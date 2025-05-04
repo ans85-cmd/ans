@@ -1,15 +1,17 @@
 ﻿<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ans85-cmd</title>
   <style>
     :root {
-      --bg-color: #121212;
-      --card-color: #000000;
-      --text-color: #ffffff;
-      --accent-color: #00bcd4;
+      --bg-color: #0d1117;
+      --card-color: #161b22;
+      --text-color: #e6edf3;
+      --accent-color: #58a6ff;
+      --hover-bg: #21262d;
+      --transition-speed: 0.3s;
     }
 
     * {
@@ -23,80 +25,57 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       height: 100vh;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem;
+      padding: 1rem 1.2rem;
       background-color: var(--card-color);
       position: relative;
-      z-index: 10;
+      z-index: 20;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
     }
 
     .title {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: bold;
+      color: var(--accent-color);
     }
 
     .menu-button {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.8rem;
-      color: var(--text-color);
+      transition: transform var(--transition-speed) ease;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
+    .menu-button:hover {
+      transform: scale(1.1);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 120px);
-      gap: 1rem;
+    .menu-button img {
+      height: 50px;
+      width: 50px;
+      filter: brightness(0.9);
     }
 
-    .tile {
-      background-color: var(--card-color);
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 1.2rem;
-      text-align: center;
-      font-weight: 500;
-      color: var(--accent-color);
-      transition: background-color 0.3s;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .tile:hover {
-      background-color: #2a2a2a;
-    }
-
-    /* Side Menu Styles */
     .side-menu {
-	  position: fixed;
-	  top: 0;
-	  right: -250px;
-	  width: 250px;
-	  height: 100%;
-	  background-color: #000000;
-	  box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-	  transition: right 0.3s ease;
-	  z-index: 9;
-	  padding-top: 4rem;
-  }
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: var(--card-color);
+      transition: right var(--transition-speed) ease;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.6);
+      padding-top: 5rem;
+      z-index: 15;
+    }
 
     .side-menu.open {
       right: 0;
@@ -107,39 +86,82 @@
       padding: 1rem 1.5rem;
       color: var(--text-color);
       text-decoration: none;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #30363d;
+      transition: background-color var(--transition-speed);
     }
 
     .side-menu a:hover {
-      background-color: #2a2a2a;
+      background-color: var(--hover-bg);
     }
 
-    @media (max-width: 400px) {
-      .grid {
-        grid-template-columns: repeat(2, 100px);
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1.2rem;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .tile {
+      background-color: var(--card-color);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+    }
+
+    .tile:hover {
+      background-color: var(--hover-bg);
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.2rem;
       }
 
       .tile {
-        padding: 1rem;
         font-size: 0.9rem;
+        padding: 1rem;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .menu-button img {
+        height: 40px;
+        width: 40px;
       }
     }
-  .auto-style1 {
-	border-style: none;
-	border-color: inherit;
-	border-width: medium;
-	background: ;
-	cursor: pointer;
-	font-size: large;
-	color: var(--text-color);
-}
   </style>
 </head>
 <body>
+
   <header>
     <div class="title">ans85-cmd</div>
-      <button class="auto-style1" id="menu-toggle" aria-label="MenÃ¼ Ã¶ffnen">
-	  <img alt="menue" height="75" src="skull1.gif" width="100"></button>
+    <button class="menu-button" id="menu-toggle" aria-label="Menü öffnen">
+      <img src="skull1.gif" alt="Menü">
+    </button>
   </header>
 
   <nav class="side-menu" id="side-menu">
@@ -160,15 +182,15 @@
   </main>
 
   <script>
-    const menuButton = document.getElementById('menu-toggle');
+    const menuToggle = document.getElementById('menu-toggle');
     const sideMenu = document.getElementById('side-menu');
 
-    menuButton.addEventListener('click', () => {
+    menuToggle.addEventListener('click', () => {
       sideMenu.classList.toggle('open');
     });
 
-    document.addEventListener('click', (event) => {
-      if (!sideMenu.contains(event.target) && !menuButton.contains(event.target)) {
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
         sideMenu.classList.remove('open');
       }
     });
