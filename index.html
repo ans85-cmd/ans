@@ -1,198 +1,129 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ans85-cmd</title>
   <style>
-    :root {
-      --bg-color: #0d1117;
-      --card-color: #161b22;
-      --text-color: #e6edf3;
-      --accent-color: #58a6ff;
-      --hover-bg: #21262d;
-      --transition-speed: 0.3s;
-    }
-
-    * {
-      box-sizing: border-box;
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      color: #00ffcc;
     }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.2rem;
-      background-color: var(--card-color);
-      position: relative;
-      z-index: 20;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    .title {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: var(--accent-color);
-    }
-
-    .menu-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: transform var(--transition-speed) ease;
-    }
-
-    .menu-button:hover {
-      transform: scale(1.1);
-    }
-
-    .menu-button img {
-      height: 50px;
-      width: 50px;
-      filter: brightness(0.9);
-    }
-
-    .side-menu {
+    canvas {
       position: fixed;
       top: 0;
-      right: -100%;
-      width: 250px;
-      height: 100%;
-      background-color: var(--card-color);
-      transition: right var(--transition-speed) ease;
-      box-shadow: -2px 0 10px rgba(0,0,0,0.6);
-      padding-top: 5rem;
-      z-index: 15;
+      left: 0;
+      z-index: -1;
     }
 
-    .side-menu.open {
-      right: 0;
-    }
-
-    .side-menu a {
-      display: block;
-      padding: 1rem 1.5rem;
-      color: var(--text-color);
-      text-decoration: none;
-      border-bottom: 1px solid #30363d;
-      transition: background-color var(--transition-speed);
-    }
-
-    .side-menu a:hover {
-      background-color: var(--hover-bg);
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1.2rem;
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .tile {
-      background-color: var(--card-color);
-      border: 1px solid #30363d;
+    .container {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(0, 0, 0, 0.75);
+      border: 1px solid #00ffcc33;
       border-radius: 12px;
-      padding: 1.2rem;
+      padding: 2rem;
+      max-width: 400px;
+      margin: 5vh auto;
       text-align: center;
-      color: var(--accent-color);
+      box-shadow: 0 0 20px #00ffcc20;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      color: #00ffcc;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: #99ffdd;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    a.button {
+      padding: 0.8rem 1rem;
+      background: #000;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
       text-decoration: none;
-      font-weight: 500;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      transition: background-color var(--transition-speed), transform var(--transition-speed);
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
     }
 
-    .tile:hover {
-      background-color: var(--hover-bg);
-      transform: translateY(-3px);
+    a.button:hover {
+      background: #00ffcc;
+      color: #000;
+      transform: scale(1.05);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 480px) {
-      .title {
-        font-size: 1.2rem;
-      }
-
-      .tile {
-        font-size: 0.9rem;
-        padding: 1rem;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .menu-button img {
-        height: 40px;
-        width: 40px;
-      }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #55ffdd;
     }
   </style>
 </head>
 <body>
+  <canvas id="matrixCanvas"></canvas>
 
-  <header>
-    <div class="title">ans85-cmd</div>
-    <button class="menu-button" id="menu-toggle" aria-label="Menü öffnen">
-      <img src="skull1.gif" alt="Menü">
-    </button>
-  </header>
-
-  <nav class="side-menu" id="side-menu">
-    <a href="index.html">Startseite</a>
-    <a href="news.html">News</a>
-    <a href="projekte.html">Projekte</a>
-    <a href="lius.html">Lius</a>
-    <a href="kontakt.html">Kontakt</a>
-  </nav>
-
-  <main>
-    <div class="grid">
-      <a href="news.html" class="tile">News</a>
-      <a href="projekte.html" class="tile">Projekte</a>
-      <a href="lius.html" class="tile">Lius</a>
-      <a href="kontakt.html" class="tile">Kontakt</a>
+  <div class="container">
+    <h1>ans85-cmd</h1>
+    <p>Willkommen im System. Wähle deinen Zugang:</p>
+    <div class="buttons">
+      <a class="button" href="https://instagram.com" target="_blank">NEWS</a>
+      <a class="button" href="https://github.com" target="_blank">PROJEKTE</a>
+      <a class="button" href="https://linkedin.com" target="_blank">LIUS</a>
+      <a class="button" href="mailto:alex@example.com">KONTAKT</a>
     </div>
-  </main>
+    <footer>&copy; 2025 ans85-cmd</footer>
+  </div>
 
   <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const sideMenu = document.getElementById('side-menu');
+    // Matrix-Effekt
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
 
-    menuToggle.addEventListener('click', () => {
-      sideMenu.classList.toggle('open');
-    });
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    document.addEventListener('click', (e) => {
-      if (!sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-        sideMenu.classList.remove('open');
-      }
+    const letters = '10101010101011101110110110110';
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ffcc';
+      ctx.font = fontSize + 'px monospace';
+
+      drops.forEach((y, x) => {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, x * fontSize, y * fontSize);
+
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[x] = 0;
+        }
+        drops[x]++;
+      });
+    }
+
+    setInterval(drawMatrix, 40);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
   </script>
 </body>
