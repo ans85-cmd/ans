@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taekwondo Quiz</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .quiz-container {
+        width: 95%;
+        max-width: 600px;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .quiz-container img {
+        display: block;
+        margin: 0 auto 15px auto;
+        width: 120px;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+    h1 { margin-bottom: 20px; color: #333; }
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+    .progress {
+        height: 100%;
+        width: 0%;
+        background: #007BFF;
+        transition: width 0.3s ease;
+    }
+    .timer {
+        width: 100%;
+        text-align: right;
+        font-size: 1em;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    .question { font-size: 1.3em; margin-bottom: 15px; color: #000; }
+    .options { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .option-btn {
+        padding: 12px;
+        font-size: 1em;
+        background: #fff;
+        color: #000;
+        border: 2px solid #007BFF;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .option-btn:hover {
+        background: #007BFF;
+        color: #fff;
+        transform: scale(1.05);
+    }
+    .correct { background: #28a745 !important; color: #fff; }
+    .wrong { background: #dc3545 !important; color: #fff; }
+    #nextBtn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1em;
+        background: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 20px;
+        display: none;
+        transition: all 0.3s ease;
+    }
+    #nextBtn:hover { background: #0056b3; transform: scale(1.05); }
+    .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(255,255,255,0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #000;
+        z-index: 999;
+    }
+    .overlay input {
+        padding: 10px;
+        font-size: 1em;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+    .overlay button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 1em;
+        background: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .overlay button:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay">
+    <h3>Prüfungsfreigabe:</h3>
+    <input type="password" id="password" placeholder="Passwort">
+    <button onclick="checkPassword()">Start</button>
+    <p id="error" style="color:red; margin-top:10px;"></p>
+</div>
+
+<div class="quiz-container" style="display:none;">
+    <!-- Grafik oberhalb des Quiz -->
+    <img src="logo.png">
+    <h1>Theorie für Gelbgurt</h1>
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div class="timer" id="timer">Zeit: 30s</div>
+    <div id="quiz"></div>
+    <button id="nextBtn">Nächste Frage</button>
+</div>
+
+<script>
+const PASSWORD = "Landesinspektor";
+
+function checkPassword() {
+    const input = document.getElementById('password').value;
+    if (input === PASSWORD) {
+        document.getElementById('overlay').style.display = 'none';
+        document.querySelector('.quiz-container').style.display = 'flex';
+        showQuestion();
+    } else {
+        document.getElementById('error').textContent = "Falsches Passwort!";
+    }
+}
+
+const questions = [
+    { question: "Wozu dienen die Verhaltensregeln im Taekwondo?", options: ["Nur zur körperlichen Fitness","Zur charakterlichen Fortbildung und Schutz vor Verletzungen","Damit das Training schneller geht","Um den Gürtel schneller zu bekommen"], correct: 1 },
+    { question: "Wann soll man sich verneigen?", options: ["Nur am Ende des Trainings","Beim Betreten und Verlassen des Dojang, Beginn/Ende der Stunde, vor/nach Übungen","Nur vor dem Trainer","Nie, das ist nicht nötig"], correct: 1 },
+    { question: "Wann wird der Gürtel gebunden?", options: ["Erst im Dojang","Vor dem Betreten des Dojang","Nach dem Training","Nur bei Prüfungen"], correct: 1 },
+    { question: "Wer steht beim Aufstellen ganz vorne rechts?", options: ["Der jüngste Schüler","Der Trainer","Der Schüler mit der höchsten Graduierung","Zufällig jemand"], correct: 2 },
+    { question: "Wann darf der Dojang während des Trainings nur verlassen werden?", options: ["Wenn man Durst hat","Nur nach Erlaubnis des Trainers","Jederzeit","Wenn man fertig ist"], correct: 1 },
+    { question: "Wie sollst du Trainer und deine Partner behandeln?", options: ["Mit Respekt und stets fair","Ignorieren","Nur freundlich zum Trainer","Es gibt keine Regeln"], correct: 0 },
+    { question: "Wie hat der Dobok zu sein?", options: ["Beliebige Farbe","Sauber und weiß, ordentlich angezogen, Gürtel richtig gebunden","Locker und bunt","Nur bei Prüfungen sauber"], correct: 1 },
+    { question: "Wie lautet das Kommando zu Beginn und Ende des Trainings?", options: ["Hallo Trainer","Charyot – Kyongle","Start – Ende","Taekwondo!"], correct: 1 },
+    { question: "Was darf während des Trainings nicht getragen werden und warum?", options: ["Uhren und Schmuck wegen Verletzungsgefahr","Sportschuhe","Handschuhe","Alles ist erlaubt"], correct: 0 },
+    { question: "Was darf während des Trainings nicht im Mund sein und warum?", options: ["Kaugummi, Zuckerl usw. wegen Erstickungsgefahr","Wasser","Proteinriegel","Alles ist erlaubt"], correct: 0 }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let timeLeft = 30;
+let timerInterval;
+
+const quizDiv = document.getElementById('quiz');
+const nextBtn = document.getElementById('nextBtn');
+const progressBar = document.getElementById('progress');
+const timerDisplay = document.getElementById('timer');
+
+function startTimer() {
+    timeLeft = 30;
+    timerDisplay.textContent = `Zeit: ${timeLeft}s`;
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Zeit: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            lockOptions();
+            nextBtn.style.display = "block";
+        }
+    }, 1000);
+}
+
+function showQuestion() {
+    clearInterval(timerInterval);
+    startTimer();
+    const q = questions[currentQuestion];
+    progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+    quizDiv.innerHTML = `
+        <div class='question'>${q.question}</div>
+        <div class='options'>
+            ${q.options.map((opt, i) => `<button class='option-btn' onclick='checkAnswer(${i})'>${opt}</button>`).join('')}
+        </div>
+    `;
+    nextBtn.style.display = "none";
+}
+
+function checkAnswer(selected) {
+    clearInterval(timerInterval);
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === selected && i !== q.correct) btn.classList.add('wrong');
+    });
+    if (selected === q.correct) score++;
+    nextBtn.style.display = "block";
+}
+
+function lockOptions() {
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+    });
+}
+
+nextBtn.addEventListener('click', () => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        progressBar.style.width = "100%";
+        quizDiv.innerHTML = `<h2>Ich hoffe du hast 10 von 10, ansonsten gleich weiter üben du Pfeife!<br>Dein Score: ${score} von ${questions.length}</h2>`;
+        nextBtn.style.display = "none";
+        timerDisplay.style.display = "none";
+    }
+});
+
+showQuestion();
+</script>
+</body>
+</html>
