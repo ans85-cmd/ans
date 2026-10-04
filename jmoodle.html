@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jennys Lernmoodle</title>
+
+    <!-- Spezielle Meta-Tags für iPhone / Web-App Fullscreen-Modus -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lernmoodle">
+
+    <!-- Verlinkung des Icons direkt als Apple Touch Icon für den Homescreen -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23004d80' rx='5'/%3E%3Cpath fill='%23ffffff' d='M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z'/%3E%3C/svg%3E">
+
+    <style>
+        :root {
+            --moodle-blue: #004d80;
+            --moodle-dark-blue: #003355;
+            --moodle-bg: #f5f6f7;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--moodle-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            /* Padding oben anpassen, damit es bei iPhones mit Notch / Dynamic Island nicht klebt */
+            padding-top: env(safe-area-inset-top);
+        }
+
+        header {
+            background-color: var(--moodle-blue);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            background-color: var(--moodle-dark-blue);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        .section-body {
+            padding: 1.25rem;
+        }
+
+        ul.file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.file-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+
+        ul.file-list li:last-child {
+            border-bottom: none;
+        }
+
+        ul.file-list a {
+            color: #0056b3;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        ul.file-list a:hover {
+            text-decoration: underline;
+            color: #003d82;
+        }
+
+        .pdf-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #cc0000;
+            color: white;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 16px;
+            border-radius: 2px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            <svg class="header-icon" viewBox="0 0 24 24">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+            </svg>
+            Jennys Lernmoodle
+        </h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Studienbrief 1 -->
+        <div class="section-card">
+            <div class="section-header">Studienbrief 1 (SB1)</div>
+            <div class="section-body">
+                <ul class="file-list">
+                    <li><a href="SB1_K1-Einführung.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K1-Einführung</a></li>
+                    <li><a href="SB1_K2-Gesbez._Verhalten.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K2-Gesbez._Verhalten</a></li>
+                    <li><a href="SB1_K3-Soziale_Integrat.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K3-Soziale_Integrat</a></li>
+                    <li><a href="SB1_K4-Persönlichkeit.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K4-Persönlichkeit</a></li>
+                    <li><a href="SB1_K5-Regulation.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K5-Regulation</a></li>
+                    <li><a href="SB1_K6-Verhaltensmodelle.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K6-Verhaltensmodelle</a></li>
+                    <li><a href="SB1_K7-Stress.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K7-Stress</a></li>
+                    <li><a href="SB1_K8-Ernährung.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K8-Ernährung</a></li>
+                    <li><a href="SB1_K9-Phys._Aktivität.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB1_K9-Phys._Aktivität</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Studienbrief 2 -->
+        <div class="section-card">
+            <div class="section-header">Studienbrief 2 (SB2)</div>
+            <div class="section-body">
+                <ul class="file-list">
+                    <li><a href="SB2_K1-Förd._Prävention.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K1-Förd._Prävention</a></li>
+                    <li><a href="SB2_K2-Kommunikation.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K2-Kommunikation</a></li>
+                    <li><a href="SB2_K3-Forschung.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K3-Forschung</a></li>
+                    <li><a href="SB2_K4-Intervention.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K4-Intervention</a></li>
+                    <li><a href="SB2_K5-Evaluation.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K5-Evaluation</a></li>
+                    <li><a href="SB2_K6-eHealth.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K6-eHealth</a></li>
+                    <li><a href="SB2_K7-Patientenschulung.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K7-Patientenschulung</a></li>
+                    <li><a href="SB2_K8-Ressourcenförderung.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB2_K8-Ressourcenförderung</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Studienbrief 3 -->
+        <div class="section-card">
+            <div class="section-header">Studienbrief 3 (SB3)</div>
+            <div class="section-body">
+                <ul class="file-list">
+                    <li><a href="SB3_K1-Schule.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K1-Schule</a></li>
+                    <li><a href="SB3_K2-Betrieb.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K2-Betrieb</a></li>
+                    <li><a href="SB3_K3-Alterhoch.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K3-Alterhoch</a></li>
+                    <li><a href="SB3_K4-Beintr._Partner.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K4-Beintr._Partner</a></li>
+                    <li><a href="SB3_K5-Migatrion.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K5-Migatrion</a></li>
+                    <li><a href="SB3_K6-Pflege.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K6-Pflege</a></li>
+                    <li><a href="SB3_K7-Planetary.pdf" target="_blank"><span class="pdf-icon">PDF</span>SB3_K7-Planetary</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        ans85-cmd
+    </footer>
+
+</body>
+</html>
