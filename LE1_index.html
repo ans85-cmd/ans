@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="J]M[L">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 580px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Slide-out Burger Menu (Drawer) --- */
+        .drawer-menu {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+        }
+
+        .drawer-menu.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Aufklappbare Zusammenfassung (Accordion) --- */
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .summary-header {
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .summary-header:hover {
+            background: #fefce8;
+        }
+
+        .summary-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .summary-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-main-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .summary-toggle-icon {
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8fafc;
+            padding: 0 16px;
+            text-align: left;
+        }
+
+        .summary-content.open {
+            max-height: 2500px;
+            padding: 16px;
+            overflow-y: auto;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Schöne Formatierung im Innenteil */
+        .summary-content h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            margin-top: 14px;
+            margin-bottom: 8px;
+        }
+
+        .summary-content p, .summary-content li {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .summary-content ul {
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 10px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        .callout-box {
+            background: #fefce8;
+            border-left: 3px solid var(--accent-gold);
+            padding: 10px 12px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 10px 0;
+        }
+        
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        /* --- Sektion / Kurse --- */
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .nav-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <div class="brand-wrapper">
+                <!-- Kleines Logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </div>
+            <!-- Burger Menu Button -->
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Slide-out Burger Menü (Drawer) -->
+        <div class="drawer-menu" id="drawerMenu">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">🏠 Startseite</a>
+                <a href="https://ans85-cmd.github.io/ans/jmoodle.html" class="drawer-link">📚 PDF-Sammlung</a>
+                <a href="LE1_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE1_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE1_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE1_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+            </div>
+        </div>
+
+        <!-- Zusammenfassung als aufklappbare Karte (Inhalt 1 zu 1 übernommen) -->
+        <div class="summary-card">
+            <div class="summary-header" onclick="toggleSummary()">
+                <div class="summary-title-wrapper">
+                    <span class="summary-tag">📚 Übersicht & Inhalte</span>
+                    <span class="summary-main-title">LE 1 – Ultra-Kurzzusammenfassung</span>
+                </div>
+                <span class="summary-toggle-icon" id="toggleIcon">▼</span>
+            </div>
+            <div class="summary-content" id="summaryContent">
+                
+                <h3>SB1 K1 – Einführung in die Gesundheitspsychologie</h3>
+                <p>Gesundheitspsychologie wurde besonders wichtig, weil chronische Erkrankungen (lang andauernde Krankheiten) zugenommen haben und Verhalten, Umwelt und soziale Bedingungen dabei eine große Rolle spielen. Gesundheit wird deshalb heute nicht mehr nur biologisch betrachtet.</p>
+                <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 SB1_K1-Einführung.pdf öffnen</a>
+
+                <ul>
+                    <li><b>Biomedizinisches Modell:</b> Krankheit = biologische Störung; Gesundheit = Abwesenheit von Krankheit. Gesundheit/Krankheit werden dichotom (entweder–oder) verstanden. Psychische und soziale Einflüsse werden wenig berücksichtigt.</li>
+                    <li><b>Risikofaktorenmodell:</b> Risikofaktoren sind wahrscheinlichkeitserhöhende Determinanten (Einflussfaktoren), aber keine zwingenden kausalen Ursachen[cite: 10].</li>
+                    <li><b>Biopsychosoziales Modell:</b> Gesundheit und Krankheit entstehen durch das Zusammenspiel biologischer, psychischer und sozialer Faktoren. Sie liegen auf einem Kontinuum (fließender Übergang), und die Person hat eine aktive Rolle.</li>
+                    <li><b>WHO-Gesundheitsbegriff:</b> Gesundheit umfasst körperliches, psychisches und soziales Wohlbefinden; Kritik: „vollständiges Wohlbefinden“ ist sehr statisch und kaum erreichbar.</li>
+                    <li><b>Ottawa-Charta:</b> Gesundheit ist ein dynamischer Prozess und entsteht im Alltag bzw. in den Lebenswelten der Menschen.</li>
+                    <li><b>Salutogenese (Entstehung/Erhaltung von Gesundheit):</b> fragt „Was hält Menschen gesund?“ → Ressourcen und Schutzfaktoren.</li>
+                    <li><b>Pathogenese (Entstehung von Krankheit):</b> fragt „Was macht Menschen krank?“ → Risiken und krankmachende Faktoren.</li>
+                    <li><b>Ökologisch-systemische Sicht:</b> Gesundheit wird durch Person und Umwelt beeinflusst. Bronfenbrenner unterscheidet Mikro-, Meso-, Exo-, Makro- und Chronosystem.</li>
+                </ul>
+                <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 SB1_K1-Einführung.pdf öffnen</a>
+
+                <div class="callout-box">
+                    <p>⚠️ <b>AK-Fallen SB1:</b><br>
+                    • Objektiv feststellbare Krankheit ≠ ausschließlich subjektives Erleben.<br>
+                    • Biomedizinisch = dichotom, biopsychosozial = Kontinuum.<br>
+                    • Risikofaktor ≠ Ursache, sondern erhöht nur die Wahrscheinlichkeit.</p>
+                </div>
+                <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>
+
+                <h3>SB2 K1 – Gesundheitsförderung & Krankheitsprävention</h3>
+                <p>Beide verfolgen dasselbe übergeordnete Ziel: Gesundheit erhalten bzw. verbessern, entweder durch Risikoreduktion oder Ressourcenförderung. Ihre Grenzen können in der Praxis fließend sein.</p>
+                <a href="SB2_K1-Förd._Prävention.pdf" target="_blank" class="pdf-link">📄 SB2_K1-Förd._Prävention.pdf öffnen</a>
+
+                <ul>
+                    <li><b>Gesundheitsförderung:</b> eher salutogenetisch → Ressourcen und protektive Faktoren (Schutzfaktoren) stärken; Gesundheit als Kontinuum und dynamischen Prozess betrachten.</li>
+                    <li><b>Krankheitsprävention:</b> eher pathogenetisch → Risikofaktoren erkennen und reduzieren.</li>
+                    <li><b>Setting-Ansatz:</b> Gesundheit wird direkt in Lebenswelten wie Schule, Betrieb oder Gemeinde gefördert; sowohl Verhalten als auch Umweltbedingungen werden verändert.</li>
+                    <li><b>Mehrebenen-Ansatz:</b> Maßnahmen können beim Individuum, bei Gruppen, Institutionen, Gemeinden und auf politischer Ebene ansetzen[cite: 10].</li>
+                    <li><b>SAR-Modell (systemisches Anforderungs-Ressourcen-Modell):</b> Gesundheit hängt vom Verhältnis zwischen Anforderungen und verfügbaren Ressourcen der Person und ihrer Umwelt ab.</li>
+                </ul>
+                <a href="SB2_K1-Förd._Prävention.pdf" target="_blank" class="pdf-link">📄 SB2_K1-Förd._Prävention.pdf öffnen</a>
+
+                <h3>Präventionsformen</h3>
+                <ul>
+                    <li><b>Primärprävention:</b> vor Krankheitsbeginn → Krankheit verhindern, z. B. Impfung.</li>
+                    <li><b>Sekundärprävention:</b> Früherkennung, z. B. Screening (Untersuchung zur frühen Entdeckung).</li>
+                    <li><b>Tertiärprävention:</b> Krankheit besteht bereits → Verschlechterung, Folgeschäden oder Rückfälle verhindern.</li>
+                    <li><b>Quartärprävention:</b> unnötige medizinische Maßnahmen bzw. Überbehandlung vermeiden.</li>
+                </ul>
+                <p><b>Nach Zielgruppe:</b> universell = für alle; selektiv = erhöhte Risikogruppe; indiziert = erste Auffälligkeiten/Vorstufen bereits vorhanden.<br>
+                <b>Nach Ansatzpunkt:</b> Verhaltensprävention = Verhalten der Person verändern; Verhältnisprävention = Lebensbedingungen/Strukturen verändern.</p>
+
+                <div class="callout-box">
+                    <p>⚠️ <b>AK-Fallen SB2:</b><br>
+                    Gesundheitsförderung ≠ einfach Prävention. Gesundheitsförderung = eher Salutogenese/Ressourcen, Prävention = eher Pathogenese/Risiken.</p>
+                </div>
+                <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>
+
+                <h3>Die wichtigste Synergie von LE1</h3>
+                <p>SB1 erklärt, wie Gesundheit und Krankheit verstanden werden → SB2 zeigt, welche Intervention daraus folgt.</p>
+                <ul>
+                    <li>Biomedizin/Risikofaktoren → Risiken reduzieren → Prävention.</li>
+                    <li>Biopsychosozial + Salutogenese → Ressourcen stärken → Gesundheitsförderung.</li>
+                    <li>Ökologisch-systemische Sicht → nicht nur Person verändern, sondern auch Settings und gesellschaftliche Bedingungen.</li>
+                    <li>Gesundheit als Kontinuum → auch ein kranker Mensch kann gesundheitlich gefördert werden.</li>
+                </ul>
+
+                <h3>Merksatz</h3>
+                <p>„Was macht krank?“ → Pathogenese → Risikofaktoren → Prävention.<br>
+                „Was hält gesund?“ → Salutogenese → Ressourcen → Gesundheitsförderung.</p>
+
+            </div>
+        </div>
+
+        <!-- Kursbereich -->
+        <div class="section-title">Inhalte:</div>
+        <div class="menu-list">
+            <a href="LE1_Zusammenfassung.html" class="nav-btn"><span>LE1 Zusammenfassung</span> <span class="nav-arrow">→</span></a>
+            <a href="inarbeit.html" class="nav-btn"><span>LE1 Video</span> <span class="nav-arrow">→</span></a>
+            <a href="LE1_Quiz1.html" class="nav-btn"><span>LE1 Quiz 1</span> <span class="nav-arrow">→</span></a>
+            <a href="LE1_Quiz2.html" class="nav-btn"><span>LE1 Quiz 2</span> <span class="nav-arrow">→</span></a>
+            <a href="LE1_Quiz3.html" class="nav-btn"><span>LE1 Quiz 3</span> <span class="nav-arrow">→</span></a>
+        </div>
+
+        <footer>
+            ans85-cmd &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        // Burger-Menü Steuerung
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Aufklapp-Funktion für die Zusammenfassung
+        function toggleSummary() {
+            const content = document.getElementById('summaryContent');
+            const icon = document.getElementById('toggleIcon');
+            content.classList.toggle('open');
+            if (content.classList.contains('open')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>

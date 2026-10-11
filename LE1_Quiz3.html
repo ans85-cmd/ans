@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 3 - LE1</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 1</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+   {
+    "frage": "61. Was ist das Ziel quartärer Prävention?",
+    "a": "Bevölkerung flächendeckend impfen",
+    "b": "unnötige medizinische Maßnahmen und Überbehandlung vermeiden",
+    "c": "Krankheiten möglichst früh screenen",
+    "d": "Rückfälle bei manifester Krankheit verhindern",
+    "richtig": "b",
+    "begruendung": "Quartäre Prävention berücksichtigt besonders die Gefahr medizinischer Überversorgung."
+  },
+  {
+    "frage": "62. Welche Zuordnung bei quartärer Prävention ist korrekt?",
+    "a": "illness = objektiv diagnostizierte Erkrankung; disease = Wohlbefinden",
+    "b": "illness = Prävention; disease = Gesundheitsförderung",
+    "c": "illness = subjektives Leiden; disease = medizinisch diagnostizierbare Krankheit",
+    "d": "illness = Risikofaktor; disease = Schutzfaktor",
+    "richtig": "c",
+    "begruendung": "Diese Unterscheidung ist leicht vertauschbar und deshalb eine gute Klausurfalle."
+  },
+  {
+    "frage": "63. Welche Maßnahme wäre am ehesten universelle Prävention?",
+    "a": "Eine Standardimpfung, die grundsätzlich für eine breite Bevölkerungsgruppe empfohlen wird",
+    "b": "Intervention ausschließlich für Menschen mit ersten Krankheitssymptomen",
+    "c": "Maßnahme ausschließlich für Hochrisikopersonen",
+    "d": "Rehabilitation chronisch Erkrankter",
+    "richtig": "a",
+    "begruendung": "Universell bedeutet ohne Auswahl aufgrund eines besonderen individuellen Risikos."
+  },
+  {
+    "frage": "64. Eine Präventionsmaßnahme richtet sich an Menschen, die aufgrund ihres Alters ein erhöhtes Erkrankungsrisiko haben, aber noch nicht erkrankt sind. Welche Form ist das?",
+    "a": "universelle Prävention",
+    "b": "indizierte Prävention",
+    "c": "selektive Prävention",
+    "d": "tertiäre Rehabilitation",
+    "richtig": "c",
+    "begruendung": "Selektiv = erhöhte Risikogruppe, aber noch keine Erkrankung bzw. Vorstufe."
+  },
+  {
+    "frage": "65. Eine Maßnahme richtet sich an Menschen, bei denen bereits eine Vorstufe einer Erkrankung vorliegt. Welche Kategorie passt am besten?",
+    "a": "indizierte Prävention",
+    "b": "universelle Prävention",
+    "c": "ausschließlich Gesundheitsförderung",
+    "d": "selektive Prävention",
+    "richtig": "a",
+    "begruendung": "Indiziert bedeutet, dass bereits erste Auffälligkeiten bzw. Vorstufen vorliegen."
+  },
+  {
+    "frage": "66. Was kennzeichnet Verhaltensprävention?",
+    "a": "Sie verändert ausschließlich Gesetze.",
+    "b": "Sie setzt am individuellen gesundheitsbezogenen Verhalten an.",
+    "c": "Sie verändert ausschließlich räumliche Bedingungen.",
+    "d": "Sie kann keine Risikofaktoren beeinflussen.",
+    "richtig": "b",
+    "begruendung": "Beispiele sind Rauchentwöhnung oder die Förderung körperlicher Aktivität."
+  },
+  {
+    "frage": "67. Was kennzeichnet Verhältnisprävention?",
+    "a": "Sie versucht ausschließlich Gedanken einer Person zu verändern.",
+    "b": "Sie verändert Lebensbedingungen bzw. strukturelle Rahmenbedingungen.",
+    "c": "Sie ist identisch mit Psychotherapie.",
+    "d": "Sie kann nur im Krankenhaus stattfinden.",
+    "richtig": "b",
+    "begruendung": "Beispiele wären Rauchverbote oder gesundheitsförderliche Arbeitsplatzgestaltung. Verhältnisse = Bedingungen der Umwelt."
+  },
+  {
+    "frage": "68. Warum ist Diversität in der Gesundheitspsychologie relevant?",
+    "a": "Weil gesundheitliche Prozesse bei allen Gruppen identisch sind.",
+    "b": "Weil Diversitätsaspekte ausschließlich statistische Störvariablen darstellen.",
+    "c": "Weil kulturelle Faktoren bei Gesundheit grundsätzlich nicht berücksichtigt werden dürfen.",
+    "d": "Weil Lebensbedingungen, Diskriminierung und kulturelle Kontexte Gesundheit und die Wirkung von Maßnahmen beeinflussen können.",
+    "richtig": "d",
+    "begruendung": "Diversität bezeichnet relevante Unterschiede zwischen Personen und Gruppen, etwa hinsichtlich Geschlecht, Kultur, sexueller Orientierung oder sozialer Lage."
+  },
+  {
+    "frage": "69. Was bezeichnet Minority Stress?",
+    "a": "einen ausschließlich genetischen Risikofaktor von Minderheiten",
+    "b": "eine kurzfristige Belastung aufgrund einer medizinischen Diagnose",
+    "c": "zusätzliche gesundheitsrelevante Belastungen durch Stigmatisierung und Diskriminierung von Minderheiten",
+    "d": "einen Schutzfaktor durch Gruppenzugehörigkeit",
+    "richtig": "c",
+    "begruendung": "Minority Stress kann durch Diskriminierungserfahrungen und deren Internalisierung entstehen."
+  },
+  {
+    "frage": "70. Was zeigt das Barbershop-Beispiel besonders gut?",
+    "a": "Gesundheitsförderung ist unabhängig von der Zielgruppe immer gleich wirksam.",
+    "b": "Ein kulturell relevantes Setting kann für eine bestimmte Zielgruppe besonders geeignete Gesundheitsinterventionen ermöglichen.",
+    "c": "Gesundheitsförderung sollte ausschließlich von Ärzt:innen durchgeführt werden.",
+    "d": "Settings sind nur geografisch definierte Räume.",
+    "richtig": "b",
+    "begruendung": "Das Beispiel zeigt die Verbindung aus Diversität + Zielgruppenorientierung + Setting-Ansatz."
+  },
+  {
+    "frage": "71. Welche Aussage zum Triple-P-Elterntraining entspricht dem Studienbrief?",
+    "a": "Es trainiert ausschließlich die Kinder.",
+    "b": "Eltern sollen unter anderem Kommunikationstechniken sowie Gefühlsregulation und Bewältigungsverhalten entwickeln.",
+    "c": "Hauptziel ist die Veränderung baulicher Strukturen in Kindergärten.",
+    "d": "Es handelt sich ausschließlich um eine medizinische Sekundärprävention.",
+    "richtig": "b",
+    "begruendung": "Triple P (Positive Parenting Program) richtet sich primär an Eltern und trainiert verschiedene Erziehungs-, Kommunikations- und Regulationskompetenzen."
+  },
+  {
+    "frage": "72. Welche Aussage fasst die wichtigste Synergie von LE1 am besten zusammen?",
+    "a": "Ein biopsychosoziales und systemisches Gesundheitsverständnis führt dazu, Gesundheit sowohl durch individuelle Ressourcen als auch durch die Gestaltung von Lebenswelten zu fördern und Krankheitsrisiken gezielt zu reduzieren.",
+    "b": "Da Gesundheit ein Kontinuum ist, sind Präventionsmaßnahmen überflüssig.",
+    "c": "Salutogenese und Pathogenese beschreiben exakt denselben Ansatz.",
+    "d": "Gesundheitsförderung ersetzt Krankheitsprävention vollständig.",
+    "richtig": "a",
+    "begruendung": "Genau das verbindet beide Kapitel: Krankheitsverständnis → Gesundheitsverständnis → Interventionslogik. Die Theorie aus SB1 erklärt, warum SB2 sowohl Person als auch Umwelt, Ressourcen und Risiken berücksichtigen muss."
+  },
+  {
+    "frage": "73. Was ist das zentrale Ziel des WHO-Projekts „Healthy Cities“ bzw. „Gesunde Städte“?",
+    "a": "Gesundheit als politisches und kommunales Anliegen dauerhaft in Städten zu verankern",
+    "b": "Die medizinische Versorgung vollständig auf private Anbieter zu übertragen",
+    "c": "Gesundheitsförderung ausschließlich auf das Verhalten einzelner Bewohner:innen zu beschränken",
+    "d": "Kommunale Gesundheitsmaßnahmen ausschließlich auf bereits Erkrankte auszurichten",
+    "richtig": "a",
+    "begruendung": "Das Projekt soll Gesundheit auf die politische Agenda von Städten und Gemeinden setzen und verschiedene gesellschaftliche Ebenen einbeziehen."
+  },
+  {
+    "frage": "74. Welche Maßnahme entspricht am besten der Logik des Gesunde-Städte-Projekts?",
+    "a": "Ausschließlich Patient:innen mit Diabetes erhalten Schulungen in einer Klinik.",
+    "b": "Die Stadt verteilt einmalig Informationsbroschüren über Bewegung.",
+    "c": "Stadtpolitik, Verwaltung, Institutionen und Bevölkerung arbeiten gemeinsam an gesundheitsförderlichen Lebensbedingungen.",
+    "d": "Ärzt:innen übernehmen allein die Verantwortung für die Gesundheit der Stadtbevölkerung.",
+    "richtig": "c",
+    "begruendung": "Gesundheitsförderung soll auf mehreren Ebenen stattfinden. Dazu gehören politische Entscheidungen ebenso wie Institutionen und die Beteiligung der Bevölkerung."
+  },
+  {
+    "frage": "75. Warum können Barbershops ein geeignetes Setting für Gesundheitsförderung bei afroamerikanischen Männern darstellen?",
+    "a": "Weil gesundheitspsychologische Interventionen grundsätzlich außerhalb des Gesundheitssystems wirksamer sind.",
+    "b": "Weil sie für diese Zielgruppe kulturell bedeutsame soziale Orte darstellen und die Zielgruppe dort gut erreicht werden kann.",
+    "c": "Weil ein Setting ausschließlich anhand seiner geografischen Lage ausgewählt wird.",
+    "d": "Weil dort ausschließlich medizinisches Fachpersonal arbeitet.",
+    "richtig": "b",
+    "begruendung": "Maßnahmen sollten an den tatsächlichen Lebenswelten und Bedürfnissen der Zielgruppe ansetzen. Das Barbershop-Beispiel verbindet Setting-Ansatz, Diversität und Zielgruppenorientierung."
+  },
+  {
+    "frage": "76. Welche Aussage über zielgruppenspezifische Gesundheitsförderung trifft zu?",
+    "a": "Die gleiche Intervention sollte unabhängig von kulturellen und sozialen Bedingungen eingesetzt werden.",
+    "b": "Zielgruppenorientierung widerspricht dem Setting-Ansatz.",
+    "c": "Relevant ist ausschließlich das Erkrankungsrisiko der Zielgruppe.",
+    "d": "Vor der Intervention muss geprüft werden, welche Bedürfnisse und welche Lebenswelt für die Zielgruppe tatsächlich relevant sind.",
+    "richtig": "d",
+    "begruendung": "Ein Programm kann nur passend gestaltet werden, wenn bekannt ist, wo und wie die Zielgruppe sinnvoll erreicht werden kann."
+  },
+  {
+    "frage": "77. Was kennzeichnet das deutsche Bismarck-Modell der sozialen Sicherung?",
+    "a": "Leistungen werden ausschließlich privat finanziert.",
+    "b": "Die soziale Absicherung erfolgt wesentlich über gesetzliche Sozialversicherungen.",
+    "c": "Jede Person erhält nur Leistungen in exakt der Höhe ihrer eigenen Beiträge.",
+    "d": "Krankenversicherung wurde erst mit dem Präventionsgesetz eingeführt.",
+    "richtig": "b",
+    "begruendung": "Das deutsche Sozialversicherungsmodell geht historisch auf Bismarck zurück; die gesetzliche Krankenversicherung wurde 1883 eingeführt."
+  },
+  {
+    "frage": "78. Welche Aussage zum Äquivalenzprinzip in der gesetzlichen Kranken- und Pflegeversicherung trifft laut Studienbrief zu?",
+    "a": "Beitrag und individuelle Leistung müssen immer exakt gleich hoch sein.",
+    "b": "Leistungen richten sich ausschließlich nach dem Einkommen.",
+    "c": "Wer höhere Beiträge zahlt, erhält automatisch eine bessere medizinische Behandlung.",
+    "d": "Es besteht kein Äquivalenzprinzip: Beiträge orientieren sich an der wirtschaftlichen Leistungsfähigkeit, Leistungen am Bedarf.",
+    "richtig": "d",
+    "begruendung": "Äquivalenzprinzip bedeutet eine direkte Entsprechung zwischen eigener Beitragsleistung und Leistungsanspruch. Gerade diese direkte Entsprechung besteht hier nicht."
+  },
+  {
+    "frage": "79. Welche Aussage zum deutschen Präventionsgesetz trifft zu?",
+    "a": "Gesundheitsförderung und Prävention wurden zu Pflichtleistungen der gesetzlichen Krankenversicherung.",
+    "b": "Es beschränkt Prävention auf medizinische Impfprogramme.",
+    "c": "Es schließt psychische Erkrankungen ausdrücklich aus.",
+    "d": "Es betrifft ausschließlich bereits chronisch erkrankte Menschen.",
+    "richtig": "a",
+    "begruendung": "Das Präventionsgesetz stärkt sowohl Prävention als auch Gesundheitsförderung, insbesondere in den Lebenswelten (Settings) von Menschen."
+  },
+  {
+    "frage": "80. Welches Ziel gehört zum Präventionsgesetz?",
+    "a": "Gesundheitsförderung aus Schulen und Betrieben herauszulösen",
+    "b": "Früherkennung zugunsten rein kurativer Behandlung zu reduzieren",
+    "c": "Gesundheitskompetenzen über die Lebensspanne zu fördern",
+    "d": "Prävention ausschließlich der individuellen Eigenverantwortung zu überlassen",
+    "richtig": "c",
+    "begruendung": "Gesundheitskompetenz bezeichnet Fähigkeiten, gesundheitsbezogene Informationen zu finden, zu verstehen und sinnvoll zu nutzen. Das Gesetz verfolgt unter anderem die Idee der „Hilfe zur Selbsthilfe“."
+  },
+  {
+    "frage": "81. Eine Krankenkasse bezahlt Medikamente und medizinische Behandlungen einer Erkrankung. Welche Kostenart liegt vor?",
+    "a": "externe Kosten",
+    "b": "intangible Kosten",
+    "c": "direkte Kosten",
+    "d": "indirekte Kosten",
+    "richtig": "c",
+    "begruendung": "Direkte Kosten entstehen unmittelbar durch die Krankheit bzw. ihre medizinische Behandlung."
+  },
+  {
+    "frage": "82. Eine Person kann wegen einer Erkrankung mehrere Monate nicht arbeiten. Der dadurch entstehende Produktivitätsverlust zählt zu …",
+    "a": "indirekten Kosten.",
+    "b": "direkten Kosten.",
+    "c": "intangiblen Kosten.",
+    "d": "ausschließlich externen Kosten.",
+    "richtig": "a",
+    "begruendung": "Indirekte Kosten entstehen beispielsweise durch Arbeitsunfähigkeit oder den Verlust von Arbeitskraft."
+  },
+  {
+    "frage": "83. Eine chronische Erkrankung führt zu Schmerzen und einem erheblichen Verlust an Lebensqualität. Welche Kostenart beschreibt diese Folgen am besten?",
+    "a": "direkte Kosten",
+    "b": "externe Kosten",
+    "c": "indirekte Kosten",
+    "d": "intangible Kosten",
+    "richtig": "d",
+    "begruendung": "Intangibel bedeutet nicht bzw. nur schwer unmittelbar finanziell messbar. Dazu gehören beispielsweise Schmerzen, depressive Belastungen oder verminderte Lebensqualität."
+  },
+  {
+    "frage": "84. Welche Kosten werden als „externe Kosten“ bezeichnet?",
+    "a": "ausschließlich Behandlungskosten im Krankenhaus",
+    "b": "Folgekosten außerhalb des Gesundheitssystems, beispielsweise im Bildungs- oder Sozialsystem",
+    "c": "subjektive Schmerzen und Lebensqualitätseinbußen",
+    "d": "ausschließlich krankheitsbedingte Arbeitsausfälle",
+    "richtig": "b",
+    "begruendung": "Externe Kosten entstehen in anderen gesellschaftlichen Bereichen."
+  },
+  {
+    "frage": "85. Was unterscheidet eine vergleichende von einer nicht vergleichenden ökonomischen Analyse?",
+    "a": "Nicht vergleichende Analysen prüfen immer die Lebensqualität der Patient:innen.",
+    "b": "Vergleichende Analysen erfassen ausschließlich Behandlungskosten.",
+    "c": "Beide Verfahren untersuchen ausschließlich finanzielle Aufwendungen.",
+    "d": "Vergleichende Analysen setzen gesundheitliche Auswirkungen einer Intervention zu ihren Kosten in Beziehung.",
+    "richtig": "d",
+    "begruendung": "Nicht vergleichende Analysen beschreiben beispielsweise Präventions- oder Krankheitskosten. Vergleichende Analysen betrachten zusätzlich Verhältnisgrößen wie Kosten-Nutzen oder Kosten-Wirksamkeit."
+  },
+  {
+    "frage": "86. Warum kann die Wirksamkeit einer Präventionsmaßnahme schwierig zu evaluieren sein?",
+    "a": "Weil Prävention grundsätzlich keine messbaren Effekte erzeugt.",
+    "b": "Weil gesundheitliche Effekte teilweise erst Jahre später auftreten und Maßnahmen häufig kombiniert werden.",
+    "c": "Weil nur subjektive Daten verwendet werden dürfen.",
+    "d": "Weil Präventionsmaßnahmen nicht mit Kontrollgruppen untersucht werden können.",
+    "richtig": "b",
+    "begruendung": "Evaluation bedeutet systematische Prüfung der Wirkung einer Maßnahme. Bei Prävention können lange Zeiträume zwischen Intervention und beobachtbarem Gesundheitseffekt liegen."
+  },
+  {
+    "frage": "87. Welches Ziel verfolgt das Lübecker Modell Bewegungswelten?",
+    "a": "Ausschließlich die Behandlung akuter Infektionskrankheiten älterer Menschen",
+    "b": "Ausschließlich die Verbesserung des theoretischen Gesundheitswissens",
+    "c": "Vorhandene körperliche, kognitive und soziale Fähigkeiten pflegebedürftiger Menschen möglichst zu erhalten und Funktionseinbußen entgegenzuwirken",
+    "d": "Die Verringerung medizinischer Überdiagnostik",
+    "richtig": "c",
+    "begruendung": "Das Lübecker Modell Bewegungswelten (LMB) verbindet körperliche Übungen mit alltagsbezogenen „Bewegungswelten“ und richtet sich an pflegebedürftige ältere Menschen."
+  },
+  {
+    "frage": "88. Welche Aussage zum Lübecker Modell Bewegungswelten trifft zu?",
+    "a": "Die Übungen werden in alltagsbezogene Themen wie beispielsweise „Garten“ eingebettet.",
+    "b": "Das Programm findet ausschließlich als individuelles Heimtraining ohne Gruppenanteil statt.",
+    "c": "Es verzichtet bewusst auf kognitive und soziale Aktivierung.",
+    "d": "Es richtet sich ausschließlich an gesunde junge Erwachsene.",
+    "richtig": "a",
+    "begruendung": "Die „Bewegungswelten“ sollen körperliche Übungen mit Erinnerungen, Kognition und sozialem Austausch verbinden."
+  },
+  {
+    "frage": "89. Welche Aussage beschreibt Triple P korrekt?",
+    "a": "Es ist ein Elterntraining, das unter anderem Erziehungsverhalten, Kommunikation, Selbstregulation und Bewältigungskompetenzen verbessern soll.",
+    "b": "Es ist ein strukturelles Schulentwicklungsprogramm ohne Training der Eltern.",
+    "c": "Es handelt sich um eine pharmakologische Behandlung kindlicher Verhaltensstörungen.",
+    "d": "Eltern und Kinder werden zwingend in identischer Weise trainiert.",
+    "richtig": "a",
+    "begruendung": "Triple P steht für Positive Parenting Program. Im Mittelpunkt stehen Fertigkeiten der Eltern."
+  },
+  {
+    "frage": "90. Welche Wirkung wurde in der Forschung zu Triple P beschrieben?",
+    "a": "Ausschließlich körperliche Verbesserungen bei den Kindern",
+    "b": "Ausschließlich geringere medizinische Behandlungskosten",
+    "c": "Positive Effekte unter anderem auf sozialer, emotionaler und behavioraler Ebene bei Kindern sowie auf elterliche Zufriedenheit und wahrgenommene Erziehungswirksamkeit",
+    "d": "Keine nachweisbaren längerfristigen Effekte",
+    "richtig": "c",
+    "begruendung": "Behavioral bedeutet das Verhalten betreffend. Im Studienbrief werden sowohl Effekte bei Kindern als auch bei Eltern beschrieben."
+  },
+  {
+    "frage": "91. Warum kann ein konkretes Präventionsprogramm nicht immer eindeutig nur einer einzigen Präventionskategorie zugeordnet werden?",
+    "a": "Weil Präventionskategorien wissenschaftlich bedeutungslos sind.",
+    "b": "Weil Zielgruppe, Ausgangslage und konkrete Zielsetzung bestimmen, ob beispielsweise primäre, sekundäre oder tertiäre Elemente vorliegen.",
+    "c": "Weil jedes Präventionsprogramm automatisch alle Präventionsformen gleichzeitig erfüllt.",
+    "d": "Weil ausschließlich der Name des Programms über seine Klassifikation entscheidet.",
+    "richtig": "b",
+    "begruendung": "Dasselbe Programm kann je nach Einsatz unterschiedlich klassifiziert werden. Triple P kann beispielsweise universell eingesetzt werden oder zielgruppenspezifisch bei bereits bestehenden Auffälligkeiten."
+  },
+  {
+    "frage": "92. Eine Stadt möchte körperliche Aktivität fördern. Sie baut sichere Fuß- und Radwege, verbessert Grünflächen, bietet Bewegungsprogramme an und beteiligt Bürger:innen an der Planung. Welcher Gedankengang aus LE1 beschreibt dieses Vorgehen am vollständigsten?",
+    "a": "Rein biomedizinische Krankheitsprävention, weil nur körperliche Faktoren verändert werden",
+    "b": "Ausschließlich Verhaltensprävention, weil Bürger:innen sich mehr bewegen sollen",
+    "c": "Ausschließlich Salutogenese auf individueller Ebene",
+    "d": "Biopsychosoziale und ökologisch-systemische Gesundheitsförderung, die Ressourcen sowie individuelle und strukturelle Bedingungen auf mehreren Ebenen berücksichtigt",
+    "richtig": "d",
+    "begruendung": "Hier laufen praktisch alle zentralen Synergien von LE1 zusammen: Gesundheit wird nicht nur im Körper verortet, sondern entsteht im Zusammenspiel von Person und Umwelt. Ressourcen werden gestärkt, Lebensverhältnisse verändert und verschiedene gesellschaftliche Ebenen beteiligt."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

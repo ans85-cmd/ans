@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE2_index.html" class="drawer-link">Zurück zu LE1</a>
+                <a href="LE2_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE2_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE2_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE2_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung -->
+        <div class="content-body">
+            <h1>LE 2 – Gesundheitsbezogenes Verhalten & Gesundheitskommunikation</h1>
+
+            <h2>1. Der rote Faden der beiden Kapitel</h2>
+            <p>Gesundheitspsychologie beschäftigt sich wesentlich damit, gesundheitsbezogenes Verhalten zu beschreiben, zu erklären und zu verändern. SB1 K2 klärt deshalb zunächst, was überhaupt als gesundheitsbezogenes Verhalten gilt, welche unterschiedlichen Funktionen und Merkmale es haben kann und wie verschiedene Verhaltensweisen zusammenhängen. Gesundheitsbezogenes Verhalten entsteht dabei nicht isoliert, sondern aus dem Zusammenspiel interner Faktoren (wie Persönlichkeit, Bedürfnisse, biologische Ausstattung) und externer Faktoren (wie soziale, materielle und kulturelle Bedingungen).</p>
+            <p><a href="SB1_K2-Gesbez._Verhalten.pdf" target="_blank" class="pdf-link">📄 SB1_K2-Gesbez._Verhalten.pdf öffnen</a></p>
+
+            <p>SB2 K2 setzt genau hier an: Gesundheitskommunikation ist ein möglicher Weg, dieses Verhalten zu beeinflussen. Informationen sollen Wissen, Risikowahrnehmung, Einstellungen und Überzeugungen verändern und dadurch letztlich gesundheitsförderliches Verhalten aufbauen bzw. gesundheitsschädigendes Verhalten reduzieren.</p>
+            <p><a href="SB2_K2-Kommunikation.pdf" target="_blank" class="pdf-link">📄 SB2_K2-Kommunikation.pdf öffnen</a></p>
+
+            <p><strong>Die zentrale Synergie lautet daher:</strong> Welches Verhalten soll verändert werden und wie funktioniert es? (→ SB1) | Wie können wir dieses Verhalten über Kommunikation beeinflussen? (→ SB2).</p>
+
+            <h2>2. Gesundheitsverhalten ist gesellschaftlich und kulturell eingebettet</h2>
+            <p>Was Menschen als gesund oder ungesund ansehen und welches Verhalten sie zeigen, hängt nicht nur von wissenschaftlichen Erkenntnissen ab. Auch gesellschaftliche Normen, wirtschaftliche Interessen und kulturelle Entwicklungen spielen eine Rolle.</p>
+            <p>Das zeigt der Studienbrief beispielsweise am Rauchen: Lange wurde die gesundheitliche Unbedenklichkeit von Tabak sogar mit Ärzt:innen beworben, erst mit zunehmender wissenschaftlicher Evidenz veränderte sich die gesellschaftliche Bewertung. Ähnliches zeigt sich beim Sonnenschutz: Gebräunte Haut galt zeitweise als Zeichen von Gesundheit und Wohlstand; mit wachsendem Wissen über UV-Risiken änderte sich diese Bewertung.</p>
+            <p><strong>Synergie zu SB2:</strong> Wenn gesellschaftliche Kommunikation beeinflusst, was Menschen für normal, gefährlich oder gesund halten, wird verständlich, warum Gesundheitskommunikation selbst ein wichtiger Ansatzpunkt zur Verhaltensänderung ist.</p>
+
+            <h2>3. Verhalten beeinflusst Gesundheit – die „Alameda Seven“</h2>
+            <p>Dass einzelne Verhaltensweisen tatsächlich mit Gesundheit zusammenhängen, zeigte unter anderem die Alameda County Study von Belloc und Breslow. Sie identifizierte sieben Verhaltensweisen, die mit einem günstigeren Gesundheitszustand zusammenhingen:</p>
+            <ul>
+                <li>genügend Schlaf</li>
+                <li>Nichtrauchen</li>
+                <li>geringer Alkoholkonsum</li>
+                <li>regelmäßige körperliche Betätigung</li>
+                <li>regelmäßiges Frühstück</li>
+                <li>Verzicht auf Zwischenmahlzeiten</li>
+                <li>Normalgewicht</li>
+            </ul>
+            <p>Die Effekte waren <strong>additiv</strong> (sie summierten sich): Personen, die mehr dieser Verhaltensweisen zeigten, wiesen insgesamt günstigere Gesundheitswerte auf.</p>
+            <p><em>AK-Radar:</em> Die Alameda Seven wurden in der SoSe-25-Klausur direkt abgefragt.</p>
+            <p><a href="SB1_K2-Gesbez._Verhalten.pdf" target="_blank" class="pdf-link">📄 SB1_K2-Gesbez._Verhalten.pdf öffnen</a></p>
+
+            <h2>4. Was zählt überhaupt als gesundheitsbezogenes Verhalten?</h2>
+            <p>Gesundheitsbezogenes Verhalten darf nicht mit gesundem Verhalten gleichgesetzt werden. Es umfasst sowohl Verhalten, das Gesundheit fördert, als auch solches, das ihr schadet. Gesundheitsschädigung kann dadurch entstehen, dass jemand Risikoverhalten ausführt oder gesundheitsförderliches Verhalten unterlässt.</p>
+            <p>Eine umfassende Definition gesundheitsbezogenen Verhaltens muss deshalb Verhalten einschließen, das:</p>
+            <ul>
+                <li>nachgewiesen gesundheitsförderlich ist</li>
+                <li>nachgewiesen gesundheitsschädigend ist</li>
+                <li>je nach konkreter Ausgestaltung förderlich oder schädigend sein kann</li>
+                <li>der Verhinderung oder Früherkennung von Krankheit dient</li>
+                <li>erst bei einer akuten oder chronischen Krankheit gesundheitlich relevant wird</li>
+                <li>nur bei bestimmten Personengruppen gesundheitlich relevant ist</li>
+            </ul>
+            <p><em>Klausurfalle:</em> Genau diese umfassende Definition wurde in SoSe 26 geprüft – dort waren alle angebotenen Varianten richtig.</p>
+            <p><a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></p>
+
+            <h2>5. Dasselbe Verhalten ist nicht automatisch „gesund“ oder „ungesund“</h2>
+            <p>Breite Kategorien wie „Bewegung“ oder „Ernährung“ können nicht pauschal klassifiziert werden. Regelmäßige moderate Bewegung kann gesundheitsförderlich sein, während Extremsport gesundheitliche Risiken bergen kann. Selbst ein Verhalten, das mit gesundheitsfördernder Absicht durchgeführt wird, kann bei falscher Ausgestaltung schädlich sein (z. B. übermäßige Einnahme von Nahrungsergänzungsmitteln).</p>
+            <p><em>Klausurfalle:</em> Nicht die Bezeichnung des Verhaltens, sondern seine konkrete Ausgestaltung und der Kontext entscheiden über seine gesundheitliche Funktion.</p>
+
+            <h2>6. Gesundheits-, Krankheits- und Krankenrollenverhalten nach Kasl & Cobb</h2>
+            <p>Kasl und Cobb unterscheiden danach, in welchem Gesundheitszustand sich die Person befindet bzw. wie sie sich selbst wahrnimmt:</p>
+            <ul>
+                <li><strong>Gesundheitsverhalten:</strong> von gesunden oder sich gesund fühlenden Personen gezeigt, um Krankheiten zu verhindern oder frühzeitig zu entdecken (z. B. Routine-Check-up).</li>
+                <li><strong>Krankheitsverhalten:</strong> von Personen gezeigt, die sich krank fühlen und deshalb Hilfe oder diagnostische Abklärung suchen – unabhängig davon, ob tatsächlich bereits eine Krankheit diagnostiziert wurde.</li>
+                <li><strong>Krankenrollenverhalten:</strong> von manifest Erkrankten gezeigt und dient der Behandlung bzw. Verbesserung des Gesundheitszustands (z. B. regelmäßige Medikamenteneinnahme).</li>
+            </ul>
+            <p><em>Klausurfalle:</em> Sich krank fühlen ≠ manifest erkrankt sein. Genau daran trennt sich Krankheitsverhalten vom Krankenrollenverhalten.</p>
+
+            <h2>7. Präventives, aufdeckendes und kuratives Verhalten</h2>
+            <p>Rothman et al. klassifizieren Verhalten nach seiner Funktion:</p>
+            <ul>
+                <li><strong>Präventives Verhalten</strong> (vorbeugendes Verhalten): z. B. Kondomgebrauch zur Verhinderung einer Infektion.</li>
+                <li><strong>Aufdeckendes Verhalten</strong> (Verhalten zur Früherkennung): z. B. Teilnahme an einer Hautkrebs-Früherkennung.</li>
+                <li><strong>Kuratives Verhalten</strong> (Verhalten im Rahmen einer Behandlung): z. B. Adhärenz bei einer Chemotherapie.</li>
+            </ul>
+            <p><strong>Aufdeckendes Verhalten besitzt eine Besonderheit:</strong> Es kann unangenehm sein, weil die Untersuchung die Möglichkeit beinhaltet, tatsächlich eine Krankheit zu entdecken. Deshalb verlangt es nach anderen Kommunikationsstrategien als präventives oder kuratives Verhalten.</p>
+
+            <h2>8. Gesundheitsverhalten besitzt unterschiedliche Merkmale</h2>
+            <p>McEachan et al. identifizierten elf wichtige Merkmalsdimensionen gesundheitsbezogenen Verhaltens:</p>
+            <ul>
+                <li>Annäherung vs. Vermeidung</li>
+                <li>Anstrengung</li>
+                <li>Emotionalität</li>
+                <li>Häufigkeit</li>
+                <li>Gewohnheit</li>
+                <li>Wahrscheinlichkeit von Folgen</li>
+                <li>öffentlich vs. privat</li>
+                <li>Relevanz von Folgen</li>
+                <li>Sichtbarkeit von Folgen</li>
+                <li>Zeitdauer angezielter Folgen</li>
+                <li>Barrieren</li>
+            </ul>
+            <p>Dasselbe Verhalten kann gleichzeitig kurzfristige sichtbare und langfristige unsichtbare Folgen haben (fehlender Sonnenschutz → Sonnenbrand und erhöhtes Hautkrebsrisiko).</p>
+
+            <h2>9. Taxonomien: Wie lassen sich Gesundheitsverhaltensweisen gruppieren?</h2>
+            <p><strong>Top-down-Ansatz:</strong> Relevante Verhaltensweisen werden zunächst vorgegeben (z. B. durch Expert:innen), danach wird ihre Gruppierung untersucht. Nachteil: Es können nur Strukturen zwischen Verhaltensweisen entdeckt werden, die vorher überhaupt ausgewählt wurden.</p>
+            <p><strong>Bottom-up-Ansatz (Nudelman & Shiloh):</strong> Laien und Fachleute wurden ohne vorgegebene Liste befragt. Daraus entstanden vier übergeordnete Klassen:</p>
+            <ol>
+                <li>Erhaltung der Gesundheit</li>
+                <li>Ernährung</li>
+                <li>Risikovermeidung</li>
+                <li>Generelles Wohlbefinden</li>
+            </ol>
+            <p>Die ersten drei bilden das Meta-Cluster des <strong>physischen Gesundheitsverhaltens</strong>, „Generelles Wohlbefinden“ das Meta-Cluster des <strong>psychosozialen Gesundheitsverhaltens</strong>.</p>
+
+            <h2>10. Multiple Gesundheitsverhaltensweisen und Lebensstil</h2>
+            <p>Gesundheitsverhaltensweisen treten häufig gebündelt auf (Clustering).</p>
+            <p>Der Begriff <strong>Lebensstil</strong> bezeichnet allgemeine Formen der Lebensgestaltung, die aus dem Zusammenspiel zwischen Umweltbedingungen, individuellen Verhaltensmustern, soziokulturellen Faktoren und der Persönlichkeit entstehen. Ein Lebensstil ist somit keine rein freie persönliche Entscheidung.</p>
+
+            <h2>11. Jetzt kommt SB2: Gesundheitskommunikation als Weg zur Verhaltensänderung</h2>
+            <p>Gesundheitskommunikation nach Baumann und Hurrelmann umfasst den Austausch und die Vermittlung von Wissen, Erfahrungen, Meinungen und Gefühlen. Sie findet interpersonal, organisational oder gesellschaftlich statt.</p>
+            <p><strong>Die drei Funktionen (Wirkungskette):</strong><br>
+            Information → Wahrnehmungen/Einstellungen verändern → Verhalten verändern.</p>
+            <p>Informationen können sachlich oder persuasiv (überzeugend) gestaltet werden; Narrative und Testimonials schaffen einen stärkeren persönlichen Bezug.</p>
+            <p><a href="SB2_K2-Kommunikation.pdf" target="_blank" class="pdf-link">📄 SB2_K2-Kommunikation.pdf öffnen</a></p>
+
+            <h2>12. Risikokommunikation – wie Menschen Gefahren einschätzen</h2>
+            <p>Ein Risiko setzt sich zusammen aus der Wahrscheinlichkeit eines schädlichen Ereignisses und dem Ausmaß der negativen Folgen.</p>
+            <p>Slovic identifiziert zwei Basisdimensionen der subjektiven Risikowahrnehmung:</p>
+            <ul>
+                <li><strong>Schrecklichkeit der Gefahr (dread risk):</strong> z. B. unkontrollierbar, furchteinflößend, potenziell tödlich.</li>
+                <li><strong>Unbekanntheit der Gefahr (unknown risk):</strong> z. B. neu, wissenschaftlich ungeklärt, verzögert auftretende Folgen.</li>
+            </ul>
+            <p><em>AK-Radar:</em> In WiSe 25/26 wurden genau diese beiden Slovic-Dimensionen abgefragt.</p>
+
+            <h2>13. Furchtappelle & das erweiterte parallele Prozessmodell</h2>
+            <p>Furchtappelle erzeugen ein Bedrohungsgefühl, um Verhaltensänderungen anzuregen. Zu viel Furcht ohne Lösung führt jedoch zu Abwehr (z. B. dem <em>optimistischen Fehlschluss</em>: „Mich trifft es schon nicht“).</p>
+            <p><strong>Das erweiterte parallele Prozessmodell (EPPM):</strong></p>
+            <ul>
+                <li>Bedrohungseinschätzung und Bewältigungseinschätzung laufen parallel.</li>
+                <li>Gefahr + wirksame, umsetzbare Schutzmaßnahme → <strong>Schutzmotivation</strong>.</li>
+                <li>Starke Furcht ohne Kontrolle → <strong>Furchtkontrolle / Abwehr</strong>.</li>
+            </ul>
+            <p><strong>Praktische Regel:</strong> Gefahr vermitteln + wirksame und umsetzbare Handlungsmöglichkeit aufzeigen.</p>
+
+            <h2>14. Besonders wichtige Synergie: Verhaltenstyp bestimmt Kommunikationserfolg</h2>
+            <p>Gesundheitskampagnen und Furchtappelle wirken nicht bei jedem Verhalten gleich. Sie zeigen eher Effekte bei <strong>einmaligem oder episodischem Verhalten</strong> (wie Impfungen oder Screening) als bei <strong>gewohnheitsmäßigem Verhalten</strong> (wie Ernährung oder Bewegung).</p>
+            <p>→ Man muss die Merkmale des Zielverhaltens aus SB1 kennen, bevor man eine Kommunikationsintervention aus SB2 plant.</p>
+
+            <h2>15. Gesundheitskampagnen & Gesundheitskommunikation im Internet</h2>
+            <p><strong>Kampagnenschritte nach Nöcker:</strong> Epidemiologische Ausgangslage → Ziele → Zielgruppe → theoretische Modelle → Umsetzung → Evaluation.</p>
+            <p>Online-Angebote lassen sich nach Aktivität unterteilen: Information → Interaktion → Vernetzung.</p>
+
+            <h2>16. Gesundheitsberatung als Teil der Gesundheitskommunikation</h2>
+            <p>Es gibt drei Formalisierungsgrade:</p>
+            <ul>
+                <li><strong>informelle Beratung:</strong> Alltagstipps durch Familie oder Bekannte.</li>
+                <li><strong>halbformalisierte Beratung:</strong> Fachauskunft durch Personen aus Gesundheits-/Sozial-/Bildungsberufen.</li>
+                <li><strong>formalisierte professionelle Beratung:</strong> Fachexpertise + spezifische Beratungskompetenz.</li>
+            </ul>
+            <p><em>Klausurfalle:</em> Eine bloße Beantwortung einer fachlichen Frage durch medizinisches Personal ist nicht automatisch eine formalisierte professionelle Beratung.</p>
+            <p><strong>Beratung vs. Psychotherapie:</strong> Psychotherapie behandelt psychische Störungen; Beratung befasst sich mit schwierigen Lebenslagen oder Krisen ohne Krankheitswert und setzt bei Ratsuchenden ein höheres Maß an Handlungsfähigkeit voraus.</p>
+            <p><strong>Motivierende Gesprächsführung (Motivational Interviewing):</strong> Betrachtet Personen als <em>ambivalent</em> (hin- und hergerissen) statt als unmotiviert. Ziel ist die Förderung der intrinsischen Motivation durch Empathie, Akzeptanz und das Sichtbarmachen von Diskrepanzen to eigenen Zielen.</p>
+
+            <h2>Der gesamte rote Faden von LE2 in einem Satz</h2>
+            <p>Gesundheitsbezogenes Verhalten ist vielfältig, kontextabhängig und durch Person und Umwelt geprägt; um es gezielt zu verändern, muss Gesundheitskommunikation deshalb zum konkreten Verhalten, zur Zielgruppe, zur Risikowahrnehmung und zu vorhandenen Barrieren passen und neben einer relevanten Bedrohung immer auch realistische Möglichkeiten zur Veränderung vermitteln.</p>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

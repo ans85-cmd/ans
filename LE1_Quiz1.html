@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE1</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 1</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+    {
+    "frage": "1. Welche Entwicklung trug wesentlich dazu bei, dass Gesundheitspsychologie an Bedeutung gewann?",
+    "a": "Der Wandel von Infektionskrankheiten hin zu chronisch-degenerativen Erkrankungen",
+    "b": "Die vollständige Ablösung chronischer Krankheiten durch akute Erkrankungen",
+    "c": "Der Bedeutungsverlust von Verhaltens- und Umweltfaktoren",
+    "d": "Die Abnahme der Lebenserwartung in Industrienationen",
+    "richtig": "a",
+    "begruendung": "Heute dominieren zunehmend chronisch-degenerative Erkrankungen (langandauernde bzw. fortschreitende Krankheiten). Bei ihnen spielen Verhalten und Umwelt eine wichtige Rolle."
+  },
+  {
+    "frage": "2. Was kennzeichnet eine chronische Erkrankung am ehesten?",
+    "a": "Sie wird ausschließlich durch Infektionserreger ausgelöst.",
+    "b": "Sie beginnt immer plötzlich und endet nach kurzer Zeit.",
+    "c": "Sie kann schleichend entstehen und über lange Zeit oder lebenslang bestehen.",
+    "d": "Sie ist grundsätzlich nicht beeinflussbar.",
+    "richtig": "c",
+    "begruendung": "Chronische Erkrankungen entstehen häufig schleichend oder schubweise und können langfristig bestehen."
+  },
+  {
+    "frage": "3. Welche Aussage beschreibt einen wichtigen Grund für die Zunahme chronischer Erkrankungen?",
+    "a": "Medizinische Fortschritte verkürzen die Überlebenszeit schwer Erkrankter.",
+    "b": "Mehr Menschen erreichen ein hohes Lebensalter, in dem chronische Erkrankungen wahrscheinlicher werden.",
+    "c": "Umwelt- und Verhaltensfaktoren spielen heute keine Rolle mehr.",
+    "d": "Chronische Krankheiten entstehen ausschließlich genetisch.",
+    "richtig": "b",
+    "begruendung": "Eine alternde Bevölkerung und bessere medizinische Versorgung erhöhen die Zahl der Menschen, die mit chronischen Erkrankungen leben."
+  },
+  {
+    "frage": "4. Warum zeigt die Zunahme chronischer Krankheiten Grenzen einer ausschließlich kurativen Medizin?",
+    "a": "Weil Vorbeugung, langfristige Bewältigung und Veränderung von Verhalten und Umwelt ebenfalls relevant werden.",
+    "b": "Weil chronische Erkrankungen grundsätzlich nicht medizinisch behandelt werden dürfen.",
+    "c": "Weil biologische Prozesse bei chronischen Erkrankungen keine Bedeutung haben.",
+    "d": "Weil Prävention nur bei akuten Krankheiten sinnvoll ist.",
+    "richtig": "a",
+    "begruendung": "Kurativ bedeutet auf die Behandlung bereits bestehender Krankheit ausgerichtet. Bei chronischen Erkrankungen gewinnen zusätzlich Prävention, Gesundheitsförderung und langfristige Bewältigung an Bedeutung."
+  },
+  {
+    "frage": "5. Welche Aussage zum medizinischen Krankheitsbegriff trifft zu?",
+    "a": "Krankheit kann mit objektiv feststellbaren körperlichen, geistigen oder seelischen Veränderungen verbunden sein.",
+    "b": "Krankheit wird ausschließlich über subjektives Wohlbefinden definiert.",
+    "c": "Krankheit setzt zwingend eine körperliche Ursache voraus.",
+    "d": "Eine Krankheit darf keine sozialen Konsequenzen haben.",
+    "richtig": "a",
+    "begruendung": "Im medizinischen Verständnis spielen objektiv feststellbare Veränderungen sowie mögliche Einschränkungen von Wohlbefinden und Leistungsfähigkeit eine Rolle."
+  },
+  {
+    "frage": "6. Welche drei Dimensionen hebt Faltermaier bei Krankheit hervor?",
+    "a": "Biologie, Genetik und Infektion",
+    "b": "Diagnose, Therapie und Rehabilitation",
+    "c": "objektive Störung, soziale Konsequenzen und psychisches Erleben",
+    "d": "Prävention, Gesundheitsförderung und Behandlung",
+    "richtig": "c",
+    "begruendung": "Krankheit kann objektiv messbar, sozial folgenreich und psychisch erlebbar sein."
+  },
+  {
+    "frage": "7. Welche Aussage über eine mögliche soziale Konsequenz von Krankheit ist korrekt?",
+    "a": "Sie bezeichnet ausschließlich das subjektive Schmerzempfinden.",
+    "b": "Sie liegt nur bei psychiatrischen Erkrankungen vor.",
+    "c": "Sie meint die objektive Abweichung eines Laborwerts.",
+    "d": "Eine eingeschränkte Funktionsfähigkeit kann beispielsweise die berufliche Rollenerfüllung beeinträchtigen.",
+    "richtig": "d",
+    "begruendung": "Eine Erkrankung kann durch eingeschränkte Funktions- und Leistungsfähigkeit soziale Folgen haben."
+  },
+  {
+    "frage": "8. Welche Aussage zu ICD und DSM passt zum Studienbrief?",
+    "a": "Beide erfassen ausschließlich körperliche Erkrankungen.",
+    "b": "Sie stellen Gesundheitsförderungsmodelle dar.",
+    "c": "Sie dienen der Klassifikation von Krankheiten bzw. psychischen Störungen.",
+    "d": "Sie sind Modelle der Salutogenese.",
+    "richtig": "c",
+    "begruendung": "Klassifikation bedeutet systematische Einordnung in Kategorien. ICD und DSM sind Klassifikationssysteme, keine Gesundheitsmodelle."
+  },
+  {
+    "frage": "9. Welche Annahme gehört zum biomedizinischen Krankheitsmodell?",
+    "a": "Krankheit ist eine Störung eines ansonsten normal funktionierenden Organismus.",
+    "b": "Gesundheit und Krankheit liegen grundsätzlich gleichzeitig vor.",
+    "c": "Soziale Unterstützung gehört zu den zentralen Krankheitsursachen des Modells.",
+    "d": "Krankheiten werden ausschließlich probabilistisch erklärt.",
+    "richtig": "a",
+    "begruendung": "Das klassische biomedizinische Modell sucht spezifische biologische Ursachen für Störungen des Organismus."
+  },
+  {
+    "frage": "10. Wie werden Gesundheit und Krankheit im biomedizinischen Modell verstanden?",
+    "a": "als dynamisches Kontinuum",
+    "b": "als dichotome Kategorien",
+    "c": "als zwei gleichzeitig immer gleich stark ausgeprägte Zustände",
+    "d": "ausschließlich als subjektive Bewertungen",
+    "richtig": "b",
+    "begruendung": "Dichotom bedeutet: zwei voneinander getrennte Kategorien – gesund oder krank. Gesundheit entspricht weitgehend der Abwesenheit von Krankheit."
+  },
+  {
+    "frage": "11. Welche Rolle besitzt der Patient im klassischen biomedizinischen Modell eher?",
+    "a": "Er gestaltet gesellschaftliche Lebenswelten aktiv um.",
+    "b": "Er definiert selbst die medizinische Diagnose.",
+    "c": "Er bestimmt sämtliche biologischen Krankheitsursachen.",
+    "d": "Er wird eher als passiver Träger einer Erkrankung betrachtet.",
+    "richtig": "d",
+    "begruendung": "Die Behandlung setzt primär am Körper an; die aktive Rolle des Individuums wird im biopsychosozialen Modell stärker betont."
+  },
+  {
+    "frage": "12. Was ist ein zentraler Kritikpunkt am biomedizinischen Modell?",
+    "a": "Es berücksichtigt zu viele psychologische Faktoren.",
+    "b": "Es ist ausschließlich auf soziale Ungleichheit ausgerichtet.",
+    "c": "Es lehnt biologische Ursachen grundsätzlich ab.",
+    "d": "Es berücksichtigt multifaktorielle, psychologische und soziale Einflüsse unzureichend.",
+    "richtig": "d",
+    "begruendung": "Multifaktoriell bedeutet durch mehrere zusammenwirkende Faktoren verursacht bzw. beeinflusst. Genau das fehlt im klassischen biomedizinischen Ansatz weitgehend."
+  },
+  {
+    "frage": "13. Warum wurden Risikofaktorenmodelle entwickelt?",
+    "a": "Um insbesondere die multifaktorielle Entstehung chronischer Erkrankungen besser erklären zu können.",
+    "b": "Um sämtliche biologischen Faktoren aus Krankheitsmodellen zu entfernen.",
+    "c": "Um Gesundheit wieder ausschließlich dichotom zu verstehen.",
+    "d": "Um ausschließlich akute Infektionskrankheiten zu erklären.",
+    "richtig": "a",
+    "begruendung": "Risikofaktorenmodelle erweiterten das biomedizinische Denken insbesondere angesichts chronischer Erkrankungen."
+  },
+  {
+    "frage": "14. Wo haben Risikofaktorenmodelle ihren wissenschaftlichen Ursprung?",
+    "a": "in der Entwicklungspsychologie",
+    "b": "in der Epidemiologie",
+    "c": "in der Psychoanalyse",
+    "d": "in der Pädagogischen Psychologie",
+    "richtig": "b",
+    "begruendung": "Epidemiologie untersucht unter anderem Häufigkeit, Verteilung und Einflussfaktoren gesundheitlicher Zustände in Populationen."
+  },
+  {
+    "frage": "15. Was ist ein Risikofaktor?",
+    "a": "Eine Variable, die die Wahrscheinlichkeit des Auftretens einer Erkrankung erhöht.",
+    "b": "Eine Variable, die zwangsläufig eine bestimmte Krankheit verursacht.",
+    "c": "Ein ausschließlich genetischer Defekt.",
+    "d": "Ein protektiver Faktor.",
+    "richtig": "a",
+    "begruendung": "Risikofaktoren erhöhen das Erkrankungsrisiko, sind aber nicht automatisch Krankheitsursachen."
+  },
+  {
+    "frage": "16. Welche Formulierung wäre in einer Klausur zur Wirkung von Rauchen als Risikofaktor korrekt?",
+    "a": "Rauchen verursacht bei jeder exponierten Person zwingend eine Erkrankung.",
+    "b": "Rauchen ist im Risikofaktorenmodell irrelevant, weil es Verhalten betrifft.",
+    "c": "Rauchen ist eine biologische Ursache im Sinne des klassischen biomedizinischen Modells.",
+    "d": "Rauchen kann als wahrscheinlichkeitserhöhende Determinante von Erkrankungen verstanden werden.",
+    "richtig": "d",
+    "begruendung": "Determinante bedeutet hier Einflussfaktor. „Wahrscheinlichkeitserhöhend“ ist die präzise Formulierung aus dem Studienbrief."
+  },
+  {
+    "frage": "17. Welche Aussage beschreibt das biopsychosoziale Modell korrekt?",
+    "a": "Krankheitsentstehung und -verlauf ergeben sich aus dem Zusammenspiel biologischer, psychologischer und sozialer Faktoren.",
+    "b": "Krankheiten entstehen ausschließlich aus psychischen Konflikten.",
+    "c": "Soziale Einflüsse ersetzen biologische Einflüsse vollständig.",
+    "d": "Das Modell geht von einer einzigen spezifischen Ursache pro Krankheit aus.",
+    "richtig": "a",
+    "begruendung": "Das Modell nach Engel integriert mehrere Ebenen und Wechselwirkungen."
+  },
+  {
+    "frage": "18. Welche der folgenden Größen wäre im biopsychosozialen Modell ein psychologischer Faktor?",
+    "a": "gesellschaftliche Sozialversicherung",
+    "b": "genetische Prädisposition",
+    "c": "Erwartungen über den Krankheitsverlauf",
+    "d": "Luftverschmutzung",
+    "richtig": "c",
+    "begruendung": "Kognitionen (Gedanken/Überzeugungen), Emotionen, Motivation und Verhalten zählen zu den psychologischen Faktoren."
+  },
+  {
+    "frage": "19. Welche Aussage unterscheidet das biopsychosoziale besonders vom klassischen biomedizinischen Modell?",
+    "a": "Gesundheit bedeutet in beiden ausschließlich Abwesenheit von Krankheit.",
+    "b": "Beide verstehen den Menschen ausschließlich als passiven Patienten.",
+    "c": "Das biopsychosoziale Modell verzichtet auf biologische Faktoren.",
+    "d": "Es betont die aktive Rolle des Individuums bei Erhalt und Wiederherstellung von Gesundheit.",
+    "richtig": "d",
+    "begruendung": "Neben biologischen Faktoren werden psychologische, soziale und verhaltensbezogene Prozesse sowie die aktive Rolle der Person berücksichtigt."
+  },
+  {
+    "frage": "20. Wie werden Gesundheit und Krankheit im biopsychosozialen Modell verstanden?",
+    "a": "als zwei vollständig unabhängige Prozesse",
+    "b": "ausschließlich als ärztliche Diagnosen",
+    "c": "als unveränderliche Zustände",
+    "d": "als Positionen auf einem Kontinuum",
+    "richtig": "d",
+    "begruendung": "Kontinuum bedeutet fließende Abstufung zwischen zwei Polen statt eines strikten Entweder-oder."
+  },
+  {
+    "frage": "21. Was war der zentrale Fortschritt der WHO-Gesundheitsdefinition von 1946 gegenüber einem rein biomedizinischen Verständnis?",
+    "a": "Sie beschränkte Gesundheit erstmals auf körperliche Funktionsfähigkeit.",
+    "b": "Sie erklärte Gesundheit ausschließlich über die Abwesenheit von Krankheit.",
+    "c": "Sie bezog körperliches, psychisches und soziales Wohlbefinden ein.",
+    "d": "Sie setzte Gesundheit mit medizinischer Behandlungsfreiheit gleich.",
+    "richtig": "c",
+    "begruendung": "Gesundheit wird dadurch positiv und mehrdimensional beschrieben."
+  },
+  {
+    "frage": "22. Welcher Kritikpunkt wird an der WHO-Definition von 1946 genannt?",
+    "a": "Sie berücksichtigt ausschließlich soziale Faktoren.",
+    "b": "Sie beschreibt Gesundheit bereits vollständig als dynamischen Prozess.",
+    "c": "Sie verzichtet auf Wohlbefinden als Kriterium.",
+    "d": "Ein Zustand vollständigen Wohlbefindens ist kaum erreichbar und die Definition ist zu statisch.",
+    "richtig": "d",
+    "begruendung": "„Statisch“ bedeutet hier, dass Gesundheit zu stark als fixer Zustand statt als veränderlicher Prozess gefasst wird."
+  },
+  {
+    "frage": "23. Welcher Gedanke wird in der Ottawa-Charta besonders betont?",
+    "a": "Gesundheit entsteht ausschließlich im Gesundheitssystem.",
+    "b": "Krankheit muss aus dem Alltag ausgegliedert werden.",
+    "c": "Medizinische Behandlung ist die einzige Gesundheitsressource.",
+    "d": "Gesundheit wird im alltäglichen Leben geschaffen und gelebt.",
+    "richtig": "d",
+    "begruendung": "Die Ottawa-Charta verbindet Gesundheit mit Lebenswelten, Selbstbestimmung und gesellschaftlichen Bedingungen."
+  },
+  {
+    "frage": "24. Was bedeutet Salutogenese?",
+    "a": "systematische Klassifikation von Krankheiten",
+    "b": "Entstehung bzw. Erhaltung von Gesundheit",
+    "c": "Behandlung akuter Erkrankungen",
+    "d": "medizinische Früherkennung",
+    "richtig": "b",
+    "begruendung": "Salus (lat.) = Gesundheit/Heil; Genese (griech.) = Entstehung. Antonovsky fragt: Was hält Menschen gesund?"
+  },
+  {
+    "frage": "25. Welche Aussage entspricht Antonovskys salutogenetischer Perspektive?",
+    "a": "Krankheit ist Bestandteil des Lebens; Menschen bewegen sich auf einem Gesundheits-Krankheits-Kontinuum.",
+    "b": "Krankheit stellt immer eine eindeutige Abweichung vom normalen Leben dar.",
+    "c": "Gesundheit besteht ausschließlich in der Abwesenheit medizinischer Diagnosen.",
+    "d": "Ein Mensch kann nur entweder gesund oder krank sein.",
+    "richtig": "a",
+    "begruendung": "Das Kontinuumsdenken ist eine Kernannahme der Salutogenese."
+  },
+  {
+    "frage": "26. Welche Kernfrage gehört zur Pathogenese?",
+    "a": "Welche Ressourcen stärken Wohlbefinden?",
+    "b": "Wie kann eine Lebenswelt gesundheitsförderlich gestaltet werden?",
+    "c": "Was macht Menschen krank?",
+    "d": "Wie lässt sich Selbstbestimmung fördern?",
+    "richtig": "c",
+    "begruendung": "Pathogenese (Entstehung von Krankheit) richtet den Blick auf krankmachende Prozesse und Risikofaktoren."
+  },
+  {
+    "frage": "27. Welche Kernfrage gehört zur Salutogenese?",
+    "a": "Welche Krankheit liegt nach ICD vor?",
+    "b": "Welche biologische Ursache muss entfernt werden?",
+    "c": "Welche Risikofaktoren führen zwangsläufig zur Erkrankung?",
+    "d": "Was erhält Menschen trotz Belastungen gesund?",
+    "richtig": "d",
+    "begruendung": "Salutogenese richtet den Blick auf Ressourcen und Schutzfaktoren."
+  },
+  {
+    "frage": "28. Welche Zuordnung ist korrekt?",
+    "a": "Salutogenese → Risikofaktoren reduzieren",
+    "b": "Pathogenese → Schutzfaktoren stärken",
+    "c": "Salutogenese → Ressourcen und protektive Faktoren stärken",
+    "d": "Pathogenese → Gesundheit als dynamischen Prozess fördern",
+    "richtig": "c",
+    "begruendung": "Protektiv bedeutet schützend. Diese Gegenüberstellung gehört zu den Lieblingsfallen des Lehrstuhls."
+  },
+  {
+    "frage": "29. Was beschreibt „Homöostase“ im Zusammenhang mit Gesundheit?",
+    "a": "das Vorliegen einer medizinischen Diagnose",
+    "b": "die vollständige Abwesenheit von Anforderungen",
+    "c": "das Herstellen bzw. Aufrechterhalten eines körperlichen oder psychischen Gleichgewichts",
+    "d": "ausschließlich gesellschaftliche Teilhabe",
+    "richtig": "c",
+    "begruendung": "Homöostase bezeichnet einen Gleichgewichts- bzw. Regulationszustand."
+  },
+  {
+    "frage": "30. Welche Auffassung beschreibt Gesundheit als „Flexibilität und Anpassung“?",
+    "a": "Gesundheit besteht in unveränderlichen biologischen Normwerten.",
+    "b": "Gesundheit liegt nur vor, wenn keine Belastungen auftreten.",
+    "c": "Gesundheit ist ausschließlich gesellschaftliche Leistungsfähigkeit.",
+    "d": "Gesundheit umfasst die Fähigkeit, innere und äußere Anforderungen zu bewältigen.",
+    "richtig": "d",
+    "begruendung": "Diese Vorstellung bildet später eine wichtige Brücke zum SAR-Modell."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

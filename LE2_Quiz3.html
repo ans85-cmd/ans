@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 3 - LE2</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 2</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+   {
+    "frage": "61. Wozu dient das DISCERN-Instrument?",
+    "a": "Diagnose psychischer Störungen",
+    "b": "Unterstützung bei der Beurteilung der Qualität von Gesundheitsinformationen und -angeboten",
+    "c": "Messung körperlicher Aktivität",
+    "d": "Bestimmung von Risikowahrnehmung nach Slovic",
+    "richtig": "b",
+    "begruendung": "DISCERN unterstützt eine strukturierte Qualitätsbewertung."
+  },
+  {
+    "frage": "62. Welche Aktivität findet auf der niedrigsten Aktivitätsebene internetbasierter Gesundheitskommunikation statt?",
+    "a": "Reine Informationsaufnahme ohne Interaktion",
+    "b": "Austausch in einer Community",
+    "c": "professionelle Onlineberatung",
+    "d": "gegenseitige Vernetzung von Nutzer:innen",
+    "richtig": "a",
+    "begruendung": "Die Stufen verlaufen grob von Information → Interaktion → Vernetzung."
+  },
+  {
+    "frage": "63. Eine Gesundheitswebseite bietet zusätzlich zu Informationen einen Selbsttest an. Welcher Ebene entspricht dies am ehesten?",
+    "a": "reine Information",
+    "b": "Interaktion",
+    "c": "Vernetzung",
+    "d": "formalisierte Psychotherapie",
+    "richtig": "b",
+    "begruendung": "Der/die Nutzer:in reagiert auf das Angebot, ohne sich zwingend mit anderen Personen zu vernetzen."
+  },
+  {
+    "frage": "64. Welche Aktivität gehört zur höchsten beschriebenen Aktivitätsebene?",
+    "a": "Vernetzung und Austausch mit anderen Personen",
+    "b": "Lesen eines Beipackzettels",
+    "c": "passives Betrachten einer Informationsseite",
+    "d": "ausschließlich Durchführung eines Selbsttests",
+    "richtig": "a",
+    "begruendung": "Auf der Vernetzungsebene kann auch professionelle Online-Gesundheitsberatung stattfinden."
+  },
+  {
+    "frage": "65. Welche Beschreibung von Gesundheitsberatung ist korrekt?",
+    "a": "Sie kann Krankheiten verhindern, Gesundheit fördern und die Bewältigung von Erkrankungen unterstützen.",
+    "b": "Sie dient ausschließlich der Behandlung psychischer Störungen.",
+    "c": "Sie richtet sich ausschließlich an bereits erkrankte Menschen.",
+    "d": "Sie ist identisch mit Psychotherapie.",
+    "richtig": "a",
+    "begruendung": "Gesundheitsberatung gehört insbesondere zu Prävention, Gesundheitsförderung und Rehabilitation."
+  },
+  {
+    "frage": "66. Welches Beispiel entspricht einer informellen Beratung?",
+    "a": "professionelle Ernährungsberatung im Krankenhaus",
+    "b": "Eine Nachbarin berichtet aufgrund eigener Erfahrungen, was ihr bei einem gesundheitlichen Problem geholfen hat.",
+    "c": "eine psychologische Psychotherapie",
+    "d": "eine strukturierte professionelle Gesundheitsberatung",
+    "richtig": "b",
+    "begruendung": "Informelle Beratung findet im Alltag statt und basiert häufig auf persönlichen Erfahrungen."
+  },
+  {
+    "frage": "67. Eine medizinische Fachkraft beantwortet in einer Praxis eine konkrete Frage zu einer Informationsbroschüre, ohne eine eigentliche professionelle Beratung durchzuführen. Welche Form liegt am ehesten vor?",
+    "a": "informelle Beratung",
+    "b": "formalisierte professionelle Beratung",
+    "c": "Psychotherapie",
+    "d": "halbformalisierte Beratung",
+    "richtig": "d",
+    "begruendung": "Halbformalisiert = fachliche Beratung durch eine Person aus Bildungs-, Gesundheits- oder Sozialwesen; die spezielle Beratungskompetenz steht nicht zwingend im Vordergrund."
+  },
+  {
+    "frage": "68. Was kennzeichnet formalisierte professionelle Beratung besonders?",
+    "a": "Sie beruht ausschließlich auf persönlicher Lebenserfahrung.",
+    "b": "Sie benötigt keine Fachkenntnisse.",
+    "c": "Sie findet nur in Kliniken statt.",
+    "d": "Sie verbindet Fachexpertise mit spezifischer Beratungskompetenz.",
+    "richtig": "d",
+    "begruendung": "Genau diese Kombination grenzt die formalisierte professionelle Beratung von einer bloßen fachlichen Auskunft ab."
+  },
+  {
+    "frage": "69. Wodurch unterscheidet sich Gesundheitsberatung von sonstiger psychologischer Beratung laut Studienbrief vor allem?",
+    "a": "ausschließlich durch die Dauer",
+    "b": "durch völlig andere Gesprächsmethoden",
+    "c": "eher durch Ziele und Inhalte als durch grundsätzlich andere Methoden",
+    "d": "ausschließlich durch den Berufsabschluss der beratenden Person",
+    "richtig": "c",
+    "begruendung": "Viele Beratungsmethoden überschneiden sich. Der gesundheitliche Gegenstand und die Ziele sind entscheidend."
+  },
+  {
+    "frage": "70. Wer kann Zielgruppe einer Gesundheitsberatung sein?",
+    "a": "sowohl gesunde als auch akut oder chronisch erkrankte Personen",
+    "b": "ausschließlich chronisch Erkrankte",
+    "c": "ausschließlich Personen mit psychischen Störungen",
+    "d": "ausschließlich Menschen mit nachgewiesenen Risikofaktoren",
+    "richtig": "a",
+    "begruendung": "Ziele und Inhalte unterscheiden sich je nach Lebens- und Gesundheitslage."
+  },
+  {
+    "frage": "71. Was ist mit der „Asymmetrie“ zwischen Expert:innen und Patient:innen gemeint?",
+    "a": "Patient:innen verfügen grundsätzlich über mehr medizinisches Fachwissen.",
+    "b": "Beide Seiten besitzen immer exakt dieselben Informationen und Entscheidungsmöglichkeiten.",
+    "c": "Es besteht ein Ungleichgewicht bezüglich Wissen und Einfluss, das durch gute Gesundheitsberatung verringert werden soll.",
+    "d": "Die Asymmetrie soll für erfolgreiche Beratung möglichst erhalten bleiben.",
+    "richtig": "c",
+    "begruendung": "Beratung soll Selbstbestimmung und Partizipation (Beteiligung) fördern."
+  },
+  {
+    "frage": "72. Warum eignet sich die Salutogenese als Grundlage für Gesundheitsberatung?",
+    "a": "Weil sie ausschließlich Risikofaktoren beseitigt.",
+    "b": "Weil sie die passive Patientenrolle stärkt.",
+    "c": "Weil sie ausschließlich auf Diagnostik ausgerichtet ist.",
+    "d": "Weil sie Schutzfaktoren und gesundheitliche bzw. psychosoziale Ressourcen stärkt.",
+    "richtig": "d",
+    "begruendung": "Das passt unmittelbar zu Gesundheitsförderung und Empowerment."
+  },
+  {
+    "frage": "73. Was bedeutet Empowerment im Kontext der Gesundheitsberatung?",
+    "a": "Entscheidungen vollständig an Fachpersonen abzugeben",
+    "b": "Menschen zu befähigen, Ressourcen aufzubauen und selbstbestimmte informierte Gesundheitsentscheidungen zu treffen",
+    "c": "Patient:innen durch möglichst starke Furcht zur Compliance zu bringen",
+    "d": "ausschließlich medizinisches Wissen zu vermitteln",
+    "richtig": "b",
+    "begruendung": "Empowerment = Befähigung zu mehr Selbstbestimmung und Handlungskompetenz."
+  },
+  {
+    "frage": "74. Welche Kombination gehört zur non-direktiven klientenzentrierten Beratung nach Rogers?",
+    "a": "Diagnose, Konfrontation und Kontrolle",
+    "b": "Kongruenz, Empathie und Akzeptanz",
+    "c": "Furcht, Druck und Fremdsteuerung",
+    "d": "Risiko, Vulnerabilität und Schweregrad",
+    "richtig": "b",
+    "begruendung": "Kongruenz = Echtheit; Empathie = einfühlendes Verstehen; Akzeptanz = wertschätzende Annahme."
+  },
+  {
+    "frage": "75. Was ist ein wesentliches Ziel non-direktiver klientenzentrierter Beratung?",
+    "a": "Die beratende Person gibt möglichst genaue Lösungen vor.",
+    "b": "Klient:innen sollen mit professioneller Unterstützung eigene Lösungen entwickeln.",
+    "c": "Verhalten wird ausschließlich über Belohnung verändert.",
+    "d": "Widerspruch der Klient:innen soll durch Konfrontation beendet werden.",
+    "richtig": "b",
+    "begruendung": "Non-direktiv bedeutet, dass nicht einfach Anweisungen erteilt werden; die Eigenständigkeit der Person wird gestärkt."
+  },
+  {
+    "frage": "76. Was ist das zentrale Ziel der Motivierenden Gesprächsführung?",
+    "a": "Förderung der intrinsischen Motivation zur Verhaltensänderung",
+    "b": "möglicherweise schnelle Fremdentscheidung durch die beratende Person",
+    "c": "Erhöhung von Angst und Furcht",
+    "d": "Vermittlung medizinischer Diagnosen",
+    "richtig": "a",
+    "begruendung": "Intrinsische Motivation = Motivation, die aus der Person selbst heraus entsteht."
+  },
+  {
+    "frage": "77. Wie werden Menschen in der Motivierenden Gesprächsführung betrachtet, die ihr problematisches Verhalten noch nicht verändern?",
+    "a": "grds. uneinsichtig",
+    "b": "grds. unmotiviert",
+    "c": "behandlungsunfähig",
+    "d": "häufig ambivalent gegenüber einer Veränderung",
+    "richtig": "d",
+    "begruendung": "Ambivalent = gleichzeitig Gründe für und gegen eine Veränderung erleben."
+  },
+  {
+    "frage": "78. Welche Vorgehensweise entspricht Motivational Interviewing?",
+    "a": "intensive Konfrontation mit Fehlern",
+    "b": "Entscheidungen für die Person treffen",
+    "c": "Widerstand durch Druck brechen",
+    "d": "Empathisch zuhören, Konfrontation vermeiden, Selbstwirksamkeit stärken und Diskrepanzen zu eigenen Lebenszielen herausarbeiten",
+    "richtig": "d",
+    "begruendung": "Diskrepanz = Widerspruch, hier beispielsweise zwischen „Ich möchte gesund sein“ und einem Verhalten, das diesem Ziel entgegensteht."
+  },
+  {
+    "frage": "79. Warum ist es für die Planung von Gesundheitskommunikation wichtig, die Merkmale des Zielverhaltens zu kennen?",
+    "a": "Alle Verhaltensweisen reagieren gleich auf Kommunikation.",
+    "b": "Kommunikation ist nur bei Erkrankungen relevant.",
+    "c": "Nur der Informationsgehalt einer Botschaft entscheidet über ihre Wirkung.",
+    "d": "Weil etwa Gewohnheitsstärke, Häufigkeit, Barrieren und Emotionalität beeinflussen, welche Intervention realistisch wirksam sein kann.",
+    "richtig": "d",
+    "begruendung": "Das ist eine der wichtigsten Synergien der LE2. SB1 beschreibt Eigenschaften des Verhaltens; SB2 zeigt, dass Kommunikationsmaßnahmen daran angepasst werden müssen."
+  },
+  {
+    "frage": "80. Eine Gesundheitskampagne möchte die Teilnahme an einer Krebsfrüherkennung erhöhen. Sie erklärt das persönliche Risiko, zeigt den Nutzen der Früherkennung, nennt konkrete leicht erreichbare Untersuchungsstellen und berücksichtigt Ängste vor einem möglichen Befund. Welche Aussage beschreibt die Strategie am besten?",
+    "a": "Sie basiert ausschließlich auf einem Furchtappell und ignoriert die Merkmale des Zielverhaltens.",
+    "b": "Sie ist reine Informationsvermittlung und kann deshalb keine Verhaltensänderung bewirken.",
+    "c": "Sie verbindet Kenntnisse über aufdeckendes Gesundheitsverhalten mit gezielter Risikokommunikation und realisierbaren Handlungsmöglichkeiten.",
+    "d": "Da Früherkennung aufdeckendes Verhalten ist, darf keine Risikokommunikation eingesetzt werden.",
+    "richtig": "c",
+    "begruendung": "Hier greifen beide Kapitel direkt ineinander: Früherkennung ist aufdeckendes Verhalten, kann wegen der möglichen Diagnose emotional belastend sein und verlangt deshalb Kommunikation, die Bedrohung und gleichzeitig kontrollierbare, umsetzbare Handlungsoptionen vermittelt."
+  },
+  {
+    "frage": "81. Was zeigte die von Khaw et al. berichtete Längsschnittstudie zu mehreren gesundheitsförderlichen Verhaltensweisen?",
+    "a": "Personen, die Nichtrauchen, ausreichende Bewegung, moderaten Alkoholkonsum und gesunde Ernährung kombinierten, hatten ein deutlich geringeres Sterblichkeitsrisiko.",
+    "b": "Nur körperliche Bewegung hing mit der Sterblichkeit zusammen.",
+    "c": "Die Kombination mehrerer Verhaltensweisen brachte keinen zusätzlichen Vorteil.",
+    "d": "Der Zusammenhang zeigte sich ausschließlich für Krebserkrankungen.",
+    "richtig": "a",
+    "begruendung": "Die Kombination der vier günstigen Verhaltensweisen war mit etwa einem Viertel des Sterblichkeitsrisikos gegenüber Personen verbunden, die keines davon praktizierten."
+  },
+  {
+    "frage": "82. Welcher der folgenden Faktoren gehörte nicht zu den acht im Studienbrief genannten verhaltensbezogenen bzw. verhaltensbeeinflussten globalen Risikofaktoren der WHO?",
+    "a": "Tabakrauchen",
+    "b": "hoher Blutdruck",
+    "c": "soziale Isolation",
+    "d": "körperliche Inaktivität",
+    "richtig": "c",
+    "begruendung": "Genannt wurden Alkoholkonsum, Tabakrauchen, hoher Blutdruck, hoher BMI, hohe Cholesterinwerte, hoher Blutzucker, geringer Obst- und Gemüseverzehr und körperliche Inaktivität."
+  },
+  {
+    "frage": "83. Was unterscheidet bei McEachan et al. die Merkmale Häufigkeit und Gewohnheit?",
+    "a": "Häufigkeit bezeichnet gesundheitliche Folgen, Gewohnheit deren Sichtbarkeit.",
+    "b": "Häufigkeit beschreibt, wie oft ein Verhalten gezeigt wird; Gewohnheit beschreibt, wie routinemäßig bzw. automatisiert es erfolgt.",
+    "c": "Häufigkeit betrifft nur Risikoverhalten, Gewohnheit nur gesundheitsförderliches Verhalten.",
+    "d": "Beide Begriffe sind gleichbedeutend.",
+    "richtig": "b",
+    "begruendung": "Ein Verhalten kann häufig auftreten, ohne bereits stark automatisiert zu sein."
+  },
+  {
+    "frage": "84. Was ist der Unterschied zwischen Wahrscheinlichkeit von Folgen und Relevanz von Folgen?",
+    "a": "Die Begriffe unterscheiden sich nur sprachlich.",
+    "b": "Wahrscheinlichkeit bezieht sich auf kurzfristige, Relevanz auf langfristige Folgen.",
+    "c": "Relevanz beschreibt, ob eine Folge sichtbar ist.",
+    "d": "Wahrscheinlichkeit betrifft, wie wahrscheinlich gesundheitliche Folgen eintreten; Relevanz betrifft, wie bedeutsam diese Folgen für die Gesundheit sind.",
+    "richtig": "d",
+    "begruendung": "Ein Verhalten kann beispielsweise mit einer relativ unwahrscheinlichen, dafür aber sehr schwerwiegenden gesundheitlichen Folge verbunden sein."
+  },
+  {
+    "frage": "85. Welche Aussage unterscheidet Sichtbarkeit von Folgen und Zeitdauer angezielter Folgen korrekt?",
+    "a": "Sichtbarkeit beschreibt immer kurzfristige Auswirkungen.",
+    "b": "Sichtbarkeit fragt, ob eine Folge wahrnehmbar ist; Zeitdauer fragt, ob die angezielte Folge eher unmittelbar oder langfristig eintritt.",
+    "c": "Unsichtbare Folgen sind immer langfristig.",
+    "d": "Beide Merkmale betreffen ausschließlich Risikoverhalten.",
+    "richtig": "b",
+    "begruendung": "Ein Verhalten kann gleichzeitig kurzfristige sichtbare und langfristige zunächst unsichtbare Konsequenzen besitzen, wie das Beispiel Sonnenschutz zeigt."
+  },
+  {
+    "frage": "86. Warum sind Taxonomien gesundheitsbezogenen Verhaltens praktisch relevant?",
+    "a": "Weil ähnliche Verhaltensweisen erkannt werden können und eine bei einem Verhalten erfolgreiche Intervention möglicherweise auf strukturell ähnliche Verhaltensweisen übertragen werden kann.",
+    "b": "Weil dadurch keine empirische Forschung mehr notwendig ist.",
+    "c": "Weil jede Verhaltensklasse automatisch dieselbe Intervention benötigt.",
+    "d": "Weil Taxonomien ausschließlich der statistischen Beschreibung dienen.",
+    "richtig": "a",
+    "begruendung": "Taxonomie = systematische Klassifikation. Sie hilft sowohl bei Interventionen als auch bei der Weiterentwicklung von Theorien über Gesundheitsverhalten."
+  },
+  {
+    "frage": "87. Welche Aussage zum gemeinsamen Auftreten verschiedener Gesundheitsverhaltensweisen ist korrekt?",
+    "a": "Einmal gefundene Verhaltenscluster gelten für alle Bevölkerungsgruppen.",
+    "b": "Nur Risikoverhalten tritt gebündelt auf.",
+    "c": "Es gibt gewisse stabile Muster, gleichzeitig können sich Bündelungen abhängig von untersuchter Gruppe, gesellschaftlichen Bedingungen und anderen Faktoren unterscheiden.",
+    "d": "Geschlecht, Alter und gesellschaftliche Veränderungen sind dabei irrelevant.",
+    "richtig": "c",
+    "begruendung": "Cluster (Bündel) von Verhaltensweisen können sich zwischen Gruppen unterscheiden. Gesundheitsverhalten ist keine statische Größe."
+  },
+  {
+    "frage": "88. Was ist ein wichtiger Unterschied zwischen gesundheitsbezogener und gesundheitsrelevanter Kommunikation?",
+    "a": "Gesundheitsrelevante Kommunikation darf nur von Fachpersonal erfolgen.",
+    "b": "Gesundheitsbezogene Kommunikation wirkt niemals auf Verhalten.",
+    "c": "Gesundheitsrelevante Kommunikation findet ausschließlich medial statt.",
+    "d": "Gesundheitsrelevante Kommunikation kann das Gesundheitsverhalten beeinflussen, auch wenn dies von den Beteiligten gar nicht beabsichtigt wurde.",
+    "richtig": "d",
+    "begruendung": "Gesundheitsbezogene Kommunikation bezieht sich inhaltlich ausdrücklich auf Gesundheit/Krankheit. Gesundheitsrelevante Kommunikation kann dagegen auch ohne entsprechende Intention das Gesundheitsverhalten beeinflussen."
+  },
+  {
+    "frage": "89. Welche Gruppe enthält die vier im Studienbrief unterschiedenen Klassen von Anbietenden bevölkerungsbezogener Gesundheitsinformationen?",
+    "a": "staatliche/halbstaatliche Institutionen – private Stiftungen/Vereine – pharmazeutische Industrie – Print- und sonstige Medien",
+    "b": "Ärzt:innen – Psycholog:innen – Pflegekräfte – Sozialarbeiter:innen",
+    "c": "Universitäten – Krankenhäuser – Schulen – Betriebe",
+    "d": "Politik – Medizin – Psychologie – Wirtschaft",
+    "richtig": "a",
+    "begruendung": "Die Anbieter verfolgen teilweise unterschiedliche Ziele, weshalb Informationen hinsichtlich Vollständigkeit, Ausgewogenheit und Gestaltung variieren können."
+  },
+  {
+    "frage": "90. Was beschreibt die Unterscheidung risk as analysis und risk as feelings?",
+    "a": "objektives Risiko versus statistischer Fehler",
+    "b": "persönliche versus gesellschaftliche Risiken",
+    "c": "sachlich-kognitive Verarbeitung einer Gefahr versus Verarbeitung der dadurch ausgelösten Gefühle",
+    "d": "bekannte versus unbekannte Gefahr nach Slovic",
+    "richtig": "c",
+    "begruendung": "Bei stark bedrohlichen Informationen muss die Person nicht nur die Gefahr kognitiv verarbeiten, sondern auch Angst oder Furcht regulieren."
+  },
+  {
+    "frage": "91. Welche Reihenfolge entspricht der Kampagnenplanung nach Nöcker am besten?",
+    "a": "Zielgruppe → Evaluation → epidemiologische Ausgangslage → Zielsetzung → Umsetzung",
+    "b": "epidemiologische Ausgangslage → Ziele → Zielgruppenanalyse → theoretische Modelle → Maßnahmen/Implementierung → Evaluation",
+    "c": "theoretisches Modell → Medienauswahl → Zielgruppe → Epidemiologie → Evaluation",
+    "d": "Evaluation → Ziele → Durchführung → Zielgruppe → Epidemiologie",
+    "richtig": "b",
+    "begruendung": "Zuerst wird das Gesundheitsproblem bestimmt, daraus werden Ziele abgeleitet, dann Zielgruppe und theoretische Grundlagen berücksichtigt, anschließend wird umgesetzt und zuletzt evaluiert."
+  },
+  {
+    "frage": "92. Welche Zuordnung von Beratungszielen bei akuter und chronischer Erkrankung entspricht dem Studienbrief?",
+    "a": "akut → Integration der Erkrankung ins Selbstbild; chronisch → schnelle vollständige Heilung",
+    "b": "bei beiden Gruppen sind die Beratungsziele grundsätzlich identisch",
+    "c": "akut → ausschließlich medizinische Information; chronisch → ausschließlich psychologische Beratung",
+    "d": "akut → Wiederherstellung der Gesundheit sowie Vermeidung von Rückfällen/Folgeschäden; chronisch → Integration der Krankheit in Alltag und Selbstbild sowie Umgang mit Belastungen",
+    "richtig": "d",
+    "begruendung": "Gesundheitsberatung muss sich an der konkreten gesundheitlichen Situation und den Bedürfnissen der Person orientieren."
+  },
+  {
+    "frage": "93. Welcher Vorteil professioneller Online-Gesundheitsberatung wird im Studienbrief genannt?",
+    "a": "Sie kann anonym sowie unabhängig von Ort und Zeit genutzt werden.",
+    "b": "Ihre Informationen sind grundsätzlich zuverlässiger als persönliche Beratung.",
+    "c": "Sie ersetzt immer eine persönliche Beratung.",
+    "d": "Sie verhindert automatisch Informationsüberflutung.",
+    "richtig": "a",
+    "begruendung": "Onlineangebote können niedrigschwellig (leicht zugänglich) sein und räumliche oder zeitliche Hürden reduzieren."
+  },
+  {
+    "frage": "94. Warum sind subjektive Krankheitstheorien für Gesundheitsberatung bedeutsam?",
+    "a": "Sie ersetzen medizinische Diagnosen.",
+    "b": "Sie spielen nur bei psychischen Erkrankungen eine Rolle.",
+    "c": "Persönliche Vorstellungen über Krankheit beeinflussen, wie Menschen Informationen wahrnehmen und interpretieren.",
+    "d": "Sie sollten in professioneller Beratung grundsätzlich ignoriert werden.",
+    "richtig": "c",
+    "begruendung": "Subjektive Krankheitstheorien sind persönliche Vorstellungen darüber, was eine Erkrankung bedeutet, wodurch sie verursacht wurde oder wie sie verläuft."
+  },
+  {
+    "frage": "95. Welches Ideal steht hinter dem Konzept der informierten Patient:innen?",
+    "a": "Patient:innen sollen medizinische Entscheidungen vollständig an Fachpersonal delegieren.",
+    "b": "Patient:innen sollen zu autonomen, informierten Gesundheitsentscheidungen und Selbstmanagement befähigt werden.",
+    "c": "Patient:innen sollen ausschließlich medizinisches Faktenwissen auswendig lernen.",
+    "d": "Die Verantwortung für Behandlung wird vollständig vom Gesundheitssystem auf die Patient:innen übertragen.",
+    "richtig": "b",
+    "begruendung": "Das Konzept passt zum Empowerment (Befähigung zu selbstbestimmtem Handeln). Selbstwirksamkeit und Selbstmanagement sollen gestärkt werden."
+  },
+  {
+    "frage": "96. Was beschreibt eine paternalistische Beziehung zwischen Fachpersonal und Patient:innen?",
+    "a": "Patient:innen besitzen grundsätzlich die alleinige Entscheidungsmacht.",
+    "b": "Patient:innen und Fachpersonen entscheiden stets völlig gleichberechtigt.",
+    "c": "Fachpersonen verzichten auf Empfehlungen.",
+    "d": "Fachpersonal übernimmt eine stärker bestimmende Rolle und Patient:innen eine eher passive Rolle.",
+    "richtig": "d",
+    "begruendung": "Paternalistisch bedeutet sinngemäß „bevormundend/für jemanden entscheidend“."
+  },
+  {
+    "frage": "97. Welche Kompetenzen gehören laut Studienbrief zu professioneller Gesundheitsberatung?",
+    "a": "ausschließlich praktische Lebenserfahrung",
+    "b": "ausschließlich medizinisches Faktenwissen",
+    "c": "Kenntnisse gesundheitspsychologischer Theorien und Forschung, valide Diagnostik sowie professionelle Beratungskompetenzen",
+    "d": "ausschließlich Gesprächsführung nach Rogers",
+    "richtig": "c",
+    "begruendung": "Valide Diagnostik bedeutet, dass tatsächlich das Merkmal aussagekräftig erfasst wird, das gemessen werden soll."
+  },
+  {
+    "frage": "98. Für welchen Problembereich wurde die Motivierende Gesprächsführung ursprünglich entwickelt?",
+    "a": "Behandlung von Menschen mit Alkoholabhängigkeit",
+    "b": "Behandlung von Angststörungen",
+    "c": "Verbesserung der Impfbereitschaft",
+    "d": "Förderung körperlicher Aktivität bei älteren Menschen",
+    "richtig": "a",
+    "begruendung": "Motivational Interviewing wurde ursprünglich in den USA für Menschen mit Alkoholabhängigkeit entwickelt und später auf viele weitere Gesundheitsverhaltensweisen übertragen."
+  },
+  {
+    "frage": "99. Welches Risiko internetbasierter Gesundheitsangebote wird im Studienbrief ausdrücklich genannt?",
+    "a": "Es existieren zu wenige gesundheitsbezogene Informationen.",
+    "b": "Onlineangebote können nicht anonym genutzt werden.",
+    "c": "Onlineangebote sind grundsätzlich kostenpflichtig.",
+    "d": "Die niedrige Zugangsschwelle kann mit einer ungefilterten Flut an Informationen und Gesundheitsangeboten einhergehen.",
+    "richtig": "d",
+    "begruendung": "Genau deshalb ist Gesundheitskompetenz wichtig."
+  },
+  {
+    "frage": "100. Welche Aussage zur Abgrenzung von Beratung und Psychotherapie entspricht dem Studienbrief am besten?",
+    "a": "Beratung und Psychotherapie unterscheiden sich ausschließlich durch die verwendeten Gesprächstechniken.",
+    "b": "Psychotherapie dient der Behandlung psychischer Störungen; Beratung befasst sich unter anderem mit schwierigen Lebenslagen, Krisen oder Konflikten ohne Krankheitswert und setzt bei Ratsuchenden typischerweise mehr Einsichts- und Handlungsfähigkeit voraus.",
+    "c": "Gesundheitsberatung darf nur mit vollkommen gesunden Menschen durchgeführt werden.",
+    "d": "Beratung zielt auf Heilung, Psychotherapie auf Hilfe zur Selbsthilfe.",
+    "richtig": "b",
+    "begruendung": "Im Studienbrief wird vereinfacht zwischen Heilen bei Psychotherapie und Helfen bei Beratung unterschieden."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

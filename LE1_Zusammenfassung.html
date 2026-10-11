@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE1_index.html" class="drawer-link">Zurück zu LE1</a>
+                <a href="LE1_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE1_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE1_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE1_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung -->
+        <div class="content-body">
+            <h1>LE 1 – Einführung, Gesundheitsförderung und Krankheitsprävention</h1>
+
+            <h2>1. Warum Gesundheitspsychologie überhaupt notwendig wurde</h2>
+            <p>Gesundheit besitzt sowohl individuell als auch gesellschaftlich einen hohen Stellenwert. Die Bedeutung der Gesundheitspsychologie hängt insbesondere mit einem Wandel des Krankheitsspektrums zusammen. Verbesserungen bei Hygiene, öffentlicher Versorgung und Medizin führten dazu, dass Infektionskrankheiten als Todesursache zurückgingen und Menschen länger leben. Gleichzeitig dominieren heute chronisch-degenerative Erkrankungen (lang andauernde bzw. fortschreitende Krankheiten) wie Herz-Kreislauf-Erkrankungen, Diabetes, Krebs oder chronische psychische Störungen.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Diese Erkrankungen lassen sich häufig nicht durch eine einzelne Ursache erklären. Neben biologischen Faktoren spielen Verhalten und Umweltbedingungen eine wichtige Rolle. Dadurch stößt eine ausschließlich kurative Medizin (Medizin, die bereits bestehende Krankheiten behandelt) an Grenzen. Hinzu kommen hohe direkte und indirekte gesellschaftliche Kosten chronischer Erkrankungen. Gesundheit soll deshalb nicht erst wiederhergestellt werden, wenn Krankheit entstanden ist, sondern bereits erhalten und gefördert werden.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Damit beginnt der zentrale Gedankengang der gesamten Lerneinheit: Das Verständnis davon, was Gesundheit und Krankheit sind, bestimmt auch, wie man Gesundheit fördert und Krankheit verhindert.</p>
+
+
+            <h2>2. Unterschiedliche Vorstellungen von Krankheit</h2>
+            <p><strong>Medizinischer Krankheitsbegriff:</strong> Im medizinischen Sinn bezeichnet Krankheit eine körperliche, geistige oder seelische Veränderung bzw. Störung, die objektiv feststellbar ist und Behandlungs- oder Pflegebedürftigkeit hervorrufen kann. Krankheit kann außerdem das subjektive Wohlbefinden und die Leistungsfähigkeit beeinträchtigen. Nach Faltermaier umfasst Krankheit drei Dimensionen:</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <ul>
+                <li>Störung bzw. Normabweichung (objektiv messbare Abweichung im Organismus)</li>
+                <li>soziale Konsequenzen (z. B. Einschränkungen der beruflichen oder familiären Rollen)</li>
+                <li>psychisches Erleben (z. B. Schmerz, Angst oder Belastung)</li>
+            </ul>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Der allgemeine medizinische Krankheitsbegriff und das biomedizinische Modell sind nicht identisch. Genau diese Vermischung wurde in der SoSe-25-AK als Distraktor verwendet. Der medizinische Krankheitsbegriff kann beispielsweise subjektives Wohlbefinden und Leistungsfähigkeit berücksichtigen; das klassische biomedizinische Modell ist dagegen deutlich enger.</p>
+            </div>
+
+
+            <h2>3. Biomedizinisches Krankheitsmodell</h2>
+            <p>Das biomedizinische Modell (Krankheit wird primär biologisch erklärt) betrachtet Krankheit als Störung eines ansonsten normal funktionierenden Organismus. Eine spezifische biologische Ursache, beispielsweise ein Virus oder eine genetische Veränderung, führt zu einer bestimmten körperlichen Störung. Psychische und soziale Faktoren werden nicht als Teil der Krankheitsentstehung berücksichtigt. Die erkrankte Person besitzt eher eine passive Rolle; die Behandlung setzt hauptsächlich am Körper an, etwa durch Medikamente oder Operationen.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Gesundheit und Krankheit werden dichotom (als zwei einander ausschließende Zustände) verstanden: <em>gesund ↔ krank</em>. Gesundheit bedeutet in diesem Modell im Wesentlichen die Abwesenheit von Krankheit.</p>
+            
+            <p>Kritisiert wurde das Modell insbesondere, weil es reduktionistisch (ein komplexes Geschehen auf wenige Faktoren reduzierend) ist. Subjektives Erleben, Verhalten, psychologische und soziale Faktoren sowie die multifaktorielle Krankheitsentstehung (Entstehung durch das Zusammenwirken mehrerer Faktoren) werden nicht ausreichend berücksichtigt.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <div class="callout-box">
+                <p>📌 AK-Radar: K1K1 wurde in allen drei vorliegenden Klausuren geprüft. Dabei tauchte das biomedizinische Modell jedes Mal auf. Typische Fallen waren: Gesundheit als Abwesenheit von Krankheit, die fehlende Berücksichtigung multifaktorieller Einflüsse und die Verwechslung mit dem biopsychosozialen Modell.</p>
+            </div>
+
+
+            <h2>4. Risikofaktorenmodell – erster Schritt über das Biomedizinische hinaus</h2>
+            <p>Risikofaktorenmodelle entstanden insbesondere zur Erklärung chronischer Erkrankungen. Sie stammen aus der Epidemiologie (Forschung zur Verteilung, Häufigkeit und zu Einflussfaktoren von Krankheiten in Bevölkerungen).</p>
+            
+            <p>Ein Risikofaktor ist eine Variable, deren Vorliegen die Wahrscheinlichkeit einer Erkrankung erhöht, beispielsweise Rauchen, Bewegungsmangel, erhöhter Blutdruck oder Übergewicht. Entscheidend ist: Ein Risikofaktor ist keine kausale Ursache (nicht automatisch die direkte Ursache einer Erkrankung). Stattdessen wird ein multifaktorielles Krankheitsgeschehen angenommen, bei dem mehrere Einflüsse gemeinsam zur Entstehung einer Erkrankung beitragen.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p><strong>Klausurformulierung, die sitzen muss:</strong><br>
+            Risikofaktoren = wahrscheinlichkeitserhöhende Determinanten (Determinante = Einflussfaktor)<br>
+            <em>Nicht:</em> Risikofaktoren = kausale Ursachen</p>
+            
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+
+            <h2>5. Biopsychosoziales Modell – der entscheidende Paradigmenwechsel</h2>
+            <p>Das biopsychosoziale Modell nach Engel erweitert die Perspektive nochmals. Gesundheit und Krankheit entstehen aus dem Wechselspiel:</p>
+            <ul>
+                <li>biologischer Faktoren (z. B. Gene, körperliche Prozesse)</li>
+                <li>psychologischer Faktoren (z. B. Emotionen, Gedanken, Motivation und Verhalten)</li>
+                <li>sozialer Faktoren (z. B. Beziehungen, Arbeit, gesellschaftliche Bedingungen)</li>
+            </ul>
+            <p>Damit besitzt auch das Individuum eine aktive Rolle bei der Erhaltung, Wiederherstellung und Förderung seiner Gesundheit.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Gleichzeitig verändert sich das Verständnis von Gesundheit und Krankheit. Es gibt nicht mehr nur „gesund oder krank“, sondern ein Gesundheits-Krankheits-Kontinuum (fließende Skala). Eine Person kann sich auf diesem Kontinuum in die eine oder andere Richtung bewegen.</p>
+            
+            <p><strong>Synergie zu SB2:</strong> Genau diese Vorstellung ermöglicht später Gesundheitsförderung. Auch ein chronisch kranker Mensch kann auf dem Kontinuum in Richtung Gesundheit bewegt werden, etwa durch bessere Lebensqualität, Ressourcen oder Teilhabe.</p>
+            
+            <a href="SB2_K1-Förd._Prävention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K1-Förd._Prävention.pdf</a>
+
+
+            <h2>6. Vom Krankheitsbegriff zum positiven Gesundheitsbegriff</h2>
+            <p>Die WHO definierte Gesundheit 1946 als körperliches, psychisches und soziales Wohlbefinden und nicht lediglich als Abwesenheit von Krankheit. Kritisiert wird jedoch, dass vollkommenes Wohlbefinden kaum erreichbar ist.</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Die Ottawa-Charta der WHO von 1986 entwickelt diesen Gedanken weiter. Gesundheit entsteht und verändert sich im Alltag – dort, wo Menschen leben, lernen, arbeiten und Beziehungen führen (dynamischer Prozess).</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+
+            <h2>7. Pathogenese und Salutogenese – die zentrale Brücke</h2>
+            <p><strong>Pathogenese</strong> (Entstehung von Krankheit) fragt: „Was macht Menschen krank?“ (Fokus auf Risiken).<br>
+            <strong>Salutogenese</strong> nach Antonovsky (Entstehung/Erhaltung von Gesundheit) fragt: „Was erhält Menschen trotz Belastungen gesund?“ (Fokus auf Ressourcen und Schutzfaktoren).</p>
+            
+            <a href="SB1_K1-Einführung.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K1-Einführung.pdf</a>
+
+            <p>Pathogenese → Krankheit verstehen → Risiken reduzieren → Krankheitsprävention<br>
+            Salutogenese → Gesundheit verstehen → Ressourcen stärken → Gesundheitsförderung</p>
+
+
+            <h2>10. Gesundheitsförderung und Krankheitsprävention</h2>
+            <p>Gesundheitsförderung basiert überwiegend auf der Salutogenese, orientiert sich an Ressourcen und Schutzfaktoren („Was hält Menschen gesund?“). Krankheitsprävention basiert stärker auf der Pathogenese und versucht Risikofaktoren zu reduzieren („Was macht Menschen krank?“).</p>
+            
+            <a href="SB2_K1-Förd._Prävention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K1-Förd._Prävention.pdf</a>
+
+
+            <h2>14. Prävention nach dem Zeitpunkt</h2>
+            <ul>
+                <li><strong>Primärprävention:</strong> vor dem erstmaligen Auftreten (z. B. Impfungen).</li>
+                <li><strong>Sekundärprävention:</strong> Früherkennung (z. B. Screening).</li>
+                <li><strong>Tertiärprävention:</strong> bei bestehender Erkrankung (Rückfälle/Folgeschäden verhindern).</li>
+                <li><strong>Quartäre Prävention:</strong> Vermeidung unnötiger medizinischer Maßnahmen / Überbehandlung.</li>
+            </ul>
+            
+            <a href="SB2_K1-Förd._Prävention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K1-Förd._Prävention.pdf</a>
+
+
+            <div class="conclusion-box">
+                <h3>Der rote Faden von LE1 in einem Satz</h3>
+                <p>Weil Gesundheit und Krankheit nicht ausreichend als rein biologische Gegensätze erklärbar sind, betrachtet die Gesundheitspsychologie sie biopsychosozial und systemisch; daraus folgen einerseits pathogenetisch orientierte Krankheitsprävention durch Reduktion von Risiken und andererseits salutogenetisch orientierte Gesundheitsförderung durch Stärkung von Ressourcen – sowohl beim Individuum als auch in seinen Lebenswelten.</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

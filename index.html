@@ -1,130 +1,242 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ans85-cmd</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Courier New', monospace;
-      color: #00ffcc;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Willkommen</title>
+    
+    <!-- PWA Manifest & App-Icons -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="J]L[M">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Playfair Display%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
+    <!-- Schriften -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
 
-    .container {
-      position: relative;
-      z-index: 1;
-      background-color: rgba(0, 0, 0, 0.75);
-      border: 1px solid #00ffcc33;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 400px;
-      margin: 5vh auto;
-      text-align: center;
-      box-shadow: 0 0 20px #00ffcc20;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    h1 {
-      margin-bottom: 1rem;
-      font-size: 1.8rem;
-      color: #00ffcc;
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
 
-    p {
-      margin-bottom: 1.5rem;
-      color: #99ffdd;
-    }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+        }
 
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+        /* Logo Animation */
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+            animation: fadeInDown 0.6s ease;
+        }
 
-    a.button {
-      padding: 0.8rem 1rem;
-      background: #000;
-      border: 1px solid #00ffcc;
-      color: #00ffcc;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: background 0.2s, color 0.2s, transform 0.2s;
-    }
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
 
-    a.button:hover {
-      background: #00ffcc;
-      color: #000;
-      transform: scale(1.05);
-    }
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
 
-    footer {
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: #55ffdd;
-    }
-  </style>
+        .welcome-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* Ladebalken */
+        .loader-container {
+            width: 100%;
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .loader-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.05s linear;
+        }
+
+        .loader-status {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sofort-Weiterleitung Button falls JavaScript blockiert */
+        .manual-link {
+            display: inline-block;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .manual-link:hover {
+            color: var(--primary-blue-hover);
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="matrixCanvas"></canvas>
 
-  <div class="container">
-    <h1>ans85-cmd</h1>
-    <p>Willkommen im System. Wähle deinen Zugang:</p>
-    <div class="buttons">
-      <a class="button" href="https://instagram.com" target="_blank">NEWS</a>
-      <a class="button" href="https://github.com" target="_blank">PROJEKTE</a>
-      <a class="button" href="https://linkedin.com" target="_blank">LIUS</a>
-      <a class="button" href="mailto:alex@example.com">KONTAKT</a>
+    <div class="app-container">
+        <div class="logo-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="75" height="75">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+
+        <h1>J]L[M Lernplattform</h1>
+        <div class="subtitle">Gesundheitspsychologie &amp; Kommunikation</div>
+        
+        <p class="welcome-text">
+            Willkommen zurück! Deine Lerninhalte werden geladen...
+        </p>
+
+        <!-- Ladebalken -->
+        <div class="loader-container">
+            <div class="loader-fill" id="loaderFill"></div>
+        </div>
+        <div class="loader-status" id="loaderStatus">Lade Module (0%)</div>
+
+        <div>
+            <a href="LE_index.html" class="manual-link">Direkt zur Startseite wechseln &rarr;</a>
+        </div>
     </div>
-    <footer>&copy; 2025 ans85-cmd</footer>
-  </div>
 
-  <script>
-    // Matrix-Effekt
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
+    <script>
+        // Automatischer Ladebalken mit Weiterleitung nach 1.8 Sekunden
+        const duration = 1800; // Dauer in Millisekunden
+        const intervalTime = 30;
+        const steps = duration / intervalTime;
+        let currentStep = 0;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const loaderFill = document.getElementById('loaderFill');
+        const loaderStatus = document.getElementById('loaderStatus');
 
-    const letters = '10101010101011101110110110110';
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+        const timer = setInterval(() => {
+            currentStep++;
+            const percent = Math.min(Math.round((currentStep / steps) * 100), 100);
+            
+            loaderFill.style.width = percent + '%';
+            loaderStatus.innerText = `Lade Module (${percent}%)`;
 
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ffcc';
-      ctx.font = fontSize + 'px monospace';
+            if (percent >= 100) {
+                clearInterval(timer);
+                window.location.href = 'LE_index.html';
+            }
+        }, intervalTime);
+    </script>
 
-      drops.forEach((y, x) => {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, x * fontSize, y * fontSize);
-
-        if (y * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[x] = 0;
-        }
-        drops[x]++;
-      });
-    }
-
-    setInterval(drawMatrix, 40);
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
 </body>
 </html>
