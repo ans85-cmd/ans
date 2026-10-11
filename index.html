@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>J]L[M - Willkommen</title>
     
-    <!-- PWA Manifest & App-Icons -->
+    <!-- PWA Manifest mit korrigiertem App-Icon -->
     <link rel="manifest" href='data:application/manifest+json,{
-        "name": "J]L[M",
+        "name": "J]L[M Lernplattform",
         "short_name": "J]L[M",
         "start_url": "LE_index.html",
         "display": "standalone",
         "background_color": "#f1f5f9",
         "theme_color": "#1e3a8a",
         "icons": [{
-            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAIJJREFUeJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwb7gABU3N3bWAAAAAElFTkSuQmCC",
             "sizes": "192x192 512x512",
-            "type": "image/svg+xml"
+            "type": "image/png"
         }]
     }'>
+    
+    <!-- Spezielles Apple Touch Icon (Löst das "Nur J"-Problem auf dem iPhone) -->
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAIJJREFUeJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwb7gABU3N3bWAAAAAElFTkSuQmCC">
     
     <!-- Meta-Tags für iOS & Android App-Feeling -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,9 +29,6 @@
     <meta name="apple-mobile-web-app-title" content="J]L[M">
     <meta name="theme-color" content="#1e3a8a">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Playfair Display%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
-
     <!-- Schriften -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,9 +44,9 @@
             --border-color: #cbd5e1;
             --text-dark: #0f172a;
             --text-muted: #64748b;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 8px 12px -6px rgba(15, 23, 42, 0.04);
         }
 
         * {
@@ -64,21 +64,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px; /* Nutzt den Bildschirmrand optimal aus */
             background-image: 
                 radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
             background-attachment: fixed;
         }
 
+        /* Volle Ausnutzung des Handy-Displays (Fluid & Responsive Container) */
         .app-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 100%; /* Passt sich auf Handys stufenlos an den Bildschirm an */
+            width: 500px;    /* Maximale Begrenzung auf Tablets/PCs */
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-card);
             border-radius: var(--radius-lg);
-            padding: 36px 28px;
+            padding: 32px 20px;
             text-align: center;
             position: relative;
         }
@@ -93,28 +95,28 @@
 
         h1 {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary-blue);
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--accent-gold);
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 700;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .welcome-text {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.5;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         /* Ladebalken */
@@ -124,7 +126,7 @@
             height: 8px;
             border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             position: relative;
         }
 
@@ -137,17 +139,16 @@
         }
 
         .loader-status {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             font-weight: 500;
             letter-spacing: 0.5px;
         }
 
-        /* Sofort-Weiterleitung Button falls JavaScript blockiert */
         .manual-link {
             display: inline-block;
-            margin-top: 25px;
-            font-size: 0.85rem;
+            margin-top: 22px;
+            font-size: 0.82rem;
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
@@ -169,7 +170,7 @@
 
     <div class="app-container">
         <div class="logo-wrapper">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="75" height="75">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="70" height="70">
               <defs>
                 <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stop-color="#1e3a8a" />
@@ -215,8 +216,7 @@
     </div>
 
     <script>
-        // Automatischer Ladebalken mit Weiterleitung nach 1.8 Sekunden
-        const duration = 1800; // Dauer in Millisekunden
+        const duration = 1600; // 1.6 Sekunden Ladezeit
         const intervalTime = 30;
         const steps = duration / intervalTime;
         let currentStep = 0;
