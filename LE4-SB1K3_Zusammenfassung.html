@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE4_index.html" class="drawer-link">Zurück zu LE4</a>
+                <a href="LE4-SB1K3_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE4-SB1K3_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE4-SB1K3_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE4-SB1K3_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+<!-- Inhalt der Zusammenfassung -->
+        <div class="content-body">
+            <h1>LE4 – SB1/K3: Soziale Integration und soziale Unterstützung</h1>
+
+            <h2>1. Soziale Integration und soziale Unterstützung</h2>
+            <p>Soziale Integration bedeutet die Einbettung einer Person in ein soziales Netzwerk. Im Mittelpunkt stehen dabei quantitative und strukturelle Merkmale sozialer Beziehungen: Wie viele Beziehungen hat eine Person? Wie häufig bestehen Kontakte? Wie ist ihr Netzwerk aufgebaut?</p>
+            
+            <p>Typische Indikatoren sind Familienstand, Zahl von Verwandten, Freund:innen und Bekannten sowie Kontakthäufigkeit. Weitere Merkmale sind Dichte (Anteil tatsächlich vorhandener Beziehungen im Verhältnis zu allen theoretisch möglichen Beziehungen), Dauer der Beziehungen und Reziprozität (Gegenseitigkeit einer Beziehung)[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Nach Laireiter lassen sich vier Dimensionen sozialer Netzwerke unterscheiden: Struktur bezeichnet Anzahl und Vernetzung der Bindungen; Beziehungen zu Netzwerkmitgliedern werden über Dauer, Art und Häufigkeit der Kontakte beschrieben; beim Inhalt wird zwischen unterstützenden und belastenden Beziehungen unterschieden; Evaluation (Bewertung) bezeichnet die Bewertung der Beziehungen durch die Beteiligten[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Soziale Unterstützung betrifft dagegen die qualitativen und funktionalen Aspekte sozialer Beziehungen. Sie umfasst Hilfe, mit der Belastungen bewältigt, Problemzustände verändert oder zumindest besser ertragen und persönliche Ziele erreicht werden können[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Soziale Integration ist eine wichtige Voraussetzung für soziale Unterstützung: Ohne soziale Kontakte bestehen weniger Möglichkeiten, Unterstützung zu erhalten. Sie garantiert Unterstützung aber nicht. Ein großes Netzwerk ist also nicht dasselbe wie tatsächlich viel Hilfe[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Integration = quantitativ/strukturell; Unterstützung = qualitativ/funktional[cite: 4].</p>
+            </div>
+
+
+            <h2>2. Formen sozialer Unterstützung</h2>
+            <p>Es gibt drei zentrale Formen. Emotionale Unterstützung umfasst Trost, Wärme, Zuspruch, Sorge und Zuneigung. Instrumentelle Unterstützung meint konkrete Hilfeleistungen, zum Beispiel Aufgaben übernehmen, Geld bereitstellen oder benötigte Dinge besorgen. Informationelle Unterstützung besteht aus relevanten Informationen, Hinweisen und Ratschlägen[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Ein Ratschlag ist informationelle Unterstützung – nicht emotionale oder eine vermeintliche „mentale“ Unterstützung[cite: 4].</p>
+            </div>
+
+
+            <h2>3. Wahrgenommene und erhaltene Unterstützung</h2>
+            <p>Wahrgenommene Unterstützung / perceived support beschreibt die Erwartung bzw. Überzeugung, bei Bedarf Unterstützung erhalten zu können. Sie ist ein kognitiver Aspekt (gedankliche Einschätzung) und prospektiv (auf mögliche zukünftige Situationen gerichtet)[cite: 4].</p>
+            
+            <p>Besonders wichtig: Wahrgenommene Unterstützung ist relativ unabhängig davon, wie viel reale Unterstützung tatsächlich stattfindet. Deshalb wird sie teilweise sogar als relativ stabiles Persönlichkeitsmerkmal betrachtet[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Erhaltene Unterstützung / received support bezeichnet dagegen tatsächlich ausgeführte Hilfen in bereits erlebten Belastungssituationen. Sie ist ein behavioraler Aspekt (tatsächliches Verhalten betreffend) und retrospektiv (rückblickend): Wie oft und wie wirksam wurde konkret geholfen?[cite: 4]</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Unterstützung kann außerdem aus drei Perspektiven betrachtet werden: Empfänger, Geber und Beobachter. Die Einschätzungen stimmen oft nur wenig bis mittelmäßig überein. Eine Person kann also eine Handlung als Hilfe meinen, ohne dass sie vom Empfänger als hilfreich wahrgenommen wird – und umgekehrt. Auch unbeteiligter Beobachter kann dieselbe Situation anders beurteilen[cite: 4].</p>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: wahrgenommen = kognitiv + prospektiv; erhalten = behavioral + retrospektiv.<br>
+                Unterstützungsabsicht des Gebers ≠ automatisch wahrgenommene Unterstützung beim Empfänger[cite: 4].</p>
+            </div>
+
+
+            <h2>4. Soziale Integration und Gesundheit</h2>
+            <p>Eine stärkere soziale Integration hängt mit höherer Lebenszufriedenheit, besserer Lebensqualität und besserer mentaler Gesundheit zusammen. Größe des sozialen Netzwerks und Kontakthäufigkeit sind positive Prädiktoren (Variablen, die mit einem späteren Ergebnis zusammenhängen bzw. dieses vorhersagen)[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Emotionale Zustände können sich außerdem innerhalb sozialer Netzwerke verbreiten. Menschen im Zentrum eines Netzwerks berichten häufiger höheres Wohlbefinden; bei geringer sozialer Integration treten dagegen häufiger depressive Symptome auf. Die exakten Prozentwerte dieser Einzelstudien sind für die Klausur eher nachrangig[cite: 4].</p>
+            
+            <p>Auch die körperliche Gesundheit hängt mit sozialer Integration zusammen. Soziale Isolation und Alleinleben gelten als Risikofaktoren für Mortalität (Sterblichkeit), während große soziale Netzwerke und Verheiratetsein protektiv wirken können. Soziale Integration hängt außerdem mit günstigeren Krankheitsverläufen zusammen, etwa schnellerer Krankenhausentlassung oder besseren Überlebens- und Rückfallparametern. Nach einer Scheidung wurden zudem geringere Lebenszufriedenheit, mehr depressive Symptome und zunehmende Einsamkeit beobachtet[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+
+            <h2>5. Soziale Unterstützung und Gesundheit</h2>
+            <p>Besonders eindeutig sind die Befunde zur wahrgenommenen Unterstützung. Die Überzeugung, im Bedarfsfall auf Hilfe zurückgreifen zu können, hängt mit geringerem Sterberisiko, besserer körperlicher Gesundheit, höherer Lebensqualität sowie weniger Angst und Depressivität zusammen. Wahrgenommene Unterstützung durch Familienmitglieder zeigte dabei besonders starke Zusammenhänge[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Bei tatsächlich erhaltener Unterstützung sind die Befunde weniger eindeutig. Sie kann positiv wirken, teilweise aber auch mit schlechterem Wohlbefinden zusammenhängen[cite: 4].</p>
+            
+            <p>Dafür werden zwei wichtige Erklärungen genannt. Erstens können konkrete Hilfen – insbesondere informationelle oder instrumentelle – als aufdringlich, selbstwertbedrohend oder die Privatsphäre verletzend erlebt werden. Zweitens kann ein Artefakt (scheinbarer Zusammenhang aufgrund eines anderen Faktors) vorliegen: Besonders stark belastete Menschen erhalten mehr Hilfe, haben aber gerade wegen ihrer starken Belastung gleichzeitig ein geringeres Wohlbefinden. Dann ist nicht die Unterstützung die Ursache des schlechten Wohlbefindens[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Mehr tatsächlich erhaltene Unterstützung = nicht automatisch besseres Wohlbefinden[cite: 4].</p>
+            </div>
+
+
+            <h2>6. Haupteffekt und Puffereffekt</h2>
+            <p>Beim Haupteffektmodell wirken soziale Faktoren unabhängig vom aktuellen Stressniveau günstig auf Gesundheit und Wohlbefinden[cite: 4].</p>
+            
+            <p>Beim Puffereffektmodell zeigt sich der Nutzen sozialer Faktoren besonders bei hoher Stressbelastung: Unterstützung schwächt die negativen Folgen der Belastung ab[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Die empirische Zuordnung aus dem Studienbrief ist wichtig:</p>
+            <ul>
+                <li>Soziale Integration → Haupteffekt[cite: 4]</li>
+                <li>Wahrgenommene Unterstützung → Haupteffekt[cite: 4]</li>
+                <li>Erhaltene Unterstützung → Puffereffekt[cite: 4]</li>
+            </ul>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p><em>Merke:</em> Integration + perceived = Haupt; received = Puffer[cite: 4].</p>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: „Wirkt nur bei hohem Stress“ = Puffereffekt. „Wirkt unabhängig vom Stressniveau“ = Haupteffekt[cite: 4].</p>
+            </div>
+
+
+            <h2>7. Wirkmechanismen nach Uchino</h2>
+            <p>Soziale Beziehungen beeinflussen körperliche Gesundheit über zwei miteinander verbundene Wege[cite: 4].</p>
+            
+            <p>Der verhaltensbezogene Wirkweg läuft über besseres Gesundheitsverhalten und stärkere Adhärenz (Befolgung medizinischer Empfehlungen). Unterstützung kann durch Motivation, Information und das Gefühl, anderen wichtig zu sein, günstiges Verhalten fördern. Soziale Netzwerke können beispielsweise Rauch- oder Alkoholverhalten beeinflussen. Gesundheitsverhalten kann den Zusammenhang zwischen sozialen Faktoren und Mortalität teilweise mediieren (als Zwischenprozess vermitteln)[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Der psychologische Wirkweg verläuft über Bewertungen, Emotionen und Kontrollüberzeugungen. Ein großes Netzwerk kann dazu führen, dass Belastungen günstiger bewertet werden, weil mehr externe Ressourcen verfügbar erscheinen. Konkrete Hilfe kann außerdem die Kontrollüberzeugung (Überzeugung, eine Situation beeinflussen oder bewältigen zu können) stärken[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Beide Wege beeinflussen anschließend biologische Prozesse: kardiovaskuläre (Herz-Kreislauf betreffende), immunologische und neuroendokrine (Zusammenspiel von Nerven- und Hormonsystem betreffende) Prozesse. Soziale Unterstützung hängt etwa mit geringerer körperlicher Stressreaktion, besserer Immunfunktion und geringerem Cortisolanstieg zusammen[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Die Wirkung sozialer Faktoren verläuft nicht ausschließlich über Gesundheitsverhalten[cite: 4].</p>
+            </div>
+
+
+            <h2>8. Determinanten sozialer Integration: VSA-Modell</h2>
+            <p>Der Partnerschaftsstatus gilt als wichtiger Indikator sozialer Integration. Zur Erklärung von Beziehungszufriedenheit und -stabilität wird das Vulnerability-Stress-Adaptation-Modell / VSA-Modell (Modell zur Erklärung von Beziehungsqualität und Beziehungsstabilität) von Karney und Bradbury herangezogen[cite: 4].</p>
+            
+            <p>Es berücksichtigt stabile Charakteristika einer Person, beispielsweise Persönlichkeit oder Herkunftsfamilie, stresshafte Umstände, etwa kritische Lebensereignisse oder normative Übergänge, und adaptive Prozesse (Anpassungs- und Bewältigungsverhalten innerhalb der Beziehung), beispielsweise Konfliktlösung und Emotionsausdruck[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Entscheidend ist die Rolle dieser Faktoren:</p>
+            <ul>
+                <li>Stabile Charakteristika → beeinflussen adaptive Prozesse[cite: 4].</li>
+                <li>Adaptive Prozesse ↔ Beziehungsqualität bzw. -zufriedenheit[cite: 4].</li>
+                <li>Beziehungsqualität → beeinflusst Beziehungsstabilität[cite: 4].</li>
+            </ul>
+            
+            <p>Stresshafte Ereignisse wirken zusätzlich auf die Prozesse und die Beziehungsqualität ein. Adaptive Prozesse haben damit eine vermittelnde Funktion zwischen stabilen Charakteristika und Beziehungszufriedenheit[cite: 4].</p>
+            
+            <p>Genau diese Mechanik wurde in einer AK direkt geprüft: Konfliktlöseverhalten als adaptiver Prozess vermittelt den Zusammenhang zwischen stabilen Persönlichkeitsmerkmalen und Beziehungszufriedenheit[cite: 4].</p>
+            
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Konfliktlöseverhalten ist kein stabiles Charakteristikum, sondern ein adaptiver Prozess[cite: 4].</p>
+            </div>
+
+
+            <h2>9. Neurotizismus, Optimismus, Bindung und Ähnlichkeit</h2>
+            <p><strong>Neurotizismus</strong><br>
+            Neurotizismus (Tendenz zu emotionaler Instabilität und negativen Gefühlen) zeigt besonders starke Zusammenhänge mit Beziehungsvariablen[cite: 4].</p>
+            
+            <p>Der entscheidende, etwas kontraintuitive Befund lautet:<br>
+            <em>Bei Singles:</em> höherer Neurotizismus → höhere Wahrscheinlichkeit, eine Paarbeziehung einzugehen[cite: 4].<br>
+            <em>Bei bestehender Partnerschaft:</em> höherer Neurotizismus → geringere Beziehungszufriedenheit und geringere Beziehungsstabilität[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Es zeigen sich sowohl Akteureffekte (Einfluss eines Merkmals auf die eigene Beziehungszufriedenheit) als auch Partnereffekte (Einfluss des Merkmals einer Person auf die Zufriedenheit des Partners bzw. der Partnerin). Negatives Interaktions- und Kommunikationsverhalten wird als vermittelnder Mechanismus diskutiert[cite: 4].</p>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Beide Neurotizismusbefunde sind richtig – sie betreffen nur unterschiedliche Beziehungssituationen. Genau beides wurde bereits abgefragt[cite: 4].</p>
+            </div>
+
+            <p><strong>Dispositionaler Optimismus</strong><br>
+            Dispositionaler Optimismus (stabile Erwartung positiver zukünftiger Entwicklungen) hängt mit höherer Beziehungszufriedenheit zusammen – sowohl bei den Optimist:innen selbst als auch bei ihren Partner:innen[cite: 4].</p>
+            
+            <p>Ein positiver Effekt auf die Partnerschaftsstabilität wurde dagegen nur bei Männern berichtet. Vermittelt werden die günstigen Zusammenhänge unter anderem durch kooperatives Problemlösen, konstruktive Problemdiskussionen, bessere Problemlösung und wahrgenommene soziale Unterstützung[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: Optimismus → Zufriedenheit beider Partner:innen; positiver Stabilitätseffekt → im Studienbrief nur bei Männern[cite: 4].</p>
+            </div>
+
+            <p><strong>Bindungsstil</strong><br>
+            Bindungserfahrungen aus der Kindheit werden zu relativ stabilen inneren Modellen und können spätere Partnerschaften beeinflussen. Sichere Bindung hängt unter anderem mit konstruktiverer Konfliktlösung und sozial verträglicherem Emotionsausdruck zusammen. Auch hier können Akteur- und Partnereffekte auftreten[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p><strong>Ähnlichkeit</strong><br>
+            Die empirischen Befunde sprechen eher für „Gleich und Gleich gesellt sich gern“ als für „Gegensätze ziehen sich an“[cite: 4].</p>
+            
+            <p>Dabei wirken sowohl tatsächliche als auch wahrgenommene Ähnlichkeit günstig auf anfängliche Anziehung, Beziehungsqualität und Beziehungsstabilität. Relevant sind z. B. Ähnlichkeiten bei Einstellungen, Werten, Persönlichkeit, Bindungsstil und emotionalem Erleben[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ Klausurfalle: „Gegensätze ziehen sich an“ wurde bereits ausdrücklich als falsch geprüft[cite: 4].</p>
+            </div>
+
+
+            <h2>10. Determinanten sozialer Unterstützungsprozesse</h2>
+            <p>Der Studienbrief unterscheidet vier Gruppen von Einflussfaktoren: Charakteristika des Stressors, des Empfängers, des Gebers und der Beziehung[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p><strong>Charakteristika des Stressors:</strong> Je stärker eine Situation als belastend wahrgenommen wird, desto eher wird grundsätzlich Unterstützung angeboten. Mehrdeutige Stressoren (Situationen, bei denen unklar ist, ob tatsächlich eine Bedrohung oder ein Schaden besteht) führen aber zu weniger Unterstützung als eindeutig erkennbare Schäden oder Verluste[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p><strong>Charakteristika des Empfängers:</strong> Ein mittleres Maß emotionaler Belastung ist besonders günstig. Zu geringe Belastung signalisiert wenig Hilfebedarf; extrem hohe Belastung kann den Geber überfordern und die Unterstützungsbereitschaft verringern[cite: 4].</p>
+            
+            <p>Auch das Bewältigungsverhalten ist wichtig: Aktives Problemlösen und positive Uminterpretation → mehr Unterstützung. Rumination (wiederholtes Grübeln), Vermeidung und starke Fokussierung auf negative Emotionen → weniger Unterstützung. Aktive Suche nach Unterstützung erhöht ebenfalls den tatsächlichen Erhalt von Hilfe[cite: 4].</p>
+            
+            <p>Personale Ressourcen wirken ebenfalls günstig: Optimismus, hohe Selbstwirksamkeit und hoher Selbstwert → mehr tatsächlich erhaltene Unterstützung[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <div class="callout-box">
+                <p>📌 Das ist sehr klausurrelevant: In einer AK waren sowohl „extrem hohe Belastung führt zu mehr Hilfe“ als auch „optimistische Menschen werden weniger unterstützt, weil sie es allein schaffen“ falsche Aussagen[cite: 4].</p>
+            </div>
+
+            <p><strong>Charakteristika des Gebers:</strong> Wichtig sind Kausalattributionen (Ursachenzuschreibungen). Wird eine Belastungsursache als unkontrollierbar eingeschätzt, entstehen eher Mitleid und Sympathie → mehr Unterstützungsbereitschaft. Wird sie als kontrollierbar angesehen, entsteht eher Ärger → weniger Unterstützungsbereitschaft[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Empathie und Mitgefühl erhöhen die Hilfsbereitschaft. Negative Gefühle gegenüber der belasteten Person können sie dagegen verringern. Eigene Erfahrungen mit ähnlichen Belastungssituationen können Unterstützung fördern, weil sie Empathie und Vertrauen in die eigene Unterstützungskompetenz erhöhen[cite: 4].</p>
+            
+            <p><strong>Charakteristika der Beziehung:</strong> Hohe Intimität, Vertrautheit und Beziehungszufriedenheit fördern den Austausch von Unterstützung. Frühere Zurückweisung angebotener Hilfe oder die Erfahrung, dass eigene Hilfe wirkungslos war, reduziert dagegen spätere Unterstützungsbereitschaft. Wer früher selbst Unterstützung erhalten hat, hilft später eher selbst – entsprechend der Reziprozität (Gegenseitigkeit) bzw. Austauschtheorie[cite: 4].</p>
+            
+            <a href="SB1_K3-Soziale_Integrat.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB1_K3-Soziale_Integrat.pdf</a>
+
+            <p>Die SoSe-26-AK prüfte genau diese Zusammenhänge in einem Fallbeispiel: Vermeidung → weniger Hilfe; unklare Bedrohung → nicht mehr, sondern weniger Hilfsbereitschaft; extrem hohe Belastung → nicht automatisch mehr Unterstützung; Optimismus und hoher Selbstwert → nicht weniger Unterstützung; frühere Zurückweisung → weniger spätere Hilfsbereitschaft[cite: 4].</p>
+            
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+
+            <div class="conclusion-box">
+                <h3>Das musst du für die Klausur besonders sicher können</h3>
+                <p>Am stärksten priorisieren würde ich Integration vs. Unterstützung, Laireiter, die drei Formen der Unterstützung, wahrgenommen vs. erhalten, Haupt- vs. Puffereffekt, VSA-Modell, Neurotizismus/Optimismus/Ähnlichkeit und die vier Gruppen der Unterstützungsdeterminanten[cite: 4].</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

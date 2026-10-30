@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 4 - LE3</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 3</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Frage 41: Welche Aussage zur Wirksamkeit von Lebenskompetenzprogrammen trifft zu?",
+    "a": "Sie wirken nur in der Grundschule.",
+    "b": "Sie reduzieren ausschließlich Tabakkonsum.",
+    "c": "Ihre Effekte sind für alle Zeiträume eindeutig stabil nachgewiesen.",
+    "d": "Je nach Schulstufe wurden unterschiedliche Effekte auf Tabak- und Alkoholkonsum gefunden; die Stabilität der Effekte ist noch nicht abschließend geklärt.",
+    "richtig": "d",
+    "begruendung": "In der Grundschule wurden andere Konsumindikatoren beeinflusst als in der Sekundarstufe. C ist zu stark, weil der Studienbrief ausdrücklich darauf hinweist, dass die Stabilität der Effekte unklar ist. AK-Falle: „wirksam“ nicht automatisch mit „dauerhaft stabil“ gleichsetzen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 42: Warum sind umfassende Aussagen zur Wirksamkeit von Standfestigkeitstrainings schwierig?",
+    "a": "Weil sie bisher überhaupt nicht evaluiert wurden.",
+    "b": "Weil nur Erwachsene untersucht wurden.",
+    "c": "Weil Standfestigkeitstraining in vielen evaluierten Programmen nur eine Teilkomponente darstellt.",
+    "d": "Weil keine Ergebnisse zum Substanzkonsum vorliegen.",
+    "richtig": "c",
+    "begruendung": "Dadurch lässt sich die Wirkung dieser einen Komponente schwer isolieren. A ist falsch, denn Evaluationsstudien existieren sehr wohl. AK-Falle: Fehlende isolierte Wirksamkeitsbestimmung ≠ fehlende Forschung insgesamt.[cite: 8]"
+  },
+  {
+    "frage": "Frage 43: Was kennzeichnet ein Mischprogramm?",
+    "a": "Es kombiniert beispielsweise Lebenskompetenzen mit spezifischem Gesundheitswissen oder substanzspezifischen Standfestigkeitselementen.",
+    "b": "Es verzichtet bewusst auf theoretische Ansätze.",
+    "c": "Es richtet sich immer gleichzeitig an Kinder und Erwachsene.",
+    "d": "Es besteht ausschließlich aus zwei verschiedenen Standfestigkeitstrainings.",
+    "richtig": "a",
+    "begruendung": "„Mischprogramm“ bezieht sich auf die Kombination verschiedener Präventionsansätze. C nutzt die Alltagssprache von „gemischt“, trifft aber die fachliche Bedeutung nicht. AK-Falle: Fachbegriff nicht wörtlich-alltagssprachlich interpretieren.[cite: 8]"
+  },
+  {
+    "frage": "Frage 44: Welche Beschreibung von Klasse2000 ist korrekt?",
+    "a": "Das Programm wird nur von externen Gesundheitsexpert:innen durchgeführt.",
+    "b": "Es wird in den Klassen 1–4 durchgeführt, umfasst pro Schuljahr 12–15 Einheiten und wird von Lehrkräften mit Unterstützung von Gesundheitsexpert:innen umgesetzt.",
+    "c": "Es richtet sich an Jugendliche zwischen 14 und 18 Jahren.",
+    "d": "Die Finanzierung erfolgt ausschließlich durch staatliche Mittel.",
+    "richtig": "b",
+    "begruendung": "Zusätzlich nennt der Studienbrief Patenschaften als Finanzierungsform. A ist ein plausibler Distraktor, weil Gesundheitsexpert:innen beteiligt sind, aber nicht allein durchführen. AK-Falle: beteiligte Berufsgruppen nicht mit alleiniger Durchführung verwechseln.[cite: 8]"
+  },
+  {
+    "frage": "Frage 45: Welche Aussage entspricht der Theorie des geplanten Verhaltens im Rahmen von Klasse2000?",
+    "a": "Intentionen entstehen ausschließlich aus Selbstwirksamkeit.",
+    "b": "Intentionen hängen nur von objektiven sozialen Normen ab.",
+    "c": "Intentionen resultieren aus Einstellungen, subjektiven Normen und Verhaltenskontrolle.",
+    "d": "Intentionen spielen für Gesundheitsverhalten keine Rolle.",
+    "richtig": "c",
+    "begruendung": "Subjektive Normen (wahrgenommene soziale Erwartungen) und wahrgenommene Verhaltenskontrolle gehören neben Einstellungen zu den zentralen Komponenten. A verwechselt die Theorie des geplanten Verhaltens mit dem Selbstwirksamkeitsfokus der sozialkognitiven Theorie. AK-Falle: korrekte Begriffe der falschen Theorie zuordnen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 46: Wie wird der Selbstmanagement-Ansatz bei Klasse2000 umgesetzt?",
+    "a": "Kinder geben gesundheitsbezogene Entscheidungen an Erwachsene ab.",
+    "b": "Eigenverantwortlichkeit wird gefördert, etwa durch selbstständig durchgeführte Aufgaben und Experimente.",
+    "c": "Kinder lernen ausschließlich, Gruppendruck zu widerstehen.",
+    "d": "Der Ansatz konzentriert sich auf die Veränderung des Schulgebäudes.",
+    "richtig": "b",
+    "begruendung": "Selbstmanagement soll Kinder dabei unterstützen, Gesundheitsverhalten eigenständig zu steuern. C wäre eher einem Standfestigkeitsansatz zuzuordnen. AK-Falle: Selbstmanagement = Eigensteuerung, nicht soziale Immunisierung.[cite: 8]"
+  },
+  {
+    "frage": "Frage 47: Welche Annahme liegt der Theorie der sozialen Informationsverarbeitung bei Klasse2000 zugrunde?",
+    "a": "Aggressivere Kinder sehen grundsätzlich mehr Handlungsalternativen.",
+    "b": "Aggressivere Kinder nehmen Situationen als weniger bedrohlich wahr.",
+    "c": "Aggressivität entsteht ausschließlich durch mangelndes Gesundheitswissen.",
+    "d": "Aggressivere Kinder bewerten Situationen tendenziell als bedrohlicher und nehmen weniger Handlungsalternativen sowie negative Konsequenzen wahr.",
+    "richtig": "d",
+    "begruendung": "Deshalb werden Empathie und effektives Problemlösen trainiert. A und B drehen zentrale Annahmen der Theorie um. AK-Falle: Bedrohungswahrnehmung und Zahl der Handlungsalternativen nicht in die falsche Richtung drehen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 48: Wie wurde in einer Evaluation von Klasse2000 der „Einstieg“ in Alkohol- oder Zigarettenkonsum definiert?",
+    "a": "Bereits das einmalige Probieren der jeweiligen Substanz wurde als Einstieg gewertet.",
+    "b": "Erst regelmäßiger wöchentlicher Konsum galt als Einstieg.",
+    "c": "Nur gleichzeitiger Alkohol- und Zigarettenkonsum galt als Einstieg.",
+    "d": "Erst eine diagnostizierte Abhängigkeit galt als Einstieg.",
+    "richtig": "a",
+    "begruendung": "Bereits das einmalige Probieren wurde in dieser Untersuchung berücksichtigt. B ist ein plausibler Distraktor, weil man umgangssprachlich unter Einstieg regelmäßigen Konsum verstehen könnte. AK-Falle: Operationalisierung (konkrete messbare Definition eines Merkmals) genau lernen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 49: Welcher längerfristige Befund wurde für Klasse2000 berichtet?",
+    "a": "Alkoholbefunde waren eindeutiger als Rauchbefunde.",
+    "b": "Vier Jahre später hatten in der Interventionsgruppe noch immer signifikant weniger Kinder das Rauchen probiert; die Alkoholbefunde waren weniger eindeutig.",
+    "c": "Nach vier Jahren bestanden keinerlei Unterschiede mehr.",
+    "d": "Langzeituntersuchungen wurden ausschließlich zum Ernährungsverhalten durchgeführt.",
+    "richtig": "b",
+    "begruendung": "Besonders für das Rauchverhalten zeigten sich langfristig günstigere Befunde. A vertauscht genau die im Studienbrief beschriebene Evidenzlage. AK-Falle: Rauchen = klarere Langzeitbefunde; Alkohol = weniger eindeutig.[cite: 8]"
+  },
+  {
+    "frage": "Frage 50: Welcher Befund wurde 16 Monate nach Ende von Klasse2000 berichtet?",
+    "a": "Teilnehmende Kinder sahen mehr Möglichkeiten, selbst etwas für ihre Gesundheit zu tun, und waren sich besonders der Bedeutung gesunder Ernährung bewusst.",
+    "b": "Die Kinder schätzten ihre eigenen Handlungsmöglichkeiten geringer ein.",
+    "c": "Es zeigten sich ausschließlich Effekte auf das Rauchverhalten.",
+    "d": "Gesundheitsbezogene Einstellungen wurden nicht untersucht.",
+    "richtig": "a",
+    "begruendung": "Der Befund betrifft wahrgenommene eigene Gesundheitsmöglichkeiten und Ernährungsbewusstsein. C ist zu eng, weil Klasse2000 über Substanzprävention hinaus untersucht wurde. AK-Falle: Klasse2000 nicht auf Suchtprävention reduzieren.[cite: 8]"
+  },
+  {
+    "frage": "Frage 51: Welche Beschreibung von GO! entspricht dem Studienbrief?",
+    "a": "Es handelt sich um ein selektives Programm ausschließlich für Hochrisikojugendliche.",
+    "b": "Es ist ein Grundschulprogramm zur Alkoholprävention.",
+    "c": "Es ist ein universelles Programm für 14- bis 18-Jährige, das im Klassenverband von qualifizierten Trainer:innen durchgeführt wird.",
+    "d": "Es besteht ausschließlich aus individueller Psychotherapie.",
+    "richtig": "c",
+    "begruendung": "Universell (ohne Auswahl einer speziellen Risikogruppe) bedeutet, dass GO! sich an eine breite schulische Zielgruppe richtet. A verwechselt universelle mit selektiver Prävention. AK-Falle: Thema Depression/Angst ≠ automatisch klinisches Therapieprogramm.[cite: 8]"
+  },
+  {
+    "frage": "Frage 52: Wie ist GO! strukturiert?",
+    "a": "Vier Einheiten zu jeweils 45 Minuten",
+    "b": "Zehn Einheiten zu jeweils 60 Minuten",
+    "c": "Acht Einheiten zu jeweils 45 Minuten",
+    "d": "Acht Einheiten zu jeweils 90 Minuten",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief nennt ausdrücklich acht 90-minütige Einheiten. AK-Falle: Zahl der Sitzungen und Dauer sind typische Zahlendreher.[cite: 8]"
+  },
+  {
+    "frage": "Frage 53: Welche Verteilung der Kernthemen von GO! ist korrekt?",
+    "a": "Angst eine Einheit, Depression zwei, Stress eine, soziale Kompetenz zwei",
+    "b": "Angst zwei, Depression zwei, Stress eine, soziale Kompetenz eine",
+    "c": "Angst zwei Einheiten, Depression eine, Stressbewältigung zwei und soziale Kompetenz eine",
+    "d": "Alle vier Themen erhalten jeweils zwei Einheiten.",
+    "richtig": "c",
+    "begruendung": "Zusätzlich gibt es Einführung und Zusammenfassung, sodass insgesamt acht Einheiten entstehen. B ist plausibel, vertauscht aber die Anzahl der Depressions- und Stresssitzungen. AK-Falle: Inhalte und Anzahl der Einheiten nicht gegeneinander verschieben.[cite: 8]"
+  },
+  {
+    "frage": "Frage 54: Was gehört zum kognitiven Teil von GO!?",
+    "a": "Aufklärung über Angst und depressive Stimmung sowie das Zusammenspiel von Emotionen, Kognitionen und Verhalten",
+    "b": "Ausschließlich Entspannungsübungen",
+    "c": "Ausschließlich Konfrontation mit angstauslösenden Situationen",
+    "d": "Veränderung des schulischen Umfeldes",
+    "richtig": "a",
+    "begruendung": "Kognition (Gedanken bzw. mentale Prozesse) steht hier zusammen mit Emotionen und Verhalten im Mittelpunkt. C gehört zum verhaltensorientierten Teil. AK-Falle: kognitive und behaviorale Komponenten nicht vertauschen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 55: Welche Maßnahme gehört zum verhaltensorientierten Teil von GO!?",
+    "a": "Nur Vermittlung von Wissen über Angst",
+    "b": "Analyse gesellschaftlicher Normen",
+    "c": "ausschließlich Diskussion von Kontaktproblemen",
+    "d": "Konfrontation bei Angst sowie positive Aktivierung bei depressiver Stimmung",
+    "richtig": "d",
+    "begruendung": "Konfrontation (gezielte Auseinandersetzung mit angstauslösenden Situationen) und positive Aktivierung (gezielter Aufbau hilfreicher bzw. positiver Aktivitäten) werden ausdrücklich genannt. C gehört stärker zum sozialen Teil. AK-Falle: korrekte Intervention dem richtigen Programmteil zuordnen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 56: Womit beschäftigt sich der soziale Teil von GO!?",
+    "a": "ausschließlich Entspannungsverfahren",
+    "b": "Kontaktprobleme und interpersonelle Probleme",
+    "c": "ausschließlich Informationsvermittlung über Depression",
+    "d": "ausschließlich körperliche Aktivierung",
+    "richtig": "b",
+    "begruendung": "Interpersonell (zwischen Personen) bezeichnet Schwierigkeiten und Beziehungen im sozialen Kontakt. A gehört stärker zur Stressbewältigung. AK-Falle: „sozial“ nicht mit „Stressbewältigung“ gleichsetzen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 57: Auf welche Variablen wirkte GO! in den Evaluationsstudien hauptsächlich positiv?",
+    "a": "Auf proximale Risikofaktoren wie Wissen über psychische Erkrankungen und dysfunktionale Einstellungen",
+    "b": "Vor allem auf die langfristige klinische Symptombelastung",
+    "c": "Ausschließlich auf schulische Leistungen",
+    "d": "Vor allem auf körperliche Fitness",
+    "richtig": "a",
+    "begruendung": "Proximal (nah am unmittelbaren Wirkmechanismus) sind hier etwa Wissen und Einstellungen. B ist die zentrale Falle, weil bei der Symptombelastung gerade keine entsprechende Verbesserung gefunden wurde. AK-Falle: Wissen/Einstellung verbessert ≠ Symptome verbessert.[cite: 8]"
+  },
+  {
+    "frage": "Frage 58: Welche Aussage zu den zeitlichen Effekten von GO! ist korrekt?",
+    "a": "Proximale Effekte wurden nach sechs Monaten stärker.",
+    "b": "Distale Symptome verbesserten sich erst nach sechs Monaten.",
+    "c": "Die proximalen Effekte waren nur kurzfristig; nach sechs Monaten waren sie nicht mehr nachweisbar, und die Symptombelastung verbesserte sich weder kurz- noch langfristig.",
+    "d": "Sämtliche Effekte blieben langfristig stabil.",
+    "richtig": "c",
+    "begruendung": "Distale Variablen (weiter vom unmittelbaren Interventionsmechanismus entfernte Ergebnisse) waren hier insbesondere die Symptombelastungen. D ist deshalb klar zu stark. AK-Falle: kurzfristige Veränderung nicht als stabilen Langzeiteffekt darstellen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 59: Welche Moderatoren der Wirksamkeit von GO! werden im Studienbrief genannt?",
+    "a": "Mädchen profitierten stärker als Jungen und Risikogruppen stärker als Gesunde.",
+    "b": "Jungen profitierten stärker als Mädchen und Gesunde eher als Risikogruppen.",
+    "c": "Geschlecht und Ausgangsbelastung spielten überhaupt keine Rolle.",
+    "d": "Nur Risikogruppen zeigten Effekte.",
+    "richtig": "b",
+    "begruendung": "Moderator (Variable, die Stärke oder Richtung eines Effekts beeinflusst) bezeichnet hier Merkmale, die mit unterschiedlichen Programmwirkungen zusammenhängen. A dreht beide berichteten Befunde um. AK-Falle: Gruppenunterschiede sind klassische Umkehr-Distraktoren.[cite: 8]"
+  },
+  {
+    "frage": "Frage 60: Welche Schlussfolgerung wird aus den Evaluationen von GO! gezogen?",
+    "a": "GO! ist eindeutig ein erfolgreiches Therapieprogramm für bestehende Angst- und Depressionsstörungen.",
+    "b": "GO! wirkt bei Risikogruppen stärker als bei gesunden Jugendlichen.",
+    "c": "Die Ergebnisse sprechen für eine besonders starke langfristige primärpräventive Wirkung.",
+    "d": "GO! scheint eher gesundheitsförderlich als primärpräventiv zu wirken; selektive Programme könnten Risikogruppen gezielter erreichen.",
+    "richtig": "d",
+    "begruendung": "Weil insbesondere Wissen und Einstellungen, nicht aber die Symptombelastung nachhaltig verbessert wurden, wird GO! eher gesundheitsförderlich eingeordnet. Primärpräventiv (auf Verhinderung des erstmaligen Auftretens einer Erkrankung gerichtet) wäre eine stärkere Aussage, die durch die Befunde nicht getragen wird. AK-Falle: proximaler Effekt ≠ nachgewiesene Prävention klinischer Symptome.[cite: 8]"
+  },
+  {
+    "frage": "Frage 61: Welche Aussage zu den im Studienbrief berichteten KiGGS-Befunden zur Ernährung ist korrekt?",
+    "a": "Rund 14 % der Kinder und Jugendlichen essen überhaupt täglich Obst oder Gemüse.",
+    "b": "Etwa die Hälfte erreicht mindestens fünf Portionen Obst und Gemüse täglich.",
+    "c": "96,8 % essen täglich Obst und Gemüse, aber nur 14,0 % erreichen fünf oder mehr Portionen pro Tag.",
+    "d": "Fast alle Kinder und Jugendlichen erreichen täglich mindestens fünf Portionen Obst und Gemüse.",
+    "richtig": "c",
+    "begruendung": "Der tägliche Konsum von Obst und Gemüse war sehr häufig, die empfohlene Menge jedoch deutlich seltener. A vertauscht den Anteil der täglich Konsumierenden mit dem Anteil, der fünf oder mehr Portionen erreicht. AK-Falle: Bei Zahlenfragen besonders auf Bezugsgröße und Schwellenwert achten.[cite: 8]"
+  },
+  {
+    "frage": "Frage 62: Welche Aussage zur sportlichen Aktivität entspricht den im Studienbrief berichteten KiGGS-Befunden?",
+    "a": "Jungen trieben etwas häufiger regelmäßig Sport als Mädchen und erreichten auch häufiger mehr als 180 Minuten Sport pro Woche.",
+    "b": "Mädchen erreichten häufiger als Jungen mehr als 180 Minuten Sport pro Woche.",
+    "c": "Jungen und Mädchen unterschieden sich weder beim regelmäßigen Sport noch bei mehr als 180 Minuten pro Woche.",
+    "d": "Ein höherer sozioökonomischer Status war mit geringerer Aktivität verbunden.",
+    "richtig": "a",
+    "begruendung": "Regelmäßig Sport trieben 75,1 % der Jungen und 70,9 % der Mädchen; mehr als 180 Minuten pro Woche erreichten 45,0 % der Jungen und 31,4 % der Mädchen. B vertauscht die Geschlechter. AK-Falle: „regelmäßig Sport“ und „mehr als 180 Minuten“ sind zwei verschiedene Angaben.[cite: 8]"
+  },
+  {
+    "frage": "Frage 63: Welche Aussage beschreibt den Gesundheitszustand von Kindern und Jugendlichen im Studienbrief am treffendsten?",
+    "a": "Weil 95,7 % eine gute Lebensqualität aufweisen, sind chronische Erkrankungen nahezu bedeutungslos.",
+    "b": "Psychische Auffälligkeiten lagen vor 2020 deutlich unter 5 %.",
+    "c": "Adipositas war häufiger als Übergewicht insgesamt.",
+    "d": "Eine sehr gute bzw. gute gesundheitsbezogene Lebensqualität kann gleichzeitig mit relevanten Anteilen chronischer Erkrankungen, Übergewicht und psychischer Auffälligkeiten bestehen.",
+    "richtig": "d",
+    "begruendung": "95,7 % der Eltern bewerteten die gesundheitsbezogene Lebensqualität als gut oder sehr gut; gleichzeitig wurden unter anderem 16,2 % chronische Erkrankungen und rund 20 % psychische Auffälligkeiten berichtet. A macht aus einer positiven Durchschnittsbewertung fälschlich optimale Gesundheit. AK-Falle: Gute Lebensqualität ≠ Abwesenheit gesundheitlicher Belastungen.[cite: 8]"
+  },
+  {
+    "frage": "Frage 64: Welche Beobachtung spricht laut Studienbrief gegen eine zu starre Interpretation von Piagets Entwicklungsstufen?",
+    "a": "Krankheitskonzepte entwickeln sich bei allen Erkrankungen im gleichen Alter.",
+    "b": "Allgemeine Krankheitskonzepte entstehen früher als Konzepte spezifischer Erkrankungen, und auch verschiedene Erkrankungen werden zu unterschiedlichen Zeitpunkten verstanden.",
+    "c": "Krankheitsspezifisches Wissen entwickelt sich grundsätzlich vor allgemeinem Krankheitswissen.",
+    "d": "Konzepte über HIV und Krebs entstehen typischerweise früher als Konzepte über Erkältungen.",
+    "richtig": "b",
+    "begruendung": "Konzepte über Erkältungen können sich früher entwickeln als solche über HIV oder Krebs. D dreht genau diesen Befund um. AK-Falle: „Kognitive Stufe erreicht“ bedeutet nicht, dass jedes krankheitsspezifische Wissen gleichzeitig vorhanden ist.[cite: 8]"
+  },
+  {
+    "frage": "Frage 65: Wie würde der schemabasierte Ansatz erklären, dass sich ein Krankheitskonzept zu HIV häufig erst im Jugendalter entwickelt?",
+    "a": "Mit zunehmendem bereichsspezifischem Wissen und Erfahrungen, etwa wenn Sexualerziehung stärker in den Vordergrund tritt.",
+    "b": "Jugendliche wechseln automatisch in ein angeborenes HIV-spezifisches Entwicklungsstadium.",
+    "c": "Kinder unter zwölf Jahren können grundsätzlich keinerlei krankheitsspezifische Informationen verstehen.",
+    "d": "HIV kann nur verstanden werden, wenn zuvor eine eigene Erkrankung erlebt wurde.",
+    "richtig": "a",
+    "begruendung": "Der schemabasierte Ansatz betont Wissen und Erfahrung statt einer grundsätzlichen kognitiven Unfähigkeit jüngerer Kinder. Bereichsspezifisch (auf ein bestimmtes Wissensgebiet bezogen) bedeutet hier Wissen über den konkreten Gesundheitsbereich. AK-Falle: Schema-Ansatz nicht wieder in ein starres Stufenmodell verwandeln.[cite: 8]"
+  },
+  {
+    "frage": "Frage 66: Welche Aussage zum Verständnis präventiven Verhaltens ist korrekt?",
+    "a": "Vorschulkinder können die Notwendigkeit gesunder Ernährung bereits ebenso differenziert erklären wie ältere Kinder.",
+    "b": "Jüngere Kinder verstehen Zähneputzen erst, nachdem sie Vorsorgeuntersuchungen beim Zahnarzt verstanden haben.",
+    "c": "Auch jüngere Kinder kennen bereits die Bedeutung des Zähneputzens; ältere Kinder verstehen zunehmend zusätzlich die Bedeutung zahnärztlicher Vorsorgeuntersuchungen.",
+    "d": "Wissen über verschiedene präventive Verhaltensweisen entwickelt sich bei allen Kindern gleichzeitig.",
+    "richtig": "c",
+    "begruendung": "Das Wissen über Prävention entwickelt sich je nach Verhalten unterschiedlich früh. B vertauscht die Entwicklungsreihenfolge. AK-Falle: Präventionswissen ist nicht ein einheitlicher Block, der zu einem bestimmten Alter vollständig „da“ ist.[cite: 8]"
+  },
+  {
+    "frage": "Frage 67: Welche Gruppe enthält ausschließlich Lebenskompetenzen des WHO-Life-Skills-Ansatzes?",
+    "a": "Selbstwirksamkeit, Gesundheitskompetenz, Resilienz und Adhärenz",
+    "b": "Entscheidungsfähigkeit, Problemlösefähigkeit, effektive Kommunikation und Empathie",
+    "c": "Risikowahrnehmung, Intention, Selbstwirksamkeit und Ergebniserwartung",
+    "d": "Prävalenzschätzung, Gesundheitswissen, Selbstkontrolle und Symptomwahrnehmung",
+    "richtig": "b",
+    "begruendung": "Zu den zehn Lebenskompetenzen zählen unter anderem Entscheidungs- und Problemlösefähigkeit, effektive Kommunikation und Empathie. Adhärenz (Einhaltung vereinbarter Behandlungsmaßnahmen) oder Selbstwirksamkeit gehören nicht zu dieser WHO-Liste. AK-Falle: Verwandte gesundheitspsychologische Begriffe können plausibel klingen, sind aber nicht automatisch WHO-Life-Skills.[cite: 8]"
+  },
+  {
+    "frage": "Frage 68: Welche Aussage zu Lebenskompetenzprogrammen und Substanzkonsum entspricht der im Studienbrief dargestellten Meta-Analyse?",
+    "a": "Lebenskompetenzprogramme waren nur in der Sekundarstufe wirksam.",
+    "b": "In der Grundschule zeigte sich keinerlei Effekt auf Tabakkonsum.",
+    "c": "Die langfristige Stabilität sämtlicher Effekte gilt als eindeutig gesichert.",
+    "d": "In der Grundschule wurde unter anderem die Lebenszeitprävalenz des Tabakkonsums gesenkt; in der Sekundarstufe zeigten sich Effekte auf aktuellen Tabak- und Alkoholkonsum sowie auf die Lebenszeitprävalenz von Alkohol.",
+    "richtig": "d",
+    "begruendung": "Lebenszeitprävalenz (Anteil der Personen, die ein Verhalten irgendwann im bisherigen Leben gezeigt haben) wurde je nach Schulstufe unterschiedlich beeinflusst. C ist falsch, weil der Studienbrief ausdrücklich festhält, dass die Stabilität der Effekte noch unklar ist. AK-Falle: Wirksamkeit, Art des Outcomes und langfristige Stabilität getrennt betrachten.[cite: 8]"
+  },
+  {
+    "frage": "Frage 69: Welche Aussage zur schulischen Gesundheitsförderung in Deutschland trifft laut Studienbrief zu?",
+    "a": "Der gesetzliche Auftrag zur Gesundheitsförderung betrifft ausschließlich Kindergärten.",
+    "b": "Der Auftrag zur Gesundheitsförderung an Schulen ist im Präventionsgesetz festgehalten; die Schule wird dabei als Lebenswelt und wichtiges Setting verstanden.",
+    "c": "Gesundheitsförderung an Schulen ist ausschließlich eine freiwillige Aufgabe einzelner Lehrkräfte.",
+    "d": "Der Präventionsauftrag wird in keinem Bundesland zusätzlich im Schulgesetz konkretisiert.",
+    "richtig": "b",
+    "begruendung": "Der Studienbrief nennt sowohl das Präventionsgesetz als auch eine weitere Konkretisierung in den Schulgesetzen vieler Bundesländer. D behauptet das Gegenteil. AK-Falle: gesetzlicher Rahmen und konkrete Programmdurchführung nicht miteinander verwechseln.[cite: 8]"
+  },
+  {
+    "frage": "Frage 70: Welche Aussage zur praktischen Umsetzung von Klasse2000 ist korrekt?",
+    "a": "Klasse2000 wird erst ab der Sekundarstufe angeboten und umfasst vier Einheiten pro Jahr.",
+    "b": "Das Programm wird ausschließlich von externen Gesundheitsexpert:innen durchgeführt.",
+    "c": "Klasse2000 besteht aus einer einmaligen Projektwoche und wird über Teilnahmegebühren der Kinder finanziert.",
+    "d": "Klasse2000 wird in den Klassen 1–4 durchgeführt, umfasst jährlich 12–15 Einheiten und wird von Lehrkräften mit Unterstützung von Gesundheitsexpert:innen umgesetzt.",
+    "richtig": "d",
+    "begruendung": "Zusätzlich wird das Programm laut Studienbrief über Patenschaften finanziert. B ist besonders plausibel, weil Gesundheitsexpert:innen tatsächlich beteiligt sind – sie führen das Programm aber nicht allein durch. AK-Falle: „unterstützen“ ≠ „führen ausschließlich durch“.[cite: 8]"
+  },
+  {
+    "frage": "Frage 71: Welche Kombination beschreibt die im Studienbrief genannten Moderatoren der GO!-Wirksamkeit korrekt?",
+    "a": "Jungen profitierten stärker als Mädchen, und Gesunde profitierten eher als Risikogruppen.",
+    "b": "Mädchen profitierten stärker als Jungen, und Risikogruppen profitierten stärker als Gesunde.",
+    "c": "Jungen profitierten stärker als Mädchen, Risikogruppen jedoch stärker als Gesunde.",
+    "d": "Es fanden sich keinerlei Gruppenunterschiede hinsichtlich der Wirksamkeit.",
+    "richtig": "a",
+    "begruendung": "Moderator (Variable, die die Stärke oder Richtung eines Effekts beeinflusst) bezeichnet hier Merkmale, die mit unterschiedlicher Wirksamkeit zusammenhängen. B vertauscht beide Befunde gleichzeitig. AK-Falle: Gruppenvergleiche eignen sich besonders gut für Richtungsumkehr-Distraktoren.[cite: 8]"
+  },
+  {
+    "frage": "Frage 72: Welche weiterführende Schlussfolgerung wird im Studienbrief aus den GO!-Befunden gezogen?",
+    "a": "Universelle schulische Programme sind grundsätzlich immer wirksamer als selektive Programme.",
+    "b": "Geschlechtsspezifische Unterschiede sollten bei Gesundheitsförderung grundsätzlich ignoriert werden.",
+    "c": "Selektive Programme außerhalb des schulischen Rahmens könnten Risikogruppen gezielter erreichen; zusätzlich wird eine geschlechtergetrennte Durchführung als mögliche Anpassung diskutiert.",
+    "d": "Da Gesunde stärker profitierten, sollte GO! ausschließlich bei bereits psychisch erkrankten Jugendlichen eingesetzt werden.",
+    "richtig": "c",
+    "begruendung": "Selektiv (gezielt an eine Risikogruppe gerichtet) bedeutet, dass eine Intervention nicht die gesamte Population anspricht. D widerspricht dem Befund und der daraus gezogenen Überlegung. AK-Falle: Aus „Risikogruppen profitieren weniger“ folgt nicht „Programm nur für Risikogruppen einsetzen“.[cite: 8]"
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

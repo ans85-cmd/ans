@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 2 - LE4 - SB3/K2</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 4</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+{
+    "frage": "Was beschreibt den motivationalen Pfad des JD-R-Modells?",
+    "a": "Hohe Anforderungen → Engagement",
+    "b": "Hohe Anforderungen → geringere Erschöpfung",
+    "c": "Ressourcen → Erschöpfung",
+    "d": "Ressourcen → Engagement; fehlende Ressourcen → Disengagement",
+    "richtig": "d",
+    "begruendung": "Engagement (positive Verbundenheit mit der Arbeit) wird durch Ressourcen gefördert; fehlen Ressourcen, steigt Disengagement (Distanzierung bzw. geringes Engagement).\nAK-Falle: Ressourcen gehören zum motivationalen Pfad[cite: 10]."
+  },
+  {
+    "frage": "Unter welcher Konstellation entsteht Burnout nach dem JD-R-Modell besonders?",
+    "a": "Hohe Anforderungen + hohe Ressourcen",
+    "b": "Hohe Anforderungen + niedrige Ressourcen",
+    "c": "Niedrige Anforderungen + niedrige Ressourcen",
+    "d": "Niedrige Anforderungen + hohe Ressourcen",
+    "richtig": "b",
+    "begruendung": "Burnout entsteht im Modell besonders durch die Kombination hoher Anforderungen mit fehlenden bzw. niedrigen Ressourcen[cite: 10].\nAK-Falle: Hohe Anforderungen allein reichen für die Modelllogik nicht aus."
+  },
+  {
+    "frage": "Welche Kombination entspricht der Burnout-Beschreibung der ICD-11 (International Classification of Diseases, 11. Ausgabe)?",
+    "a": "Eschöpfung + mentale Distanz/Zynismus + Gefühl von Ineffektivität",
+    "b": "Erschöpfung + soziale Isolation + körperliche Schmerzen",
+    "c": "Angst + depressive Stimmung + reduzierte Selbstwirksamkeit",
+    "d": "Disengagement + mangelnde Belohnung + geringe Kontrolle",
+    "richtig": "a",
+    "begruendung": "Die ICD-11 beschreibt Burnout als Folge chronischen, nicht erfolgreich bewältigten Arbeitsstresses mit drei genannten Dimensionen[cite: 10].\nAK-Falle: ICD-11-Beschreibung nicht mit den zwei JD-R-Dimensionen Erschöpfung und (Dis-)Engagement vermischen."
+  },
+  {
+    "frage": "Welche Kombination gehört zu den Voraussetzungen einer erfolgreichen Implementierung von BGF?",
+    "a": "Standardisierung – Zentralisierung – Individualisierung – Gewinnorientierung",
+    "b": "Diagnose – Wettbewerb – Hierarchieabbau – Belohnung",
+    "c": "Ganzheitlichkeit – doppelte Zielsetzung – Beteiligung – Prozessorientierung – Diagnose",
+    "d": "Partizipation – Gratifikation – Kontrolle – Ressourcenabbau",
+    "richtig": "c",
+    "begruendung": "BGF soll sowohl Humanität als auch betriebliche Effizienz berücksichtigen, Beschäftigte beteiligen und Veränderungen als Prozess verstehen. Die Diagnose bildet einen Ausgangspunkt[cite: 10].\nAK-Falle: Wieder können echte Begriffe anderer Modelle als Fremdkörper eingebaut werden."
+  },
+  {
+    "frage": "Welches Instrument dient primär der Diagnose des Ist-Zustands und nicht unmittelbar der Umsetzung einer Intervention?",
+    "a": "Führungskräfteseminar",
+    "b": "Krankenstandsanalyse",
+    "c": "Coaching",
+    "d": "Teamentwicklung",
+    "richtig": "b",
+    "begruendung": "Krankenstands-, Unfall-, Gefährdungs- und Belastungsanalysen dienen der Diagnose. Seminare, Coaching und Teamentwicklung zählen eher zur Einführung und Umsetzung von Maßnahmen[cite: 10].\nAK-Falle: Diagnoseinstrument und Interventionsmaßnahme unterscheiden."
+  },
+  {
+    "frage": "Welche Zuordnung der Gesundheitszirkelmodelle ist korrekt?",
+    "a": "Berliner Modell = mit allen Stakeholdern; Düsseldorfer Modell = nur Führungskräfte",
+    "b": "Beide Modelle schließen grundsätzlich Vorgesetzte aus.",
+    "c": "Berliner Modell = ausschließlich Vorgesetzte; Düsseldorfer Modell = Beschäftigte ohne Vorgesetzte",
+    "d": "Düsseldorfer Modell = verschiedene Stakeholder inklusive Vorgesetzten; Berliner Modell = eine Hierarchieebene ohne Vorgesetzte",
+    "richtig": "d",
+    "begruendung": "Der Düsseldorfer Zirkel ist hierarchisch gemischt, während das Berliner Modell ohne Vorgesetzte auf einer Hierarchieebene arbeitet[cite: 10].\nAK-Falle: Düsseldorf mit – Berlin ohne Vorgesetzte."
+  },
+  {
+    "frage": "Was meint der strukturelle Widerspruch an Hochschulen?",
+    "a": "Die Verwaltung verfügt über flache Hierarchien, die Wissenschaft über eine strenge Bürokratie.",
+    "b": "Forschung und Lehre sind organisatorisch vollständig voneinander getrennt.",
+    "c": "Wissenschaftsbereiche weisen eher flache Hierarchien auf, während die Verwaltung bürokratisch-hierarchisch organisiert ist.",
+    "d": "Studierende und Beschäftigte haben dieselben Aufgaben und Mitwirkungsrechte.",
+    "richtig": "c",
+    "begruendung": "Unterschiedliche Organisationslogiken von Wissenschaft und Verwaltung bilden den strukturellen Widerspruch[cite: 10].\nAK-Falle: Wissenschaft und Verwaltung nicht vertauschen."
+  },
+  {
+    "frage": "Welche Zuordnung von Statusgruppe und gesundheitsrelevantem Merkmal ist korrekt?",
+    "a": "Wissenschaftliches Personal: Sinnhaftigkeit, Identifikation und Entscheidungs-/Handlungsspielräume können Gesundheitsressourcen darstellen.",
+    "b": "Studierende: Befristete Arbeitsverträge bilden den zentralen studienspezifischen Stressor.",
+    "c": "Nichtwissenschaftliches Personal: Prüfungsangst ist die zentrale Belastung.",
+    "d": "Wissenschaftliches Personal: Es liegen besonders viele eindeutige empirische Befunde vor.",
+    "richtig": "a",
+    "begruendung": "Beim wissenschaftlichen Personal gelten Sinnhaftigkeit, Identifikation und Handlungsspielräume als Ressourcen; Belastungen sind u. a. Betreuungsdruck und prekäre Beschäftigungsbedingungen.\nAK-Falle: Belastungen der drei Statusgruppen nicht durcheinanderwerfen."
+  },
+  {
+    "frage": "Welche Aussage beschreibt eine gesundheitsfördernde Hochschule gemäß den Gütekriterien am besten?",
+    "a": "Sie setzt primär auf individuelle Gesundheitskurse ohne strukturelle Veränderungen.",
+    "b": "Gesundheitsförderung wird unabhängig von der Hochschulpolitik organisiert.",
+    "c": "Sie verzichtet auf Vernetzung, um hochschulspezifisch zu bleiben.",
+    "d": "Sie verbindet Setting- und Ressourcenorientierung mit Partizipation, Verhaltens- und Verhältnismaßnahmen, Nachhaltigkeit, Evaluation und Vernetzung.",
+    "richtig": "d",
+    "begruendung": "Gesundheitsförderung soll als strukturelle Querschnittsaufgabe in die Hochschule integriert werden[cite: 10].\nAK-Falle: Setting-Ansatz = nicht bloß einzelne Personen „gesünder machen“."
+  },
+  {
+    "frage": "Welches Ziel gehört zu Healthy Campus Bonn?",
+    "a": "Ausschließlich krankgeschriebene Beschäftigte wieder einzugliedern",
+    "b": "Gesundheitskompetenz und einen nachhaltigen gesundheits- und bewegungsbezogenen Lebensstil von Universitätsangehörigen zu fördern",
+    "c": "Ausschließlich die psychische Gesundheit Studierender zu behandeln",
+    "d": "Betriebliche Gesundheitsförderung durch gesetzliche Gefährdungsbeurteilungen zu ersetzen",
+    "richtig": "b",
+    "begruendung": "Healthy Campus Bonn umfasst Angebote u. a. zu Bewegung, Ernährung und psychischer Gesundheit und richtet sich an unterschiedliche Universitätsangehörige.\nAK-Falle: Das Programm ist nicht auf eine einzelne Statusgruppe oder einen einzigen Gesundheitsbereich beschränkt."
+  },
+  {
+    "frage": "Was war ein zentrales Ziel des GFS-Projekts („Die Gesundheit Fernstudierender stärken“)?",
+    "a": "Die Übertragbarkeit klassischer Arbeitsplatzmodelle auf Präsenzstudierende zu prüfen",
+    "b": "Fernstudierende ausschließlich zu körperlicher Aktivität zu motivieren",
+    "c": "Fernstudienspezifische Belastungen empirisch zu untersuchen und daraus angepasste digitale Gesundheitsförderung abzuleiten",
+    "d": "Die Gesundheitsangebote der FernUniversität vollständig durch Präsenzkurse zu ersetzen",
+    "richtig": "c",
+    "begruendung": "Die Maßnahmen sollten an den spezifischen Kontext des Fernstudiums angepasst, gemeinsam mit der Zielgruppe entwickelt und niederschwellig sowie barrierefrei sein.\nAK-Falle: GFS = nicht einfach allgemeine Studierendengesundheit, sondern Fernstudium-spezifisch."
+  },
+  {
+    "frage": "Welche Belastung spielte im ersten Gesundheitssurvey des GFS-Projekts eine besonders wichtige Rolle?",
+    "a": "Zeitmangel und die Vereinbarkeit von Studium, Beruf und Familie bzw. sozialem Leben",
+    "b": "Ausschließlich fehlende körperliche Bewegung",
+    "c": "Primär Konflikte mit Lehrenden im Präsenzunterricht",
+    "d": "Ausschließlich finanzielle Belastungen durch Studiengebühren",
+    "richtig": "a",
+    "begruendung": "Besonders wichtig waren Zeitmangel, Leistungsdruck und Mehrfachbelastungen. Aus der Bedarfsanalyse wurde unter anderem das app- und webbasierte Stressbewältigungsprogramm Stressdown entwickelt.\nAK-Falle: Der Schwerpunkt des GFS-Projekts liegt stark auf Mehrfachbelastung und Stressbewältigung."
+  },
+  {
+    "frage": "Welche Aussage zum JD-R-Modell (Job Demands-Resources-Modell; Anforderungs-Ressourcen-Modell) ist korrekt?",
+    "a": "Erschöpfung entsteht ausschließlich dann, wenn gleichzeitig Disengagement vorliegt.",
+    "b": "Engagement und Erschöpfung stellen zwei Ausprägungen derselben Dimension dar.",
+    "c": "Erschöpfung und (Dis-)Engagement entstehen im Modell unabhängig voneinander und vermitteln den Einfluss von Anforderungen bzw. Ressourcen auf gesundheitliche und arbeitsbezogene Ergebnisse.",
+    "d": "Anforderungen und Ressourcen wirken ausschließlich direkt auf Gesundheit und Leistung.",
+    "richtig": "c",
+    "begruendung": "Das JD-R-Modell unterscheidet einen gesundheitsbeeinträchtigenden und einen motivationalen Pfad. Erschöpfung und (Dis-)Engagement mediieren (vermitteln als Zwischenprozess) den Einfluss von Anforderungen und Ressourcen auf verschiedene Outcomes (Ergebnisse). Die breite Definition von Anforderungen und Ressourcen ermöglicht außerdem die Anwendung in verschiedenen Branchen und Hierarchieebenen.\nAK-Falle: Erschöpfung und Disengagement müssen nicht gemeinsam entstehen."
+  },
+  {
+    "frage": "Welche Aussage zur erfolgreichen Einführung von BGF entspricht dem Studienbrief?",
+    "a": "Die Humanität der Arbeitsgestaltung soll zugunsten betrieblicher Effizienz nachrangig behandelt werden.",
+    "b": "BGF verfolgt eine doppelte Zielsetzung aus Effizienz der Betriebsführung und Humanität der Arbeitsgestaltung; die Diagnose bildet den Ausgangspunkt der Veränderung.",
+    "c": "Für erfolgreiche BGF existiert ein einheitliches Maßnahmenpaket, das auf alle Betriebe übertragen werden kann.",
+    "d": "Eine Diagnose sollte erst nach der Einführung der Gesundheitsmaßnahmen erfolgen.",
+    "richtig": "b",
+    "begruendung": "Neben Ganzheitlichkeit, Beteiligung und Prozessorientierung (Veränderung als gemeinsamer Entwicklungsprozess) nennt the Studienbrief die doppelte Zielsetzung und die Diagnose als Ausgangspunkt. Aufgrund unterschiedlicher finanzieller, personeller und organisatorischer Bedingungen gibt es keine einheitlichen Maßnahmen für alle Betriebe.\nAK-Falle: „One size fits all“ gilt bei BGF gerade nicht."
+  },
+  {
+    "frage": "Welche Zuordnung zum BGM (Betriebliches Gesundheitsmanagement) ist korrekt?",
+    "a": "BEM = weiterer Sinn; Organisationsentwicklung = engerer Sinn",
+    "b": "Arbeitsgestaltung = engerer Sinn; Fehlzeitenmanagement = weiterer Sinn",
+    "c": "Personalentwicklung = engerer Sinn; Arbeitsschutz = weiterer Sinn",
+    "d": "BEM und Fehlzeitenmanagement = engerer Sinn; Personal- und Organisationsentwicklung = weiterer Sinn",
+    "richtig": "d",
+    "begruendung": "Der engere Sinn umfasst direkt gesundheitsbezogene Handlungsfelder wie Arbeitsschutz, BEM (Betriebliches Eingliederungsmanagement), Fehlzeitenmanagement und Gesundheitsförderung. Der weitere Sinn betrifft stärker Organisationsstrukturen wie Arbeitsgestaltung, Personal- und Organisationsentwicklung.\nAK-Falle: „Weiter“ bedeutet hier nicht „gesundheitlich wichtiger“, sondern organisationsbezogener."
+  },
+  {
+    "frage": "Welche Aussage zu den gesetzlichen Pflichten im Arbeitsschutz ist korrekt?",
+    "a": "Nur Arbeitgeber:innen tragen Verantwortung für Sicherheit; Beschäftigte haben keine eigenen Pflichten.",
+    "b": "Eine Gefährdungsbeurteilung ist nur nach einem Arbeitsunfall erforderlich.",
+    "c": "Psychische Belastungen müssen nur bei bereits diagnostizierter psychischer Erkrankung geprüft werden.",
+    "d": "Arbeitgeber:innen müssen unter anderem einen kontinuierlichen Verbesserungsprozess, geeignete Organisationsstrukturen und regelmäßige Gefährdungsbeurteilungen gewährleisten; auch Beschäftigte besitzen Mitwirkungspflichten.",
+    "richtig": "d",
+    "begruendung": "Beschäftigte sollen für die eigene Sicherheit und die ihrer Kolleg:innen sorgen und den Arbeitgeber bei der Umsetzung des Arbeitsschutzes unterstützen. Gefährdungsbeurteilungen schließen ausdrücklich auch psychische Belastungen ein.\nAK-Falle: Arbeitsschutz ist keine reine Arbeitgeber-Einbahnstraße."
+  },
+  {
+    "frage": "Was geschieht laut Studienbrief mit den Ergebnissen eines Gesundheitszirkels?",
+    "a": "Sie werden ausschließlich den teilnehmenden Beschäftigten mitgeteilt und nicht weiterverwendet.",
+    "b": "Die Teilnehmenden entscheiden selbst verbindlich über die Umsetzung aller vorgeschlagenen Maßnahmen.",
+    "c": "Ein Bericht zu Belastungen und Lösungsvorschlägen geht an Arbeitskreis Gesundheit bzw. Lenkungsausschuss; anschließend werden umgesetzte Veränderungen evaluiert und später einer Erfolgskontrolle unterzogen.",
+    "d": "Gesundheitszirkel enden mit der Gruppendiskussion und sehen keine spätere Überprüfung vor.",
+    "richtig": "c",
+    "begruendung": "Gesundheitszirkel liefern Vorschläge; über deren Umsetzung berät der zuständige betriebliche Arbeitskreis bzw. Lenkungsausschuss. Anschließend folgen Evaluation (Überprüfung eingeleiteter Veränderungen) und spätere Erfolgskontrolle.\nAK-Falle: Gesundheitszirkel haben Beteiligungsfunktion, aber die Gruppe entscheidet nicht automatisch allein über die Umsetzung."
+  },
+  {
+    "frage": "Welche Zuordnung zu Initiativen der Gesundheitsförderung an Hochschulen ist korrekt?",
+    "a": "Die Okanagan Charter ist ein deutsches Programm zur Wiedereingliederung erkrankter Hochschulbeschäftigter.",
+    "b": "Der AGH ist ein internationales Arbeitsschutzgesetz für Universitäten.",
+    "c": "Die Okanagan Charter ist eine internationale Initiative zur Gesundheitsförderung an Hochschulen; der AGH ist ein deutsches Netzwerk gesundheitsfördernder Hochschulen.",
+    "d": "Beide Initiativen richten sich ausschließlich an Studierende.",
+    "richtig": "c",
+    "begruendung": "Die Okanagan Charter wurde 2015 im internationalen Hochschulkontext verabschiedet. Der AGH (Arbeitskreis Gesundheitsfördernde Hochschulen) besteht in Deutschland seit 1995 und fördert u. a. Vernetzung und Gütekriterien gesundheitsfördernder Hochschulen.\nAK-Falle: Initiative/Netzwerk nicht mit einzelnen Gesundheitsprogrammen oder Gesetzen verwechseln."
+  },
+  {
+    "frage": "Welche Zuordnung von Hochschulstatusgruppe und gesundheitsrelevantem Merkmal entspricht dem Studienbrief?",
+    "a": "Studierende → vor allem Befristungen und akademische Selbstverwaltung",
+    "b": "Nichtwissenschaftliches Personal → primär Prüfungsangst und schlechte Noten",
+    "c": "Wissenschaftliches Personal → ausschließlich körperliche Belastungen, kaum psychosoziale Faktoren",
+    "d": "Wissenschaftliches Personal → Sinnhaftigkeit und Handlungsspielraum als Ressourcen; Studierende → Prüfungen und Mehrfachbelastung; nichtwissenschaftliches Personal → u. a. Arbeitszunahme und fehlende Fortbildung",
+    "richtig": "d",
+    "begruendung": "Die drei Gruppen unterscheiden sich deutlich in ihren typischen Ressourcen und Belastungen. Beim wissenschaftlichen Personal zählen Sinnhaftigkeit, Identifikation und Handlungsspielräume zu wichtigen Ressourcen; beim nichtwissenschaftlichen Personal werden unter anderem Arbeitszunahme, fehlende Fortbildung und Personalentwicklung genannt.\nAK-Falle: Der Prof kann einfach typische Belastungen der drei Gruppen untereinander vertauschen."
+  },
+  {
+    "frage": "Welche Aussage zur gesundheitlichen Bedeutung von Erwerbsarbeit ist am treffendsten?",
+    "a": "Arbeit stellt grundsätzlich einen gesundheitlichen Risikofaktor dar.",
+    "b": "Arbeit ist grundsätzlich gesundheitsförderlich, solange keine Arbeitsunfähigkeit eintritt.",
+    "c": "Gesundheitliche Auswirkungen der Arbeit ergeben sich ausschließlich aus körperlichen Arbeitsbedingungen.",
+    "d": "Erwerbsarbeit kann gleichzeitig gesundheitsfördernde Funktionen wie Lebensunterhalt, Tagesstruktur und Sinnstiftung sowie körperliche und psychische Belastungen mit sich bringen.",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief betrachtet Arbeit ausdrücklich nicht einseitig: Sie kann eine wichtige Ressource darstellen, beansprucht aber zugleich Zeit sowie physische und psychische Energie und findet unter potenziell belastenden Rahmenbedingungen statt.\nAK-Falle: Aussagen wie „Arbeit ist grundsätzlich gesund/ungesund“ sind zu pauschal."
+  },
+  {
+    "frage": "Welche Aussage zum Präventionsgesetz und Hochschulen als Setting entspricht dem Studienbrief?",
+    "a": "Hochschulen fallen ausschließlich unter den betrieblichen Arbeitsschutz und nicht unter den Setting-Ansatz.",
+    "b": "Seit dem Präventionsgesetz von 2015 besteht gegenüber den gesetzlichen Krankenkassen ein verpflichtender Leistungsanspruch, sich im Sinne des nichtbetrieblichen Setting-Ansatzes (Gesundheitsförderung in einer Lebenswelt) an Hochschulen zu engagieren.",
+    "c": "Der Setting-Ansatz gilt nur für Studierende, nicht für andere Hochschulangehörige.",
+    "d": "Gesetzliche Krankenkassen dürfen sich nur dann an Hochschulen engagieren, wenn bereits konkrete Erkrankungen vorliegen.",
+    "richtig": "b",
+    "begruendung": "Hochschulen werden als gesundheitsrelevante Lebenswelten (abgrenzbare soziale Systeme) betrachtet. Der Studienbrief leitet aus dem Präventionsgesetz von 2015 einen entsprechenden Leistungsanspruch gegenüber gesetzlichen Krankenkassen ab.\nAK-Falle: Hochschule ≠ ausschließlich „Betrieb“; hier spielt ausdrücklich auch der nichtbetriebliche Setting-Ansatz eine Rolle."
+  },
+  {
+    "frage": "Welche Aussage gehört zu den Gütekriterien einer gesundheitsfördernden Hochschule?",
+    "a": "Gesundheitsförderung soll möglichst unabhängig von Hochschulpolitik und Organisationsentwicklung stattfinden.",
+    "b": "Verhaltensbezogene Maßnahmen sollen Vorrang haben; Verhältnismaßnahmen sind nicht vorgesehen.",
+    "c": "Gesundheitsförderung richtet sich ausschließlich an Personen mit bestehenden gesundheitlichen Problemen.",
+    "d": "Gesundheitsförderung soll u. a. nachhaltig, partizipativ und als strukturelle Querschnittsaufgabe verankert sein sowie Gender Mainstreaming, Cultural Mainstreaming und Gleichbehandlung berücksichtigen.",
+    "richtig": "d",
+    "begruendung": "Zu den Gütekriterien gehören neben Setting-, Ressourcen- und Salutogeneseorientierung (Fokus auf Entstehung und Erhaltung von Gesundheit) auch Partizipation, Verhaltens- und Verhältnismaßnahmen, Nachhaltigkeit, Evaluation, Vernetzung und Gleichbehandlung.\nAK-Falle: Eine gesundheitsfördernde Hochschule besteht gerade nicht nur aus einzelnen Gesundheitskursen."
+  },
+  {
+    "frage": "Welche Aussage über Gesundheitszirkel ist korrekt?",
+    "a": "Die Teilnahme gilt als dienstliche Arbeitszeit; nach der Umsetzung von Veränderungen sind Evaluation und spätere Erfolgskontrolle vorgesehen.",
+    "b": "Gesundheitszirkel werden ausschließlich außerhalb der Arbeitszeit durchgeführt und enden nach der letzten Gruppensitzung.",
+    "c": "Die Mitglieder eines Gesundheitszirkels entscheiden allein und verbindlich über sämtliche betrieblichen Veränderungen.",
+    "d": "Nach Abschluss eines Gesundheitszirkels ist keine weitere Überprüfung der Maßnahmen vorgesehen.",
+    "richtig": "a",
+    "begruendung": "Ein Gesundheitszirkel besteht laut Studienbrief aus maximal 12 Mitarbeitenden und durchschnittlich sieben Sitzungen; die Teilnahme zählt als Arbeitszeit. Nach einem halben Jahr erfolgt eine Evaluation der eingeleiteten Veränderungen und später eine Erfolgskontrolle. Die Umsetzungsentscheidung liegt nicht allein beim Zirkel.\nAK-Falle: Gesundheitszirkel = Beteiligung und Vorschläge, nicht alleinige Entscheidungskompetenz."
+  },
+  {
+    "frage": "Eine Beschäftigte hat sehr hohe Arbeitsanforderungen und kaum Einfluss darauf, wie sie ihre Aufgaben erledigt. Welches Modell beschreibt diese Belastungskonstellation am direktesten?",
+    "a": "Gratifikationskrisenmodell nach Siegrist",
+    "b": "Anforderungs-Kontroll-Modell nach Karasek",
+    "c": "JD-R-Modell ausschließlich über den motivationalen Pfad",
+    "d": "Anforderungs-Kontroll-Unterstützungs-Modell aufgrund fehlender Belohnung",
+    "richtig": "b",
+    "begruendung": "Karasek betrachtet das Verhältnis von Anforderungen und Kontrolle. Hohe Anforderungen bei niedriger Kontrolle ergeben einen High Strain Job.\nAK-Falle: Viel Arbeit + wenig Kontrolle → Karasek. Nicht automatisch Siegrist."
+  },
+  {
+    "frage": "Ein Mitarbeiter leistet regelmäßig Überstunden, übernimmt viel Verantwortung und erhält dafür weder Anerkennung noch gute Aufstiegschancen oder Arbeitsplatzsicherheit. Welches Modell passt am besten?",
+    "a": "Anforderungs-Kontroll-Modell",
+    "b": "Anforderungs-Kontroll-Unterstützungs-Modell",
+    "c": "JD-R-Modell mit hoher Kontrolle",
+    "d": "Modell beruflicher Gratifikationskrisen",
+    "richtig": "d",
+    "begruendung": "Hier steht hohe Verausgabung einer niedrigen Belohnung gegenüber – genau das beschreibt eine Gratifikationskrise nach Siegrist.\nAK-Falle: Kontrolle = Karasek, Belohnung/Gegenleistung = Siegrist."
+  },
+  {
+    "frage": "Welche Zuordnung der vier Modelle ist korrekt?",
+    "a": "Karasek → Kontrolle; Support-Erweiterung → soziale Unterstützung; Siegrist → Belohnung; JD-R → allgemeine Ressourcen",
+    "b": "Karasek → Belohnung; Support-Erweiterung → Kontrolle; Siegrist → Ressourcen; JD-R → soziale Unterstützung",
+    "c": "Karasek → Ressourcen; Support-Erweiterung → Belohnung; Siegrist → Kontrolle; JD-R → Anerkennung",
+    "d": "Karasek → soziale Unterstützung; Support-Erweiterung → Gratifikation; Siegrist → Engagement; JD-R → Kontrolle",
+    "richtig": "a",
+    "begruendung": "Genau diese Begriffe helfen, die Modelle auseinanderzuhalten: Karasek fokussiert Kontrolle, die Erweiterung soziale Unterstützung, Siegrist Belohnung und JD-R allgemein Anforderungen und Ressourcen.\nAK-Falle: Alle vier Begriffe sind fachlich richtig – entscheidend ist, zu welchem Modell sie gehören."
+  },
+  {
+    "frage": "Eine Person hat hohe Arbeitsanforderungen, gleichzeitig aber großen Entscheidungsspielraum und viel Unterstützung durch Kolleg:innen. Welche Aussage trifft am besten zu?",
+    "a": "Nach Karasek handelt es sich zwingend um einen High Strain Job, weil die Anforderungen hoch sind.",
+    "b": "Soziale Unterstützung spielt nur dann eine Rolle, wenn die Kontrolle niedrig ist.",
+    "c": "Nach Karasek spricht der große Handlungsspielraum für einen Active Job; die soziale Unterstützung kann zusätzlich Belastungsfolgen abmildern.",
+    "d": "Nach Siegrist liegt automatisch eine Gratifikationskrise vor.",
+    "richtig": "c",
+    "begruendung": "Hohe Anforderungen + hohe Kontrolle = Active Job. Zusätzlich kann soziale Unterstützung die negativen Folgen hoher Belastung abmildern.\nAK-Falle: Hohe Anforderungen allein reichen weder für High Strain noch für eine Gratifikationskrise."
+  },
+  {
+    "frage": "Welche Verbindung besteht zwischen dem zuvor gelernten Puffereffekt sozialer Unterstützung und dem Anforderungs-Kontroll-Unterstützungs-Modell?",
+    "a": "In beiden Fällen bedeutet Unterstützung, dass Stressoren vollständig verschwinden.",
+    "b": "In beiden Fällen kann soziale Unterstützung besonders unter Belastung negative Folgen abmildern.",
+    "c": "In beiden Fällen wirkt ausschließlich wahrgenommene, niemals erhaltene Unterstützung.",
+    "d": "Es besteht keine inhaltliche Verbindung zwischen den beiden Konzepten.",
+    "richtig": "b",
+    "begruendung": "Beim Puffereffekt wird die gesundheitsschädliche Wirkung hoher Belastung abgeschwächt. Genau diese Logik findet sich auch im arbeitsbezogenen Support-Modell wieder.\nAK-Falle: Ein Puffer beseitigt nicht unbedingt die Belastung selbst, sondern schwächt deren Folgen ab."
+  },
+  {
+    "frage": "Warum ist das JD-R-Modell breiter anwendbar als die klassischen Arbeitsstressmodelle?",
+    "a": "Weil es ausschließlich psychische Anforderungen berücksichtigt.",
+    "b": "Weil es auf Kontrollmöglichkeiten als einzige Ressource beschränkt ist.",
+    "c": "Weil es Belohnung vollständig durch soziale Unterstützung ersetzt.",
+    "d": "Weil Anforderungen und Ressourcen sehr allgemein als physische, soziale und organisationale Faktoren definiert werden.",
+    "richtig": "d",
+    "begruendung": "Dadurch kann das JD-R-Modell in unterschiedlichen Unternehmen und auf unterschiedlichen Hierarchieebenen eingesetzt werden. Es fasst mögliche Anforderungen und Ressourcen breiter als die klassischen Modelle.\nAK-Falle: JD-R sammelt breiter – Kontrolle, Unterstützung usw. können Ressourcen sein, aber das Modell ist nicht auf eine davon beschränkt."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

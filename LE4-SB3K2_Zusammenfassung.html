@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE4_index.html" class="drawer-link">Zurück zu LE4</a>
+                <a href="LE4-SB3K2_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE4-SB3K2_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE4-SB3K2_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE4-SB3K2_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+<!-- Inhalt der Zusammenfassung -->
+        <div class="content-body">
+            <h1>LE4 – SB3/K2: Betriebliche Gesundheitsförderung / Setting Hochschule</h1>
+
+            <h2>1. Erwerbsarbeit und Gesundheit</h2>
+            <p>Arbeit hat sowohl gesundheitsfördernde als auch gesundheitsbelastende Seiten. Positiv wirken unter anderem Lebensunterhalt, Tagesstruktur und Sinnstiftung. Belastend können dagegen hohe Arbeitsmengen, Zeitdruck, Störungen, mangelnde Anerkennung, ungünstige Umgebungsbedingungen sowie die schlechte Vereinbarkeit von Arbeit und Familie wirken. Auch körperliche Belastungen wie schweres Heben oder repetitive Arbeit spielen eine Rolle.</p>
+            
+            <p>Gesundheitliche Probleme können unabhängig von der Arbeit entstehen oder durch sie mitbedingt sein. Arbeitsunfähigkeit liegt vor, wenn die bisherige Tätigkeit krankheitsbedingt nicht mehr bzw. nur unter Gefahr einer Verschlechterung ausgeübt werden kann. Besonders relevant für Fehlzeiten sind Muskel-Skelett-Erkrankungen, Atemwegserkrankungen und psychische Erkrankungen.</p>
+
+
+            <h2>2. BGF – Betriebliche Gesundheitsförderung</h2>
+            <p>BGF (Betriebliche Gesundheitsförderung) umfasst nach der Luxemburger Deklaration gemeinsame Maßnahmen von Arbeitgeber:innen, Arbeitnehmer:innen und Gesellschaft zur Verbesserung von Gesundheit und Wohlbefinden am Arbeitsplatz.</p>
+            
+            <p>Sie verbindet drei Ansätze:</p>
+            <ul>
+                <li>Verbesserung von Arbeitsorganisation und Arbeitsbedingungen</li>
+                <li>aktive Beteiligung der Mitarbeitenden</li>
+                <li>Stärkung persönlicher Kompetenzen.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Für BGF gelten vier zentrale Leitlinien:</p>
+            <ul>
+                <li><strong>Partizipation (aktive Beteiligung):</strong> Die gesamte Belegschaft soll einbezogen werden.</li>
+                <li><strong>Integration (Einbindung in betriebliche Entscheidungen):</strong> Gesundheit soll bei wichtigen Entscheidungen und in allen Unternehmensbereichen berücksichtigt werden.</li>
+                <li><strong>Projektmanagement (systematische Steuerung):</strong> Analyse, Planung, Durchführung, Verlaufskontrolle und Evaluation (Überprüfung der Wirksamkeit) sollen strukturiert erfolgen.</li>
+                <li><strong>Ganzheitlichkeit:</strong> Sowohl individuelles Verhalten als auch Arbeitsbedingungen sollen berücksichtigt werden; außerdem sollen Risiken reduziert und Schutzfaktoren bzw. Gesundheitsressourcen gestärkt werden.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: Ganzheitlichkeit = nicht nur Verhaltensänderung beim einzelnen Beschäftigten.</p>
+            </div>
+
+
+            <h2>3. BGF vs. BGM</h2>
+            <p>BGM (Betriebliches Gesundheitsmanagement) bezeichnet die Entwicklung betrieblicher Rahmenbedingungen, Strukturen und Prozesse, die gesundheitsförderliche Arbeit ermöglichen und Beschäftigte zu gesundheitsförderlichem Verhalten befähigen.</p>
+            
+            <p>Kurz:<br>
+            BGF = konkrete Gesundheitsförderung.<br>
+            BGM = Organisation und strukturelle Steuerung von Gesundheit im Betrieb.</p>
+            
+            <p>Das Verhältnis beider Begriffe wird in der Literatur allerdings nicht vollkommen einheitlich verwendet: teils synonym, teils wird BGM als übergeordnete Grundlage für BGF verstanden.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Beim BGM unterscheidet man Handlungsfelder im engeren Sinn (direkt gesundheitsbezogen) und im weiteren Sinn (organisationsbezogen).</p>
+            
+            <p>Zum engeren Sinn gehören:</p>
+            <ul>
+                <li>Arbeits- und Gesundheitsschutz</li>
+                <li>BEM (Betriebliches Eingliederungsmanagement; Maßnahmen zur Wiedereingliederung erkrankter Beschäftigter)</li>
+                <li>Fehlzeitenmanagement</li>
+                <li>Gesundheitsförderung</li>
+                <li>medizinische und psychosoziale Betreuung.</li>
+            </ul>
+            
+            <p>Zum weiteren Sinn gehören:</p>
+            <ul>
+                <li>Arbeitsgestaltung</li>
+                <li>Personalentwicklung</li>
+                <li>Organisationsgestaltung und Organisationsentwicklung.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+
+            <h2>4. Gesetzliche Grundlagen</h2>
+            <p>BGF und BGM sind nicht reine freiwillige „Extras“ der Unternehmensleitung.</p>
+            
+            <p>Das Arbeitsschutzgesetz (ArbSchG) verpflichtet Arbeitgeber:innen unter anderem dazu, Gefahren für physische und psychische Gesundheit möglichst zu vermeiden bzw. zu minimieren, kontinuierlich Verbesserungen anzustreben und regelmäßig Gefährdungsbeurteilungen (systematische Prüfung möglicher Gesundheitsgefahren) durchzuführen. Dabei müssen auch psychische Belastungen berücksichtigt werden.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Auch Beschäftigte haben Pflichten: Sie sollen auf die eigene Sicherheit sowie die Sicherheit anderer achten und den Arbeitgeber beim Arbeitsschutz unterstützen.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <div class="callout-box">
+                <p>📌 Für die Klausur wichtiger als einzelne Paragraphennummern ist die Logik: Arbeitsschutz umfasst körperliche UND psychische Gesundheit.</p>
+            </div>
+
+
+            <h2>5. Psychosoziale Belastung und Gesundheit</h2>
+            <p>Psychosoziale Belastung (Belastung durch soziale und psychologische Arbeitsbedingungen) umfasst Stressoren und individuelle Bewältigungsmuster.</p>
+            
+            <p>Chronische Belastung kann die Gesundheit auf zwei Wegen beeinträchtigen:</p>
+            <ul>
+                <li>über dauerhafte körperliche Stressreaktionen, z. B. wiederholte Ausschüttung von Stresshormonen;</li>
+                <li>über gesundheitsrelevantes Verhalten, z. B. Rauchen als Kompensation.</li>
+            </ul>
+            
+            <p>Langfristig können daraus körperliche und psychische Erkrankungen entstehen.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+
+            <h2>6. Anforderungs-Kontroll-Modell – höchste AK-Priorität</h2>
+            <p>Das Demand-Control-/Anforderungs-Kontroll-Modell von Karasek erklärt Gesundheit über zwei Dimensionen:</p>
+            <ul>
+                <li><strong>Anforderungen</strong> = insbesondere psychologische Arbeitsanforderungen wie Zeitdruck.</li>
+                <li><strong>Kontrolle</strong> = Einfluss- und Entscheidungsmöglichkeiten, z. B. eigene Fähigkeiten einsetzen, Neues lernen und selbst Entscheidungen treffen.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Daraus entstehen vier Jobtypen:</p>
+            <ul>
+                <li><strong>High Strain Job (Anforderungen: hoch / Kontrolle: niedrig):</strong> höchste Belastung / Gesundheitsrisiko</li>
+                <li><strong>Passive Job (Anforderungen: niedrig / Kontrolle: niedrig):</strong> Apathie, Langeweile, ebenfalls ungünstig</li>
+                <li><strong>Low Strain Job (Anforderungen: niedrig / Kontrolle: hoch):</strong> geringe psychische Belastung</li>
+                <li><strong>Active Job (Anforderungen: hoch / Kontrolle: hoch):</strong> trotz hoher Anforderungen günstig(er), da hohe Kontrolle Lernen und Entwicklung ermöglicht</li>
+            </ul>
+            
+            <p>Besonders wichtig:<br>
+            High Strain = hohe Anforderungen + niedrige Kontrolle.<br>
+            Active Job = hohe Anforderungen + hohe Kontrolle.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>High-Strain-Jobs sind mit erhöhtem Risiko für psychische und körperliche Erkrankungen verbunden. Mehr Autonomie (Selbstbestimmung/Entscheidungsspielraum) und Entwicklungsmöglichkeiten können dagegen günstig wirken.</p>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Fallen: Active Job ist nicht geringe Anforderung + hohe Kontrolle. High Strain ist nicht gesundheitsförderlich. Das Modell fokussiert Belastungshäufigkeit und Handlungs-/Entscheidungsspielräume. Genau diese Unterscheidungen wurden bereits mehrfach abgefragt.</p>
+            </div>
+
+
+            <h2>7. Anforderungs-Kontroll-Unterstützungs-Modell</h2>
+            <p>Das Demand-Control-Support-Modell / Anforderungs-Kontroll-Unterstützungs-Modell erweitert Karaseks Modell um eine dritte Dimension: soziale Unterstützung am Arbeitsplatz.</p>
+            
+            <p>Unterstützung durch Kolleg:innen und Vorgesetzte kann die gesundheitsschädlichen Wirkungen eines High-Strain-Jobs abmildern. Auch nichtarbeitsbezogene Unterstützung, z. B. durch Familie oder Partner:innen, kann Belastungsfolgen reduzieren.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: Die zusätzliche Dimension heißt soziale Unterstützung, nicht Gratifikation. Und: Der Unterstützungsaspekt ist nicht ausschließlich Unterstützung aus dem Privatleben – im Modell steht besonders auch Unterstützung durch Kolleg:innen und Vorgesetzte im Mittelpunkt.</p>
+            </div>
+
+
+            <h2>8. Modell beruflicher Gratifikationskrisen – höchste AK-Priorität</h2>
+            <p>Das Effort-Reward-Imbalance-Modell / Modell beruflicher Gratifikationskrisen von Siegrist geht von unausgeglichenen sozialen Austauschbeziehungen aus.</p>
+            
+            <p>Eine Gratifikationskrise (Ungleichgewicht zwischen Leistung und Belohnung) entsteht, wenn:<br>
+            <em>hohe Verausgabung + niedrige Belohnung</em><br>
+            zusammentreffen.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p><strong>Verausgabung / Effort</strong> umfasst z. B.: Zeitdruck, Verantwortung, widersprüchliche Anforderungen, Arbeitsintensivierung, Überstunden, körperlich anstrengende Arbeit.</p>
+            
+            <p><strong>Belohnung / Reward</strong> umfasst z. B.: Lohn/Gehalt, Anerkennung und Wertschätzung, Aufstiegsmöglichkeiten, Arbeitsplatzsicherheit.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Zusätzlich berücksichtigt das Modell die Verausgabungsneigung (persönliches Muster exzessiven Arbeitseinsatzes mit starkem Anerkennungsbedürfnis). Sie gilt als gesundheitsbeeinträchtigendes Bewältigungsverhalten.</p>
+            
+            <p>Das Modell berücksichtigt somit nicht nur äußere Arbeitsbedingungen, sondern auch individuelles Bewältigungsverhalten.</p>
+            
+            <p>Gratifikationskrisen hängen mit erhöhten körperlichen und psychischen Gesundheitsrisiken zusammen. Die Befunde zeigen außerdem geschlechtsspezifische Muster: Bei Männern hängen Herz-Kreislauf-Risiken stärker mit extrinsischen Komponenten (äußeren Arbeitsbedingungen) zusammen, bei Frauen stärker mit der intrinsischen Komponente (inneres Bewältigungsmuster/Verausgabungsneigung).</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <div class="callout-box">
+                <p>📌 AK-Merksatz: viel geben + wenig bekommen = Gratifikationskrise.</p>
+            </div>
+
+
+            <h2>9. Anforderungs-Kontroll vs. Gratifikationskrise – sehr AK-wichtig</h2>
+            <p>Beide Modelle beruhen auf ähnlichen stresstheoretischen Grundannahmen, betrachten aber unterschiedliche Aspekte.</p>
+            
+            <p><strong>Anforderungs-Kontroll-Modell:</strong> Belastungshäufigkeit, Handlungs- und Entscheidungsspielräume / Kontrolle.</p>
+            
+            <p><strong>Gratifikationskrisenmodell:</strong> Belastungsintensität, berufliche Belohnungen, marktwirtschaftliche Rahmenbedingungen, individuelles Bewältigungsverhalten.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Da beide unterschiedliche Belastungsaspekte erfassen, könnte ihre Kombination gesundheitliche Risiken besser vorhersagen.</p>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: Karasek = Häufigkeit + Kontrolle. Siegrist = Intensität + Belohnung + Verausgabungsneigung.</p>
+            </div>
+
+
+            <h2>10. JD-R-Modell – höchste AK-Priorität</h2>
+            <p>Das Job Demands-Resources Model / JD-R-Modell (Anforderungs-Ressourcen-Modell) versucht die engeren Annahmen der klassischen Modelle zu erweitern.</p>
+            
+            <p><strong>Job Demands / Anforderungen</strong> sind physische, soziale oder organisationale Arbeitsfaktoren, die Anstrengung verlangen und dadurch Belastung erzeugen.</p>
+            
+            <p><strong>Job Resources / Ressourcen</strong> sind physische, soziale oder organisationale Faktoren, die Ziele erleichtern, Anforderungen reduzieren, persönliches Wachstum und Entwicklung fördern.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Das Modell beschreibt zwei voneinander unabhängige Pfade:</p>
+            <ul>
+                <li><strong>Gesundheitsbeeinträchtigender Pfad:</strong> hohe Anforderungen → Erschöpfung</li>
+                <li><strong>Motivationaler Pfad:</strong> Ressourcen → Engagement bzw. fehlende Ressourcen → Disengagement (innere Distanzierung / vermindertes Engagement).</li>
+            </ul>
+            
+            <p>Burnout entsteht besonders bei: <em>hohen Anforderungen + niedrigen Ressourcen.</em></p>
+            
+            <p>Die beiden Burnout-Dimensionen im JD-R-Modell sind Erschöpfung und (Dis-)Engagement. Diese mediieren (vermitteln) den Einfluss von Anforderungen und Ressourcen auf gesundheitliche und arbeitsbezogene Ergebnisse.</p>
+            
+            <p>Das JD-R-Modell gilt aktuell als besonders erklärungsstarker Ansatz, weil Anforderungen und Ressourcen sehr allgemein definiert sind und das Modell dadurch in verschiedenen Unternehmen und Hierarchieebenen anwendbar ist.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: Anforderungen → Erschöpfung, nicht Engagement. Ressourcen → Engagement, nicht Erschöpfung. Das wurde bereits exakt so geprüft.</p>
+            </div>
+
+
+            <h2>11. Burnout</h2>
+            <p>Die ICD-11 (Internationale Klassifikation der Krankheiten, 11. Ausgabe) beschreibt Burnout als Syndrom aufgrund chronischen, nicht erfolgreich bewältigten Stresses am Arbeitsplatz.</p>
+            
+            <p>Drei Merkmale:</p>
+            <ul>
+                <li>Energieerschöpfung</li>
+                <li>mentale Distanz, Negativismus oder Zynismus gegenüber der Arbeit</li>
+                <li>Gefühl von Ineffektivität bzw. mangelnder Leistung.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Im JD-R-Modell wird Burnout etwas anders über die zwei Dimensionen Erschöpfung und (Dis-)Engagement konzeptualisiert.</p>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: ICD-11-Burnoutbeschreibung und JD-R-Burnoutdimensionen nicht vermischen.</p>
+            </div>
+
+
+            <h2>12. Maßnahmen der BGF</h2>
+            <p>Erfolgreiche BGF sollte mehrere Prinzipien berücksichtigen:</p>
+            <ul>
+                <li>ganzheitlicher Ansatz: Individuum, Organisation und Umwelt berücksichtigen</li>
+                <li>doppelte Zielsetzung: betriebliche Effizienz und humane Arbeitsgestaltung</li>
+                <li>Beteiligung der Beschäftigten</li>
+                <li>prozessorientiertes Vorgehen (Veränderung als längerfristiger gemeinsamer Entwicklungsprozess)</li>
+                <li>Diagnose als Ausgangspunkt der Veränderung.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Es gibt keine einheitliche Maßnahme, die für alle Betriebe passt.</p>
+            
+            <p>Zur Diagnose des Ist-Zustands können z. B. Krankenstands- und Unfallanalysen, Gefährdungsanalysen, Krankenkassendaten, ergonomische Analysen und Gruppendiskussionen dienen.</p>
+            
+            <p>Umsetzungsmaßnahmen sind z. B. Informationsveranstaltungen, Führungskräfteseminare, Arbeitsplatzgestaltung, Coaching, Teamentwicklung und Gesundheitszirkel.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Wichtig ist außerdem die Kombination von Verhaltensprävention (Veränderung des individuellen Verhaltens) und Verhältnisprävention (Veränderung von Umwelt- und Arbeitsbedingungen).</p>
+
+
+            <h2>13. Gesundheitszirkel</h2>
+            <p>Ein Gesundheitszirkel ist eine moderierte Gruppendiskussion, in der Beschäftigte aktiv in Planung und Umsetzung von Gesundheitsförderung einbezogen werden. Ziel ist, ihr Erfahrungswissen über gesundheitliche Belastungen in die Organisation einzubringen.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Es gibt zwei wichtige Formen:</p>
+            <ul>
+                <li><strong>Düsseldorfer Modell:</strong> verschiedene Stakeholder (beteiligte Interessengruppen) einschließlich Vorgesetzter.</li>
+                <li><strong>Berliner Modell:</strong> Beschäftigte einer Hierarchieebene ohne Vorgesetzte.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Gesundheitszirkel sollen unter anderem Fehlzeiten und Arbeitsunfälle reduzieren sowie Arbeitsqualität, Organisation, Kommunikation und Kooperation verbessern.</p>
+
+            <div class="callout-box">
+                <p>⚠️ AK-Falle: Düsseldorf = mit Vorgesetzten; Berlin = ohne Vorgesetzte.</p>
+            </div>
+
+
+            <h2>14. Hochschule als gesundheitsförderndes Setting</h2>
+            <p>Hochschulen haben besondere Organisationsstrukturen. Es existieren verschiedene Statusgruppen und Aufgabenbereiche: Forschung, Lehre und Verwaltung.</p>
+            
+            <p>Ein struktureller Widerspruch besteht darin, dass Wissenschaftsbereiche eher flache Hierarchien besitzen, die Hochschulverwaltung dagegen bürokratisch-hierarchisch organisiert ist.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Es werden drei relevante Statusgruppen unterschieden:</p>
+            <ul>
+                <li><strong>Studierende:</strong> typische Stressoren sind Prüfungen, schlechte Noten sowie Mehrfachbelastungen durch Studium, Arbeit und Familie.</li>
+                <li><strong>Wissenschaftliches Personal:</strong> Ressourcen sind Sinnhaftigkeit, persönliche Identifikation sowie Entscheidungs- und Handlungsspielräume; Belastungen sind unter anderem hoher Betreuungsaufwand, steigende Studierendenzahlen, Befristung und ungünstige Arbeitszeitstrukturen.</li>
+                <li><strong>Nichtwissenschaftliches Personal:</strong> Belastungen sind z. B. Rücken-/Nackenbeschwerden, Arbeitszunahme durch Stellenabbau, fehlende Fortbildung und unzureichende Personalentwicklung.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+
+            <h2>15. Gesundheitsfördernde Hochschule</h2>
+            <p>Eine gesundheitsfördernde Hochschule orientiert sich unter anderem am Setting-Ansatz (Gesundheitsförderung durch Veränderung einer gesamten Lebenswelt), am Ressourcen- und Salutogenesekonzept (Fokus auf Entstehung und Erhaltung von Gesundheit) und integriert Gesundheitsförderung als strukturelle Querschnittsaufgabe.</p>
+            
+            <p>Wichtig sind außerdem:</p>
+            <ul>
+                <li>Partizipation</li>
+                <li>Verhaltens- und Verhältnismaßnahmen</li>
+                <li>Nachhaltigkeit</li>
+                <li>Steuerungsgruppen</li>
+                <li>Evaluation</li>
+                <li>Gleichbehandlung und Diversität</li>
+                <li>Vernetzung mit anderen Hochschulen und der Region.</li>
+            </ul>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Internationale bzw. nationale Initiativen sind unter anderem die Okanagan Charter und der deutsche Arbeitskreis Gesundheitsfördernde Hochschulen (AGH).</p>
+
+
+            <h2>16. Beispiele: Healthy Campus Bonn und GFS</h2>
+            <p>Healthy Campus Bonn richtet sich an Universitätsangehörige und fördert Gesundheitskompetenz und einen gesundheitsbewussten bzw. bewegungsorientierten Lebensstil. Angebote umfassen unter anderem Bewegung, Ernährung, psychische Gesundheit, Seminare, Beratung und aktive Pausen.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+            <p>Das GFS-Projekt („Die Gesundheit Fernstudierender stärken“) der FernUniversität Hagen untersucht spezifische Belastungen von Fernstudierenden und entwickelt daraus evidenzbasierte digitale Gesundheitsförderung.</p>
+            
+            <p>Wichtige Belastungen waren insbesondere: Zeitmangel, Leistungsdruck, Sorgen/Zukunftsängste, Unsicherheit, Überforderung, Vereinbarkeit von Studium, Beruf und Familie/Sozialleben.</p>
+            
+            <p>Aus den Ergebnissen entstand unter anderem das digitale Stressbewältigungsangebot Stressdown.</p>
+            
+            <a href="SB3_K2-Betrieb.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K2-Betrieb.pdf</a>
+
+
+            <div class="conclusion-box">
+                <h3>Das musst du für die Klausur besonders sicher können</h3>
+                <p>Nach den drei vorhandenen AKs liegt die höchste Priorität auf den vier Modellen:<br>
+                1. <strong>Anforderungs-Kontroll-Modell (Karasek):</strong> High Strain, Active, Passive, Low Strain; Anforderungen vs. Kontrolle; Belastungshäufigkeit.<br>
+                2. <strong>Anforderungs-Kontroll-Unterstützungs-Modell:</strong> zusätzliche Dimension = soziale Unterstützung; Unterstützung puffert High-Strain-Effekte.<br>
+                3. <strong>Gratifikationskrisenmodell (Siegrist):</strong> hohe Verausgabung + niedrige Belohnung; Verausgabungsneigung; geschlechtsspezifische Befunde; Belastungsintensität.<br>
+                4. <strong>JD-R-Modell:</strong> Anforderungen → Erschöpfung; Ressourcen → Engagement; hohe Anforderungen + niedrige Ressourcen → Burnout.<br>
+                Zusätzlich wichtig sind BGF vs. BGM, Leitlinien der BGF, Gesundheitszirkel (Düsseldorf vs. Berlin), Burnoutdefinition und gesundheitsfördernde Hochschule[cite: 6].</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

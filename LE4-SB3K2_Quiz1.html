@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE4 - SB3/K2</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 4</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Was beschreibt BGF (Betriebliche Gesundheitsförderung) am treffendsten?",
+    "a": "Ausschließlich gesetzlich vorgeschriebene Maßnahmen des Arbeitsschutzes",
+    "b": "Gemeinsame Maßnahmen von Arbeitgeber:innen, Arbeitnehmer:innen und Gesellschaft zur Verbesserung von Gesundheit und Wohlbefinden am Arbeitsplatz",
+    "c": "Ausschließlich Maßnahmen zur Reduktion krankheitsbedingter Fehlzeiten",
+    "d": "Die übergeordnete Organisation aller betrieblichen Personalprozesse",
+    "richtig": "b",
+    "begruendung": "BGF umfasst gemeinsame Maßnahmen zur Verbesserung von Gesundheit und Wohlbefinden am Arbeitsplatz. Sie ist breiter als Arbeitsschutz oder Fehlzeitenmanagement.\nAK-Falle: BGF nicht mit Arbeitsschutz oder BGM gleichsetzen."
+  },
+  {
+    "frage": "Welche Kombination gehört laut Luxemburger Deklaration zu den drei grundlegenden Ansätzen der BGF?",
+    "a": "Fehlzeiten reduzieren – Gewinne steigern – Arbeitszeiten verlängern",
+    "b": "Arbeitsschutz – BEM – Personalentwicklung",
+    "c": "Gesundheitsrisiken diagnostizieren – Beschäftigte behandeln – Reintegration organisieren",
+    "d": "Arbeitsorganisation/-bedingungen verbessern – Mitarbeitende aktiv beteiligen – persönliche Kompetenzen stärken",
+    "richtig": "d",
+    "begruendung": "Genau diese drei Ansätze sollen miteinander verknüpft werden.\nAK-Falle: Richtige BGM-Handlungsfelder sind nicht automatisch die drei Ansätze der BGF."
+  },
+  {
+    "frage": "Welche Leitlinie der BGF fordert den Einbezug der gesamten Belegschaft?",
+    "a": "Partizipation",
+    "b": "Integration",
+    "c": "Projektmanagement",
+    "d": "Ganzheitlichkeit",
+    "richtig": "a",
+    "begruendung": "Partizipation (aktive Beteiligung) bedeutet, die Beschäftigten einzubeziehen. Integration bezieht sich dagegen auf die Einbindung von Gesundheit in wichtige betriebliche Entscheidungen.\nAK-Falle: Partizipation und Integration lassen sich leicht vertauschen."
+  },
+  {
+    "frage": "Was bedeutet Ganzheitlichkeit im Rahmen der BGF?",
+    "a": "Gesundheitsförderung ausschließlich auf besonders gefährdete Beschäftigte zu konzentrieren",
+    "b": "Nur die betrieblichen Arbeitsbedingungen zu verändern",
+    "c": "Sowohl Verhalten als auch Arbeitsbedingungen sowie Risikoreduktion und Ressourcenstärkung einzubeziehen",
+    "d": "Alle Gesundheitsmaßnahmen zentral durch die Unternehmensleitung durchführen zu lassen",
+    "richtig": "c",
+    "begruendung": "Ganzheitlichkeit verbindet individuelle und kontextbezogene Maßnahmen sowie Risikoreduktion mit dem Aufbau von Schutzfaktoren und Ressourcen.\nAK-Falle: Ganzheitlichkeit = nicht nur Verhalten und auch nicht nur Verhältnisse."
+  },
+  {
+    "frage": "Welche Aussage beschreibt BGM (Betriebliches Gesundheitsmanagement) am besten?",
+    "a": "Es bezeichnet ausschließlich einzelne Gesundheitskurse für Beschäftigte.",
+    "b": "Es schafft betriebliche Rahmenbedingungen, Strukturen und Prozesse für gesundheitsförderliche Arbeit und gesundheitsförderliches Verhalten.",
+    "c": "Es ist ausschließlich ein anderes Wort für gesetzlichen Arbeitsschutz.",
+    "d": "Es betrifft nur die Wiedereingliederung erkrankter Beschäftigter.",
+    "richtig": "b",
+    "begruendung": "BGM kann als Organisation von Gesundheit im Betrieb verstanden werden. Es geht über einzelne Maßnahmen hinaus.\nAK-Falle: BGF eher Maßnahmen – BGM eher Strukturen/Prozesse/Steuerung."
+  },
+  {
+    "frage": "Welches Handlungsfeld gehört zum Gesundheitsmanagement im weiteren Sinn?",
+    "a": "Personalentwicklung",
+    "b": "Betriebliches Eingliederungsmanagement",
+    "c": "Fehlzeitenmanagement",
+    "d": "Medizinische Betreuung im Betrieb",
+    "richtig": "a",
+    "begruendung": "Personalentwicklung sowie Arbeits- und Organisationsgestaltung gehören zum weiteren, organisationsbezogenen Sinn. BEM, Fehlzeitenmanagement und medizinische Betreuung gehören zum engeren Sinn.\nAK-Falle: „Enger“ = direkt gesundheitsbezogen; „weiter“ = Organisationsstrukturen."
+  },
+  {
+    "frage": "Welche Aussage zum deutschen Arbeitsschutz entspricht dem Studienbrief?",
+    "a": "Gefährdungsbeurteilungen beziehen sich ausschließlich auf körperliche Risiken.",
+    "b": "Psychische Belastungen fallen nur unter freiwillige BGF.",
+    "c": "Arbeitsschutz betrifft ausschließlich die Vermeidung von Arbeitsunfällen.",
+    "d": "Auch Gefährdungen der psychischen Gesundheit müssen berücksichtigt und beurteilt werden.",
+    "richtig": "d",
+    "begruendung": "Das Arbeitsschutzgesetz verlangt, Gefährdungen der physischen und psychischen Gesundheit möglichst zu vermeiden bzw. zu reduzieren. Psychische Belastungen gehören ausdrücklich zur Gefährdungsbeurteilung.\nAK-Falle: Psychische Gesundheit ist kein freiwilliger Zusatz zum Arbeitsschutz."
+  },
+  {
+    "frage": "Über welche zwei grundlegenden Wege kann chronische psychosoziale Arbeitsbelastung laut Studienbrief gesundheitsschädlich wirken?",
+    "a": "Ausschließlich über genetische und soziale Prozesse",
+    "b": "Über Beziehungsqualität und Arbeitszufriedenheit",
+    "c": "Über dauerhafte körperliche Stressreaktionen und über gesundheitsrelevantes Verhalten",
+    "d": "Ausschließlich über Veränderungen der Arbeitsmotivation",
+    "richtig": "c",
+    "begruendung": "Chronische Belastung kann über Stresshormonausschüttung körperlich wirken und außerdem Verhalten beeinflussen, z. B. Rauchen als Kompensation.\nAK-Falle: Die Wirkung läuft nicht nur über „Stress im Kopf“."
+  },
+  {
+    "frage": "Welche Konstellation beschreibt im Anforderungs-Kontroll-Modell einen High Strain Job (hoch belastenden Arbeitsplatz)?",
+    "a": "Niedrige Anforderungen + niedrige Kontrolle",
+    "b": "Hohe Anforderungen + niedrige Kontrolle",
+    "c": "Niedrige Anforderungen + hohe Kontrolle",
+    "d": "Hohe Anforderungen + hohe Kontrolle",
+    "richtig": "b",
+    "begruendung": "Hohe psychologische Anforderungen bei gleichzeitig geringem Einfluss- und Entscheidungsspielraum bilden die gesundheitlich besonders ungünstige Kombination.\nAK-Falle: High Strain = hoch/niedrig."
+  },
+  {
+    "frage": "Welche Konstellation entspricht einem Passive Job?",
+    "a": "Hohe Anforderungen + hohe Kontrolle",
+    "b": "Hohe Anforderungen + niedrige Kontrolle",
+    "c": "Niedrige Anforderungen + hohe Kontrolle",
+    "d": "Niedrige Anforderungen + niedrige Kontrolle",
+    "richtig": "d",
+    "begruendung": "Ein Passive Job kann mit Apathie und Langeweile verbunden sein und ist deshalb nicht automatisch gesundheitsförderlich.\nAK-Falle: Niedrige Anforderungen sind nicht automatisch optimal."
+  },
+  {
+    "frage": "Was kennzeichnet einen Active Job?",
+    "a": "Hohe Anforderungen + hohe Kontrolle",
+    "b": "Niedrige Anforderungen + hohe Kontrolle",
+    "c": "Hohe Anforderungen + geringe Kontrolle",
+    "d": "Niedrige Anforderungen + geringe Kontrolle",
+    "richtig": "a",
+    "begruendung": "Trotz hoher Anforderungen können hohe Kontrollmöglichkeiten Lernen, Kompetenzentwicklung und gesundheitsförderliche Prozesse ermöglichen.\nAK-Falle: „Hohe Anforderungen = immer schädlich“ wäre falsch."
+  },
+  {
+    "frage": "Welche zusätzliche Dimension enthält das Anforderungs-Kontroll-Unterstützungs-Modell?",
+    "a": "Berufliche Gratifikation",
+    "b": "Verausgabungsneigung",
+    "c": "Soziale Unterstützung",
+    "d": "Arbeitsengagement",
+    "richtig": "c",
+    "begruendung": "Das ursprüngliche Modell wurde um soziale Unterstützung durch Kolleg:innen und Vorgesetzte erweitert. Diese kann negative Auswirkungen von High-Strain-Jobs abmildern.\nAK-Falle: Belohnung gehört zu Siegrist, Unterstützung zur Erweiterung von Karasek."
+  },
+  {
+    "frage": "Wann liegt nach dem Modell von Siegrist eine Gratifikationskrise (Ungleichgewicht zwischen Leistung und Belohnung) vor?",
+    "a": "Niedrige Verausgabung + niedrige Belohnung",
+    "b": "Hohe Verausgabung + hohe Belohnung",
+    "c": "Niedrige Verausgabung + hohe Belohnung",
+    "d": "Hohe Verausgabung + niedrige Belohnung",
+    "richtig": "d",
+    "begruendung": "Belastung entsteht, wenn hoher Einsatz keine angemessene Gegenleistung erhält.\nAK-Falle: Verausgabung ↑ + Belohnung ↓."
+  },
+  {
+    "frage": "Was zählt im Gratifikationskrisenmodell zu den Belohnungen?",
+    "a": "Zeitdruck, Überstunden und Verantwortung",
+    "b": "Lohn, Wertschätzung, Aufstiegsmöglichkeiten und Arbeitsplatzsicherheit",
+    "c": "Entscheidungsfreiheit und Lernmöglichkeiten",
+    "d": "Arbeitsintensität und widersprüchliche Anforderungen",
+    "richtig": "b",
+    "begruendung": "Belohnung umfasst materielle und soziale Anerkennung sowie berufliche Sicherheit und Entwicklungschancen. Die übrigen Beispiele betreffen Verausgabung bzw. Kontrolle.\nAK-Falle: Kontrolle/Autonomie ≠ Gratifikation."
+  },
+  {
+    "frage": "Was bezeichnet Verausgabungsneigung?",
+    "a": "Die objektive Häufigkeit hoher Arbeitsanforderungen",
+    "b": "Ein Mangel an Handlungsspielraum",
+    "c": "Ein gesundheitsbeeinträchtigendes Muster aus exzessiver Verausgabung und starkem Anerkennungswunsch",
+    "d": "Einen Mangel an sozialer Unterstützung durch Kolleg:innen",
+    "richtig": "c",
+    "begruendung": "Verausgabungsneigung ist ein individuelles Bewältigungsmuster (typische Art des Umgangs mit Anforderungen) und damit eine intrinsische Komponente des Gratifikationskrisenmodells.\nAK-Falle: Es handelt sich nicht um eine äußere Arbeitsbedingung."
+  },
+  {
+    "frage": "Welche Aussage zu geschlechtsspezifischen Befunden bei Gratifikationskrisen entspricht dem Studienbrief?",
+    "a": "Bei Männern waren Herz-Kreislauf-Risiken stärker mit extrinsischen Komponenten verbunden, bei Frauen stärker mit Verausgabungsneigung.",
+    "b": "Bei Frauen waren ausschließlich äußere Arbeitsbedingungen relevant.",
+    "c": "Bei Männern spielte ausschließlich Verausgabungsneigung eine Rolle.",
+    "d": "Das Modell gilt ausdrücklich als geschlechtsunspezifisch.",
+    "richtig": "a",
+    "begruendung": "Extrinsisch (äußerlich bedingt) meint hier Arbeitsbedingungen; intrinsisch (personenbezogen) insbesondere Verausgabungsneigung.\nAK-Falle: Männer = eher extrinsisch; Frauen = eher intrinsisch."
+  },
+  {
+    "frage": "Welche Zuordnung von Karasek und Siegrist ist korrekt?",
+    "a": "Karasek = Belastungsintensität; Siegrist = Belastungshäufigkeit",
+    "b": "Karasek = Belastungshäufigkeit; Siegrist = Belastungsintensität",
+    "c": "Beide fokussieren ausschließlich Belastungsintensität.",
+    "d": "Beide fokussieren ausschließlich Belastungshäufigkeit.",
+    "richtig": "b",
+    "begruendung": "Genau diese Unterscheidung hebt der Studienbrief beim Modellvergleich hervor.\nAK-Falle: Das wurde in der AK direkt geprüft."
+  },
+  {
+    "frage": "Welcher weitere Unterschied zwischen dem Anforderungs-Kontroll-Modell und dem Gratifikationskrisenmodell ist korrekt?",
+    "a": "Nur Karasek berücksichtigt berufliche Belohnungen.",
+    "b": "Nur Karasek berücksichtigt individuelles Bewältigungsverhalten.",
+    "c": "Siegrist berücksichtigt keine wirtschaftlichen Rahmenbedingungen.",
+    "d": "Siegrist berücksichtigt zusätzlich marktwirtschaftliche Bedingungen und individuelles Bewältigungsverhalten.",
+    "richtig": "d",
+    "begruendung": "Das Gratifikationskrisenmodell erweitert den Blick u. a. um berufliche Belohnungen, marktwirtschaftliche Rahmenbedingungen und Verausgabungsneigung.\nAK-Falle: Karasek = Kontrolle; Siegrist = Belohnung + individuelles Bewältigungsverhalten."
+  },
+  {
+    "frage": "Was gilt im JD-R-Modell (Job Demands-Resources-Modell; Anforderungs-Ressourcen-Modell) als Arbeitsressource?",
+    "a": "Ein physischer, sozialer oder organisationaler Faktor, der Ziele erleichtert, Anforderungen reduziert oder Entwicklung unterstützt",
+    "b": "Jeder Faktor, der zusätzliche Anstrengung verlangt",
+    "c": "Ausschließlich finanzielle Belohnung",
+    "d": "Ausschließlich soziale Unterstützung",
+    "richtig": "a",
+    "begruendung": "Ressourcen sind im JD-R-Modell sehr breit definiert. Genau diese breite Definition macht das Modell für unterschiedliche Berufe und Hierarchieebenen einsetzbar.\nAK-Falle: Ressourcen sind nicht auf Geld oder soziale Unterstützung beschränkt."
+  },
+  {
+    "frage": "Welcher Zusammenhang gehört zum gesundheitsbeeinträchtigenden Pfad des JD-R-Modells?",
+    "a": "Ressourcen → Erschöpfung",
+    "b": "Anforderungen → Engagement",
+    "c": "Hohe Anforderungen → Erschöpfung",
+    "d": "Fehlende Ressourcen → höhere Motivation",
+    "richtig": "c",
+    "begruendung": "Der gesundheitsbeeinträchtigende Pfad führt von Arbeitsanforderungen zu Erschöpfung.\nAK-Falle: Pfade nicht vertauschen: Demands → Erschöpfung."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE3</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 3</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Frage 1: Was war das zentrale Ziel der Studie von Marckhoff et al. (2022)?",
+    "a": "Die Wirksamkeit eines Bewegungsprogramms experimentell zu untersuchen.",
+    "b": "Auswirkungen der pandemiebedingten Kontaktbeschränkungen auf PA (körperliche Aktivität), SST (sitzend verbrachte Bildschirmzeit) und MWB (psychisches Wohlbefinden) zu untersuchen.",
+    "c": "Ausschließlich psychische Erkrankungen bei Jugendlichen zu diagnostizieren.",
+    "d": "Den Einfluss des BMI auf eine COVID-19-Erkrankung zu untersuchen.",
+    "richtig": "b",
+    "begruendung": "Im Zentrum standen Veränderungen von PA, SST und MWB während der PR (pandemiebedingten Kontaktbeschränkungen) sowie Zusammenhänge zwischen diesen Variablen. AK-Falle: Die Studie war keine Interventionsstudie."
+  },
+  {
+    "frage": "Frage 2: Welche Veränderung entsprach den Hypothesen der Autor:innen?",
+    "a": "Gleichbleibende PA, sinkende SST und stabiles MWB",
+    "b": "Zunehmende PA, zunehmende SST und verbessertes MWB",
+    "c": "Sinkende PA, sinkende SST und schlechteres MWB",
+    "d": "Sinkende PA (körperliche Aktivität), steigende SST (Bildschirmzeit) und schlechteres MWB (psychisches Wohlbefinden)",
+    "richtig": "d",
+    "begruendung": "Die erwartete Richtung lautete PA ↓, SST ↑, MWB ↓. AK-Falle: In der SoSe-25-AK wurden genau diese Richtungen durch Vertauschungen geprüft."
+  },
+  {
+    "frage": "Frage 3: Welche Veränderung war keine Hypothese von Marckhoff et al.?",
+    "a": "Zunahme des Konsums ungesunder Lebensmittel",
+    "b": "Abnahme der körperlichen Aktivität",
+    "c": "Zunahme der Bildschirmzeit",
+    "d": "Verschlechterung des psychischen Wohlbefindens",
+    "richtig": "a",
+    "begruendung": "Ernährungsverhalten gehörte nicht zu den untersuchten Haupthypothesen. In der AK wurde „Erhöhung des Konsums ungesunder Lebensmittel“ ausdrücklich als falscher Distraktor verwendet. AK-Falle: Eine gesundheitlich plausible Variable muss nicht Bestandteil der konkreten Studie gewesen sein."
+  },
+  {
+    "frage": "Frage 4: Wie wurde PA (körperliche Aktivität) erfasst?",
+    "a": "Durch Fremdbeobachtung",
+    "b": "Durch Accelerometer bei allen Teilnehmenden",
+    "c": "Durch Selbstbericht auf Grundlage eines Items des MoMo-PAQ (Fragebogen zur körperlichen Aktivität)",
+    "d": "Durch automatisch erhobene Smartphone-Bewegungsdaten",
+    "richtig": "c",
+    "begruendung": "Die Jugendlichen gaben selbst an, an wie vielen Tagen sie mindestens 60 Minuten körperlich aktiv waren. Der verwendete Ansatz orientierte sich am MoMo-PAQ im KiGGS-Kontext. AK-Falle: In der WiSe-25/26-AK war „Fremdbeobachtung“ ausdrücklich falsch."
+  },
+  {
+    "frage": "Frage 5: Wie ist ΔPA (Veränderung der körperlichen Aktivität) definiert?",
+    "a": "PA vor PR minus PA während PR",
+    "b": "SST während PR minus SST vor PR",
+    "c": "PA während PR minus PA vor PR",
+    "d": "PA während PR geteilt durch PA vor PR",
+    "richtig": "c",
+    "begruendung": "Ein negativer ΔPA-Wert bedeutet damit eine Abnahme der körperlichen Aktivität. AK-Falle: Auf die Reihenfolge der Subtraktion achten: während minus vorher."
+  },
+  {
+    "frage": "Frage 6: Welche Rolle hatte ΔPA (Veränderung der körperlichen Aktivität) in der Regressionsanalyse?",
+    "a": "Kontrollvariable",
+    "b": "AV (abhängige Variable)",
+    "c": "Moderatorvariable",
+    "d": "ausschließlich deskriptive Variable",
+    "richtig": "b",
+    "begruendung": "In der Regression sollte erklärt werden, welche Variablen mit der Veränderung der körperlichen Aktivität zusammenhingen. AK-Falle: Genau diese Variablenrolle wurde in der WiSe-25/26-AK abgefragt."
+  },
+  {
+    "frage": "Frage 7: Wie wurde die SST (sitzend verbrachte Bildschirmzeit) erhoben?",
+    "a": "Ausschließlich über die automatische Bildschirmzeit der Smartphones",
+    "b": "Durch Fremdbeobachtung der Jugendlichen",
+    "c": "Durch Daten der Internetanbieter",
+    "d": "Durch Selbsteinschätzungen zur Nutzung von Fernsehen, Spielkonsole, Computer und Smartphone",
+    "richtig": "d",
+    "begruendung": "Die Bildschirmzeit wurde selbst berichtet und nicht automatisch von Geräten übernommen. AK-Falle: „Automatisch erfasste Bildschirmzeit mobiler Endgeräte“ war bereits ein falscher AK-Distraktor."
+  },
+  {
+    "frage": "Frage 8: Welche Rolle spielte der BMI-SDS (alters- und geschlechtsbezogener standardisierter BMI) in der Studie?",
+    "a": "Er wurde als mögliche Einflussvariable berücksichtigt, war aber nicht das gesundheitsbezogene Outcome der Studie.",
+    "b": "Er war die zentrale abhängige Variable.",
+    "c": "Er wurde überhaupt nicht erfasst.",
+    "d": "Er diente als Maß für das psychische Wohlbefinden.",
+    "richtig": "a",
+    "begruendung": "Der BMI-SDS wurde unter anderem als Prädiktor in der Regression berücksichtigt. Das zentrale Outcome dort war ΔPA (Veränderung der körperlichen Aktivität). AK-Falle: In der WiSe-25/26-AK war die Aussage „BMI war ein gesundheitsbezogenes Outcome“ falsch."
+  },
+  {
+    "frage": "Frage 9: Welche Stichprobe wurde analysiert?",
+    "a": "627 Jugendliche zwischen 14 und 18 Jahren",
+    "b": "1.038 Jugendliche im Alter von 11 bis 17 Jahren",
+    "c": "1.038 Erwachsene und Jugendliche",
+    "d": "411 Jugendliche im Alter von 11 bis 17 Jahren",
+    "richtig": "b",
+    "begruendung": "In die Analyse gingen 1.038 Schüler:innen zwischen 11 und 17 Jahren ein. Die Stichprobe war allerdings nicht repräsentativ. AK-Falle: Die Zahl 627 bezeichnet die weiblichen Teilnehmenden, nicht die Gesamtstichprobe."
+  },
+  {
+    "frage": "Frage 10: Wie veränderte sich PA (körperliche Aktivität) während der PR (pandemiebedingten Kontaktbeschränkungen)?",
+    "a": "Sie nahm signifikant zu.",
+    "b": "Sie blieb unverändert.",
+    "c": "Sie nahm signifikant ab.",
+    "d": "Sie nahm nur bei Mädchen ab.",
+    "richtig": "c",
+    "begruendung": "Der deutliche Rückgang der körperlichen Aktivität entsprach der Hypothese. AK-Falle: Richtung merken: PA ↓."
+  },
+  {
+    "frage": "Frage 11: Wie veränderte sich SST (sitzend verbrachte Bildschirmzeit) während der PR?",
+    "a": "Sie nahm signifikant zu.",
+    "b": "Sie nahm signifikant ab.",
+    "c": "Sie blieb unverändert.",
+    "d": "Sie nahm ausschließlich bei Jungen zu.",
+    "richtig": "a",
+    "begruendung": "Die Gesamtbildschirmzeit erhöhte sich während der Kontaktbeschränkungen deutlich. AK-Falle: PA und SST gingen in entgegengesetzte Richtungen: PA ↓, SST ↑."
+  },
+  {
+    "frage": "Frage 12: Welcher Befund zum MWB (psychischen Wohlbefinden) wurde berichtet?",
+    "a": "Sorgen nahmen ab und die Lebenszufriedenheit nahm zu.",
+    "b": "Das psychische Wohlbefinden wurde überhaupt nicht erfasst.",
+    "c": "Das Wohlbefinden verbesserte sich trotz sinkender PA.",
+    "d": "Ein relevanter Anteil berichtete mehr Sorgen und eine geringere Lebenszufriedenheit.",
+    "richtig": "d",
+    "begruendung": "Beide Befunde sprechen für eine Verschlechterung von Aspekten des psychischen Wohlbefindens. AK-Falle: MWB wurde nicht ausschließlich über den SDQ erfasst; Veränderungen von Sorgen und Lebenszufriedenheit wurden mit eigenen Items erhoben."
+  },
+  {
+    "frage": "Frage 13: Welche Variable war signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert?",
+    "a": "Alter",
+    "b": "BMI-SDS",
+    "c": "SDQ: Hyperaktivität/Unaufmerksamkeit",
+    "d": "Geschlecht",
+    "richtig": "d",
+    "begruendung": "Geschlecht zeigte einen signifikanten Zusammenhang mit ΔPA. Alter, BMI-SDS und die SDQ-Subskalen waren nicht signifikant. AK-Falle: Geschlecht ✅, Alter ❌ – genau diese Gegenüberstellung kam in der AK vor."
+  },
+  {
+    "frage": "Frage 14: Welche Aussage zur PA vor PR (körperliche Aktivität vor den pandemiebedingten Kontaktbeschränkungen) trifft zu?",
+    "a": "Sie wurde nicht in die Regression aufgenommen.",
+    "b": "Sie war signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert.",
+    "c": "Sie war die abhängige Variable.",
+    "d": "Sie wurde nur zur Beschreibung der Stichprobe erfasst.",
+    "richtig": "b",
+    "begruendung": "Die körperliche Aktivität vor PR war ein signifikanter Prädiktor von ΔPA. AK-Falle: PA vorher = UV/Prädiktor, ΔPA = AV."
+  },
+  {
+    "frage": "Frage 15: Welche Aussage zu ΔSST (Veränderung der Gesamt-Bildschirmzeit = SST während PR minus SST vor PR) trifft zu?",
+    "a": "ΔSST war die abhängige Variable der zentralen Regression.",
+    "b": "ΔSST wurde nicht statistisch berücksichtigt.",
+    "c": "ΔSST war signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert.",
+    "d": "ΔSST bezeichnet die Veränderung der körperlichen Aktivität.",
+    "richtig": "c",
+    "begruendung": "Eine Veränderung der Gesamtbildschirmzeit gehörte zu den signifikanten Prädiktoren von ΔPA. AK-Falle: Beide sind Δ-Werte, haben aber unterschiedliche Rollen: ΔPA = AV, ΔSST = Prädiktor."
+  },
+  {
+    "frage": "Frage 16: Welche Variable war nicht signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert?",
+    "a": "Alter",
+    "b": "Geschlecht",
+    "c": "PA vor PR",
+    "d": "ΔSST",
+    "richtig": "a",
+    "begruendung": "Alter war nicht signifikant. Die übrigen drei Variablen zeigten signifikante Zusammenhänge. AK-Falle: Diese Kombination entspricht sehr direkt dem Fragemuster der SoSe-26-AK."
+  },
+  {
+    "frage": "Frage 17: Welche Aussage zur Lebenszufriedenheit trifft zu?",
+    "a": "Sie wurde nicht in die Regression aufgenommen.",
+    "b": "Höhere Lebenszufriedenheit war die abhängige Variable.",
+    "c": "Geringere Lebenszufriedenheit seit PR war signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert.",
+    "d": "Lebenszufriedenheit wurde ausschließlich vor der Pandemie erfasst.",
+    "richtig": "c",
+    "begruendung": "Eine geringere Lebenszufriedenheit seit Beginn der Restriktionen gehörte zu den signifikanten Prädiktoren. AK-Falle: Auch dieser Befund wurde in der SoSe-26-AK direkt geprüft."
+  },
+  {
+    "frage": "Frage 18: Welche Aussage zu den SDQ-Variablen (Variablen des Fragebogens zu Stärken und Schwierigkeiten) ist korrekt?",
+    "a": "Alle SDQ-Subskalen waren signifikante Prädiktoren von ΔPA.",
+    "b": "Nur emotionale Probleme waren signifikant.",
+    "c": "Nur Peer-Probleme waren signifikant.",
+    "d": "Die berücksichtigten SDQ-Variablen waren nicht signifikant mit ΔPA (Veränderung der körperlichen Aktivität) assoziiert.",
+    "richtig": "d",
+    "begruendung": "Die SDQ-Variablen zeigten in der Regression keinen signifikanten Zusammenhang mit ΔPA. AK-Falle: „psychische Variable“ bedeutet nicht automatisch, dass sie signifikant war. Sorgen und Lebenszufriedenheit ≠ SDQ-Subskalen."
+  },
+  {
+    "frage": "Frage 19: Welche Einschränkung der Studie sollte man sich am ehesten merken?",
+    "a": "Die Stichprobe war nicht repräsentativ und die zentralen Verhaltensvariablen beruhten auf Selbstberichten.",
+    "b": "Die Studie umfasste nur sehr wenige Teilnehmende.",
+    "c": "Körperliche Aktivität konnte nicht erhoben werden.",
+    "d": "Es wurden ausschließlich Jugendliche mit psychiatrischen Erkrankungen untersucht.",
+    "richtig": "a",
+    "begruendung": "Besonders viele Teilnehmende besuchten ein Gymnasium, und PA sowie SST wurden per Selbstbericht erfasst. AK-Falle: Große Stichprobe ≠ automatisch repräsentative Stichprobe."
+  },
+  {
+    "frage": "Frage 20: Welche Schlussfolgerung ist aufgrund des Studiendesigns am angemessensten?",
+    "a": "Weniger PA verursacht nachweislich eine geringere Lebenszufriedenheit.",
+    "b": "Zwischen PA (körperlicher Aktivität), SST (Bildschirmzeit) und Aspekten des MWB (psychischen Wohlbefindens) wurden relevante Veränderungen und Zusammenhänge gefunden, eindeutige Kausalrichtungen lassen sich daraus aber nicht für alle Zusammenhänge ableiten.",
+    "c": "Die Studie zeigt, dass Bildschirmzeit keine Rolle für körperliche Aktivität spielt.",
+    "d": "Die Studie beweist, dass psychische Probleme ausschließlich durch Kontaktbeschränkungen entstehen.",
+    "richtig": "b",
+    "begruendung": "Assoziation (statistischer Zusammenhang) ist nicht automatisch Kausalität (Ursache-Wirkungs-Beziehung). AK-Falle: Aus „signifikant assoziiert“ niemals automatisch „verursacht“ machen."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

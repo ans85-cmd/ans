@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE3_index.html" class="drawer-link">Zurück zu LE3</a>
+                <a href="LE3_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE3_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="LE3_Quiz2.html" class="drawer-link">📝 Quiz 2 starten</a>
+                <a href="LE3_Quiz3.html" class="drawer-link">📝 Quiz 3 starten</a>
+                <a href="LE3_Quiz4.html" class="drawer-link">📝 Quiz 4 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+<!-- Inhalt der Zusammenfassung -->
+    <div class="content-body">
+        <h1>LE 3 – Gesundheit bei Kindern und Jugendlichen / Setting Schule</h1>
+
+        <h2>1. Warum Kindheit und Jugend für die Gesundheitspsychologie wichtig sind</h2>
+        <p>Die Kindheit umfasst ungefähr die Geburt bis zum 11. Lebensjahr. Unterschieden werden die frühe Kindheit (0–5 Jahre) und die mittlere Kindheit (6–11 Jahre). Die Adoleszenz (Jugendalter) beginnt ungefähr mit 12–13 Jahren und reicht bis etwa 18 Jahre.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Die Kindheit galt lange als besonders gesunder Lebensabschnitt und wurde deshalb in der Gesundheitspsychologie teilweise vernachlässigt. Sie ist aber entscheidend, weil Gesundheitsverhalten wie Bewegung, Ernährung und Zahnhygiene früh gelernt wird und relativ stabil bleiben kann. Einmal entstandene Gewohnheiten (automatisierte Verhaltensweisen) sind später schwieriger zu verändern. Deshalb sollte gesundes Verhalten möglichst früh aufgebaut und Risikoverhalten möglichst verhindert werden. In der Jugend steigt gleichzeitig die Bereitschaft, Alkohol, Drogen oder riskantes Sexualverhalten auszuprobieren, während der Einfluss der Eltern zurückgeht.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Gesundheit von Kindern hängt dabei deutlich von der Umwelt ab: Kinder sind beispielsweise häufiger körperlich aktiv, wenn ihre Eltern aktiv sind, Sportmöglichkeiten in der Umgebung vorhanden sind oder günstigere sozioökonomische Bedingungen bestehen. Negative gesundheitliche Folgen eines ungesunden Lebensstils können außerdem zeitverzögert auftreten und erst im Erwachsenenalter sichtbar werden.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Kindheit ist zwar durchschnittlich ein relativ gesunder Lebensabschnitt, aber keinesfalls gesundheitlich bedeutungslos. Gerade weil Verhalten dort entsteht, ist sie für Prävention besonders wichtig.</p>
+        </div>
+
+
+        <h2>2. Entwicklungsaufgaben und Gesundheit</h2>
+        <p>Entwicklungsaufgaben sind typische Anforderungen, die Menschen in bestimmten Lebensphasen bewältigen müssen. Sie entstehen aus dem Zusammenspiel von körperlicher Entwicklung, Persönlichkeitsentwicklung und kulturellen Erwartungen. Sie sind von kritischen Lebensereignissen zu unterscheiden: Entwicklungsaufgaben betreffen grundsätzlich alle Menschen einer Altersgruppe, kritische Ereignisse dagegen nicht.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Die wichtigsten Zusammenhänge sind:</p>
+        <ul>
+            <li><strong>Frühe Kindheit (0–5):</strong> Bedürfnisregulation, motorische und sensorische Entwicklung, Bindung und Eintritt in Kindergarten/Krippe. Gesundheitsbezogen wichtig sind Bindungsqualität, Sozialverhalten und Gesundheitsroutinen.</li>
+            <li><strong>Mittlere Kindheit (6–11):</strong> intellektuelle Kompetenzen und Selbstkontrolle entwickeln sich weiter. Erfolgserlebnisse stärken Selbstwert und Selbstwirksamkeit (Überzeugung, Anforderungen aus eigener Kraft bewältigen zu können).</li>
+            <li><strong>Jugend (12–18):</strong> Autonomie von den Eltern, Anerkennung durch die Peer-Group (Gruppe Gleichaltriger), intime Beziehungen und Identitätsentwicklung. Gleichzeitig steigen Selbstverantwortung, Suche nach neuen Erfahrungen und Risikoverhalten.</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Misserfolge können beispielsweise die Selbstwirksamkeit senken und dadurch eine ungünstige Entwicklung bis hin zu mehr Risikoverhalten begünstigen.</p>
+
+        <p><strong>Krankheit als zusätzliche Entwicklungsbelastung</strong><br>
+        Eine körperliche oder chronische Erkrankung kann die Bewältigung von Entwicklungsaufgaben erschweren. Körperliche Einschränkungen können die motorische Entwicklung behindern, häufige Arztbesuche Freizeit und soziale Beziehungen beeinträchtigen und überprotektives Elternverhalten (übermäßig beschützendes Verhalten) die Entwicklung von Autonomie einschränken.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Krankheit beeinflusst bei Kindern nicht nur den aktuellen Gesundheitszustand, sondern kann indirekt auch die normale Entwicklungsbewältigung beeinträchtigen.</p>
+        </div>
+
+
+        <h2>3. Kindliche Krankheits- und Gesundheitskonzepte</h2>
+        <p>Subjektive Krankheitskonzepte (persönliche mentale Vorstellungen von Krankheit) verändern sich im Laufe der Entwicklung. Zu wissen, wie ein Kind eine Krankheit versteht, ist wichtig, um Informationen altersgerecht zu vermitteln, emotionale Unterstützung anzupassen und das Krankheitsmanagement zu verbessern.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Strukturgenetischer Ansatz nach Piaget</strong><br>
+        Piagets Ansatz geht davon aus, dass sich Krankheitskonzepte parallel zu den allgemeinen kognitiven Fähigkeiten stufenweise entwickeln.</p>
+        <ul>
+            <li><strong>Präoperationale Phase (ca. 2–6 Jahre):</strong> Erklärungen sind häufig magisch oder zirkulär (Ursache und Wirkung werden miteinander verwechselt). Krankheit wird hauptsächlich anhand sichtbarer Merkmale beschrieben.</li>
+            <li><strong>Konkret operationale Phase (ca. 7–11 Jahre):</strong> Kinder verstehen Ansteckung und Internalisierung (ein schädlicher Einfluss gelangt von außen in den Körper). Sie können sichtbare und unsichtbare Symptome unterscheiden und erste Präventionsideen entwickeln.</li>
+            <li><strong>Formal operationale Phase (ca. 12–18 Jahre):</strong> Jugendliche können mehrere physiologische und psychologische Faktoren gleichzeitig berücksichtigen und komplexere Zusammenhänge zwischen Lebensstil, Körper und Psyche verstehen.</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Kritik an Piaget</strong><br>
+        Der Ansatz ist nützlich, weil Gesundheitsinformationen an das kognitive Entwicklungsniveau angepasst werden können. Kritisiert wird aber, dass jüngere Kinder möglicherweise unterschätzt werden. Sie können Prozesse bereits intuitiv verstehen, ohne sie sprachlich ausdrücken zu können. Außerdem entwickelt sich Denken nicht zwingend in streng abgegrenzten Altersstufen und Krankheitskonzepte für verschiedene Erkrankungen entstehen zu unterschiedlichen Zeitpunkten. Eine Erkältung kann beispielsweise wesentlich früher verstanden werden als HIV oder Krebs.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Wissens- bzw. schemabasierter Ansatz</strong><br>
+        Der schemabasierte Ansatz erklärt Krankheitsverständnis stärker durch Wissen und persönliche Erfahrungen. Schemata (organisierte Wissensstrukturen) werden durch neue Erfahrungen zunehmend differenziert.</p>
+        
+        <p>Der entscheidende Gegensatz zu Piaget lautet:<br>
+        <em>Piaget:</em> Ein jüngeres Kind kann bestimmte Informationen aufgrund seiner kognitiven Entwicklungsstufe noch nicht vollständig verarbeiten.<br>
+        <em>Schema-Ansatz:</em> Das Kind könnte sie grundsätzlich verstehen, besitzt aber möglicherweise noch nicht genügend spezifisches Wissen und Erfahrung.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Piaget = kognitive Entwicklungsstufe. Schema-Ansatz = Vorwissen und Erfahrung.</p>
+        </div>
+
+
+        <h2>4. Wie entwickelt sich das Verständnis von Gesundheit und Prävention?</h2>
+        <p>Schon Kinder verstehen Gesundheit nicht ausschließlich als „nicht krank sein“. Mit zunehmendem Alter wird ihr Gesundheitsbegriff differenzierter und umfasst etwa Energie, Wohlbefinden, persönliche Bedeutung und Funktionsfähigkeit im Alltag.</p>
+        
+        <p>Jüngere Kinder verstehen Gesundheit und Krankheit eher als dichotome Kategorien (entweder gesund oder krank). Ältere Kinder können zunehmend verstehen, dass Aspekte von Gesundheit und Krankheit gleichzeitig bestehen können.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Auch das Verständnis präventiven Verhaltens entwickelt sich schrittweise. Jüngere Kinder kennen zum Teil schon Zähneputzen oder Bewegung als gesundheitsförderlich, verstehen aber komplexere Gründe – etwa Vitamine, Nährstoffe oder Vorsorgeuntersuchungen – erst später. Unterschiedliche Präventionskonzepte entwickeln sich also nicht alle gleichzeitig.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+
+        <h2>5. Der ökologisch-systemische Ansatz nach Bronfenbrenner</h2>
+        <p>Kinder entwickeln sich nicht isoliert. Gesundheit und Gesundheitsverhalten entstehen aus der Interaktion (gegenseitigen Beeinflussung) zwischen dem Kind und verschiedenen Umweltkontexten.</p>
+        <ul>
+            <li><strong>Mikrosystem:</strong> unmittelbare Umgebung, z. B. Familie, Freunde, Lehrkräfte.</li>
+            <li><strong>Mesosystem:</strong> Beziehungen zwischen verschiedenen Mikrosystemen, z. B. Eltern ↔ Schule.</li>
+            <li><strong>Exosystem:</strong> Bereiche, an denen das Kind nicht direkt beteiligt ist, die es aber beeinflussen, z. B. Arbeitsstress der Eltern.</li>
+            <li><strong>Makrosystem:</strong> gesellschaftliche Normen, Kultur, Gesetze und strukturelle Bedingungen.</li>
+            <li><strong>Chronosystem:</strong> Veränderungen von Person und Umwelt über die Zeit.</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><em>Beispiel:</em> Ob ein Kind gesund isst, hängt nicht nur von seiner persönlichen Entscheidung ab. Eltern bestimmen Lebensmittel zu Hause, Schulen gestalten ihr Angebot und gesellschaftliche Rahmenbedingungen beeinflussen Werbung und Verfügbarkeit.</p>
+        
+        <p><strong>Synergie zu LE1:</strong><br>
+        Hier wird Bronfenbrenner aus LE1 konkret angewendet: Gesundheit entsteht nicht nur im Individuum, sondern in einem System aus Person und Umwelt. Genau daraus folgt später der Setting-Ansatz in der Schule.</p>
+
+
+        <h2>6. Die Familie als Sozialisationskontext</h2>
+        <p>Sozialisation (Entwicklung durch soziale Umwelt und gesellschaftliche Einflüsse) findet in jungen Jahren besonders stark in der Familie statt.</p>
+        
+        <p>Eltern beeinflussen Gesundheit unter anderem durch medizinische Entscheidungen, die Verfügbarkeit bestimmter Lebensmittel, Unterstützung bei Sportaktivitäten, Aufbau von Routinen und ihre Vorbildfunktion bei Ernährung, Bewegung oder Mediennutzung.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Auch der Erziehungsstil ist relevant:</p>
+        <ul>
+            <li><strong>autoritativ:</strong> Wärme und Unterstützung + angemessene Kontrolle → besonders günstig</li>
+            <li><strong>autoritär:</strong> übermäßige Kontrolle</li>
+            <li><strong>permissiv:</strong> wenig Kontrolle</li>
+            <li><strong>gleichgültig:</strong> wenig Wärme + wenig Kontrolle</li>
+        </ul>
+        <p>Der autoritative Erziehungsstil zeigt günstigere Zusammenhänge mit Ess-, Schlaf- und Bewegungsverhalten.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: autoritativ ≠ autoritär. Autoritativ bedeutet nicht „streng“, sondern Wärme plus angemessene Kontrolle.</p>
+        </div>
+
+
+        <h2>7. Gesundheitsförderung und Prävention bei Kindern</h2>
+        <p>Schulen, Kindergärten und Kitas sind zentrale Settings (Lebenswelten, in denen Menschen einen großen Teil ihres Alltags verbringen) für Gesundheitsförderung.</p>
+        
+        <p>Die meisten Programme in Deutschland sind universell (für eine breite Gruppe ohne spezielle Risikoauswahl). Viele fördern allgemeine Lebenskompetenzen; andere richten sich gezielt auf Sucht, Gewalt, Ernährung, Essstörungen oder psychische Probleme.</p>
+        
+        <p>Programme werden überwiegend von Lehrkräften oder Erzieher:innen und seltener von Gesundheitsfachkräften durchgeführt. Meta-Analysen (statistische Zusammenfassung mehrerer Studien) zeigen überwiegend kleine bis mittlere Effekte. Wissen und sozialkognitive Faktoren lassen sich meist leichter verändern als das tatsächliche Gesundheitsverhalten. Spezifische Programme, etwa zur Rauchprävention oder Stressbewältigung, wirken auf konkretes Verhalten häufig besser als sehr allgemeine Programme.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: „Gesundheitsprogramme in Schulen werden überwiegend von Gesundheitsfachkräften durchgeführt“ → falsch.</p>
+        </div>
+
+
+        <h2>8. Schule als Setting: drei verschiedene Ansätze</h2>
+        <p>Schule eignet sich besonders gut, weil durch die Schulpflicht sehr viele Kinder erreicht werden, Kinder dort viel Zeit verbringen und soziale sowie kognitive Entwicklung stattfindet.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Drei Ansätze müssen sauber auseinandergehalten werden:</p>
+        <ul>
+            <li><strong>Verhaltensbezogene Gesundheitsförderung:</strong> Sie setzt beim individuellen Verhalten an, beispielsweise bei Stressbewältigung oder dem Umgang mit Alkohol.</li>
+            <li><strong>Gesundheitsfördernde Schule:</strong> Sie setzt stärker auf Verhältnisprävention (Veränderung von Strukturen und Umweltbedingungen). Beispiele sind bessere Bewegungsmöglichkeiten oder ein gesundheitsförderlicheres Lebensmittelangebot.</li>
+            <li><strong>Gute gesunde Schule:</strong> Das ist der ganzheitlichste Ansatz. Gesundheit und Bildung werden als wechselseitig verbunden verstanden:<br>
+            <em>Bessere Gesundheit → bessere Bildung.<br>
+            Bessere Bildung → Gesundheitsförderung.</em><br>
+            Einbezogen wird außerdem nicht nur die Gesundheit der Schüler:innen, sondern auch die anderer Beteiligter, beispielsweise Lehrkräfte.</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Die „gute gesunde Schule“ will nicht nur die Gesundheit verbessern, sondern ausdrücklich auch die Bildungsqualität. Genau das wurde in SoSe 26 abgefragt.</p>
+        </div>
+
+
+        <h2>9. Lebenskompetenzprogramme</h2>
+        <p>Lebenskompetenzprogramme sind verhaltensunspezifisch. Sie zielen also nicht nur auf ein bestimmtes Verhalten wie Rauchen, sondern stärken allgemeine Fähigkeiten zur Bewältigung des Lebens.</p>
+        
+        <p>Grundannahme: Risikoverhalten kann unter anderem aus mangelnden Bewältigungskompetenzen entstehen. Werden diese Kompetenzen gestärkt, soll Risikoverhalten weniger wahrscheinlich werden.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Die WHO nennt zehn zentrale Lebenskompetenzen:</p>
+        <ul>
+            <li>Entscheidungsfähigkeit</li>
+            <li>Problemlösefähigkeit</li>
+            <li>kreatives Denken</li>
+            <li>kritisches Denken</li>
+            <li>effektive Kommunikation</li>
+            <li>zwischenmenschliche Beziehungen</li>
+            <li>Selbsterkenntnis</li>
+            <li>Empathie</li>
+            <li>Emotionsbewältigung</li>
+            <li>Stressbewältigung</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Evaluationen zeigen positive Effekte unter anderem auf Tabak-, Marihuana- und teilweise Alkoholkonsum sowie auf Gewalt und Aggression. Die Stabilität der Effekte ist jedoch nicht immer eindeutig.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>📌 AK-Falle: Lebenskompetenzprogramm = verhaltensunspezifisch. Diese Formulierung wurde in SoSe 26 direkt geprüft.</p>
+        </div>
+
+
+        <h2>10. Standfestigkeitstrainings</h2>
+        <p>Standfestigkeitstrainings richten sich besonders gegen Rauchen und Alkoholkonsum.</p>
+        
+        <p>Dabei werden vor allem drei Dinge trainiert:</p>
+        <ul>
+            <li>Widerstand gegen Gruppendruck = soziale Immunisierung</li>
+            <li>Argumente gegen Überredungsversuche = Verhaltensimpfung</li>
+            <li>Korrektur von Fehlvorstellungen über soziale Normen (Vorstellungen darüber, was andere typischerweise tun oder akzeptieren)</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Sie können den Einstieg in Tabak- und Alkoholkonsum hinauszögern. Bei Jugendlichen, die bereits gewohnheitsmäßig rauchen oder trinken, sind sie dagegen kaum wirksam.</p>
+        
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Standfestigkeit = besonders Peer-Druck und Normvorstellungen, nicht allgemeines Stressmanagement. Auch dieser Punkt wurde SoSe 26 direkt geprüft.</p>
+        </div>
+
+
+        <h2>11. Mischprogramme und Klasse2000</h2>
+        <p>Mischprogramme kombinieren verschiedene Präventionsansätze, beispielsweise Lebenskompetenzen mit spezifischem Gesundheitswissen oder Standfestigkeitstraining.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Klasse2000</strong><br>
+        Klasse2000 ist ein Mischprogramm für die Klassen 1–4 und verfolgt drei zentrale Ziele:</p>
+        <ul>
+            <li>gesunder Lebensstil</li>
+            <li>Prävention von Substanzmittelkonsum</li>
+            <li>Gewaltprävention</li>
+        </ul>
+        <p>Es verbindet Lebenskompetenzen mit spezifischem Gesundheitswissen und wird von Lehrkräften mit Unterstützung von Gesundheitsexpert:innen durchgeführt.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Das Programm baut auf mehreren theoretischen Ansätzen auf:</p>
+        <ul>
+            <li><strong>Sozialkognitive Theorie:</strong> Selbstwirksamkeit wird etwa durch Rollenspiele gestärkt.</li>
+            <li><strong>Theorie des geplanten Verhaltens:</strong> Verhaltensintentionen werden durch Einstellungen, subjektive Normen (wahrgenommene soziale Erwartungen) und Verhaltenskontrolle beeinflusst. Deshalb werden beispielsweise Normverzerrungen zum Substanzkonsum korrigiert.</li>
+            <li><strong>Selbstmanagement-Ansatz:</strong> Eigenverantwortung und selbstständige Steuerung des Gesundheitsverhaltens werden gefördert.</li>
+            <li><strong>Theorie der sozialen Informationsverarbeitung:</strong> Aggressivere Kinder interpretieren Situationen eher als bedrohlich und sehen weniger Handlungsalternativen. Deshalb werden Empathie und Problemlösen trainiert.</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Wirksamkeit</strong><br>
+        Teilnehmende Kinder beginnen im Durchschnitt später mit dem Probieren von Alkohol und Zigaretten. Langfristige Ergebnisse sind für das Rauchen überzeugender als für den Alkoholkonsum. Außerdem sehen Teilnehmende mehr Möglichkeiten, selbst etwas für ihre Gesundheit zu tun.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>📌 AK-Falle: „Klasse2000 dient unter anderem der Prävention von Substanzmittelkonsum“ → richtig und bereits direkt geprüft.</p>
+        </div>
+
+
+        <h2>12. GO! – Gesundheit und Optimismus</h2>
+        <p>GO! ist ein universelles Präventionsprogramm für Jugendliche zwischen 14 und 18 Jahren. Es soll psychische Gesundheit fördern und Depressionen sowie Angststörungen vorbeugen.</p>
+        
+        <p>Es basiert auf kognitiv-verhaltenstherapeutischen Ansätzen (Ansätzen, die Denken und Verhalten gemeinsam betrachten) und umfasst Themen wie Angst, Depression, Stressbewältigung, Selbstsicherheit und soziale Kompetenzen.</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p>Das Programm kombiniert:</p>
+        <ul>
+            <li><strong>kognitive Elemente:</strong> Gedanken, Denkfehler und Verständnis psychischer Probleme</li>
+            <li><strong>verhaltensorientierte Elemente:</strong> Konfrontation bei Angst, positive Aktivierung bei Depression</li>
+            <li><strong>soziale Elemente:</strong> soziale Kompetenz und Umgang mit zwischenmenschlichen Problemen</li>
+        </ul>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <p><strong>Wirksamkeit</strong><br>
+        GO! zeigt kurzfristige Effekte auf proximale Risikofaktoren (unmittelbare bzw. nahe Einflussgrößen) wie Wissen und dysfunktionale Einstellungen. Diese Effekte waren nach sechs Monaten nicht mehr nachweisbar.</p>
+        
+        <p>Für distale Variablen (weiter entfernte Ergebnisse) wie tatsächliche Angst- oder Depressionssymptome wurden weder kurz- noch langfristig deutliche Verbesserungen gefunden.</p>
+        
+        <p>Das Programm scheint daher eher gesundheitsförderlich als klar primärpräventiv zu wirken. Außerdem profitierten manche Gruppen stärker als andere; solche Einflussgrößen nennt man Moderatoren (Variablen, die Stärke oder Richtung eines Effekts verändern).</p>
+        
+        <a href="SB3_K1-Schule.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB3_K1-Schule.pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Veränderung von Wissen/Einstellungen bedeutet nicht automatisch, dass sich auch klinische Symptome verändern.</p>
+        </div>
+
+
+        <h2>13. Marckhoff et al. (2022)</h2>
+        <p>Diese Studie ist für LE3 besonders wichtig, weil sie in allen drei vorliegenden AKs direkt geprüft wurde – jeweils mit einem anderen Schwerpunkt. Sie sollte deshalb nicht nur inhaltlich, sondern nach Fragestellung → Methode → Variablen → Ergebnisse gelernt werden.</p>
+        
+        <p><strong>Fragestellung und Hypothesen</strong><br>
+        Marckhoff et al. untersuchten die Folgen der COVID-19-Kontaktbeschränkungen im April/Mai 2020 auf:</p>
+        <ul>
+            <li><strong>PA:</strong> Physical Activity (körperliche Aktivität)</li>
+            <li><strong>SST:</strong> Sedentary Screen Time (sitzend verbrachte Bildschirmzeit)</li>
+            <li><strong>MWB:</strong> Mental Well-Being (psychisches Wohlbefinden)</li>
+        </ul>
+        <p><em>Hypothese:</em> Während der Beschränkungen sollte die körperliche Aktivität abnehmen, die Bildschirmzeit zunehmen und das psychische Wohlbefinden schlechter werden.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ AK-Falle SoSe 25: Genau diese Hypothesenlogik wurde geprüft. „Gleichbleibende Bewegung“ und „Verringerung der Bildschirmzeit“ sind falsch.</p>
+        </div>
+
+        <p><strong>Stichprobe und Design</strong><br>
+        An der Online-Befragung nahmen 1.038 Schüler:innen zwischen 11 und 17 Jahren teil. Das Durchschnittsalter lag bei rund 14 Jahren, etwa 60 % waren weiblich. Die Jugendlichen besuchten weiterführende Schulen im Raum Münster.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <p>Es handelte sich nicht um eine objektive Bewegungsmessung, sondern überwiegend um Selbstbericht (Teilnehmende geben ihr eigenes Verhalten an).</p>
+
+        <p><strong>Körperliche Aktivität</strong><br>
+        Die Messung orientierte sich am MoMo-PAQ, einem Fragebogen, der auch im Zusammenhang mit der KiGGS-Studie eingesetzt wird. Gefragt wurde, an wie vielen Tagen pro Woche mindestens 60 Minuten körperliche Aktivität stattfanden – jeweils vor und während der Kontaktbeschränkungen.</p>
+        
+        <p>Aus beiden Werten wurde ΔPA (Delta PA = Veränderung der körperlichen Aktivität) berechnet:<br>
+        <em>PA während der Restriktionen – PA davor.</em><br>
+        Negativer Wert = Bewegung nahm ab.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ AK-Falle WiSe 25/26: PA wurde nicht durch Fremdbeobachtung gemessen. Außerdem war ΔPA die zentrale abhängige Variable.</p>
+        </div>
+
+        <p><strong>Bildschirmzeit</strong><br>
+        Die Jugendlichen schätzten ihre Zeit für Fernsehen, Spielekonsole, Computer und Smartphone vor und während der Kontaktbeschränkungen selbst ein. Daraus wurde die gesamte Bildschirmzeit und ΔSST (Veränderung der Bildschirmzeit) berechnet.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ AK-Falle: Es wurde nicht automatisch die Bildschirmzeit der Smartphones ausgelesen.</p>
+        </div>
+
+        <p><strong>Psychische Gesundheit</strong><br>
+        Psychische Auffälligkeiten vor den Beschränkungen wurden mit dem SDQ – Strengths and Difficulties Questionnaire (Fragebogen zu Stärken und Schwierigkeiten) erfasst.</p>
+        
+        <p>Das aktuelle psychische Wohlbefinden wurde zusätzlich über Fragen zu Sorgen und Lebenszufriedenheit erfasst.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+
+        <h2>14. Ergebnisse von Marckhoff et al.</h2>
+        <p>Während der Kontaktbeschränkungen nahm die körperliche Aktivität signifikant (statistisch bedeutsam) ab und die Bildschirmzeit signifikant zu. Rund ein Drittel berichtete mehr Sorgen und geringere Lebenszufriedenheit.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <p>Die körperliche Aktivität sank durchschnittlich von etwa 4,5 Tagen auf 3,3 Tage pro Woche mit mindestens 60 Minuten Bewegung. Der Rückgang war bei Jungen stärker als bei Mädchen. Gleichzeitig stieg die Gruppe besonders inaktiver Jugendlicher deutlich an.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <p>Die gesamte Bildschirmzeit nahm ebenfalls deutlich zu. Der Anteil der Jugendlichen mit mindestens acht Stunden Bildschirmzeit pro Tag stieg stark an.</p>
+        
+        <p>Beim psychischen Wohlbefinden berichteten 37,1 % mehr Sorgen und ebenfalls 37,1 % eine geringere Lebenszufriedenheit. Mädchen berichteten diese Verschlechterungen häufiger als Jungen.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+
+        <h2>15. Was hing mit der Veränderung der körperlichen Aktivität zusammen?</h2>
+        <p>In einer linearen Regressionsanalyse (statistisches Verfahren zur Untersuchung, welche Variablen mit einer Zielvariable zusammenhängen) wurde ΔPA als Ergebnisvariable untersucht.</p>
+        
+        <p>Signifikant mit ΔPA assoziiert waren:</p>
+        <ul>
+            <li>Geschlecht</li>
+            <li>körperliche Aktivität vor den Restriktionen</li>
+            <li>Veränderung der Gesamt-Bildschirmzeit</li>
+            <li>mehr Sorgen</li>
+            <li>geringere Lebenszufriedenheit</li>
+        </ul>
+        
+        <p>Nicht signifikant waren unter anderem Alter, BMI-SDS und die einzelnen SDQ-Skalen. Das gesamte Modell erklärte rund 24 % der Varianz (Unterschiede zwischen Personen) in ΔPA.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <div class="callout-box">
+            <p>📌 <strong>Das für die AK wichtigste Schema:</strong><br>
+            <em>Signifikant:</em> Geschlecht ✓ | PA vorher ✓ | Δ Bildschirmzeit ✓ | mehr Sorgen ✓ | geringere Lebenszufriedenheit ✓<br>
+            <em>Nicht signifikant:</em> Alter ✗ | BMI-SDS ✗ | SDQ-Einzelskalen ✗</p>
+        </div>
+
+        <div class="callout-box">
+            <p>⚠️ AK-Falle SoSe 26: Genau die ersten vier der angebotenen relevanten Variablen wurden abgefragt; Alter war falsch.</p>
+        </div>
+
+
+        <h2>16. Grenzen der Marckhoff-Studie</h2>
+        <p>Die Stichprobe war nicht repräsentativ für alle Jugendlichen. Ein sehr großer Anteil besuchte Gymnasium oder Realschule und viele verfügten über einen Garten; die untersuchte Gruppe war damit vermutlich sozial relativ privilegiert.</p>
+        
+        <p>Außerdem beruhte die Untersuchung auf Selbstberichten, teilweise auch auf rückblickenden Angaben. Mögliche Confounder (Drittvariablen, die Zusammenhänge mit beeinflussen) wie sozioökonomischer Status oder individuelle Stressoren konnten nicht vollständig berücksichtigt werden.</p>
+        
+        <p>Die Autor:innen betonen außerdem: Es wurden Assoziationen (statistische Zusammenhänge) gefunden, aber aus dem Studiendesign lässt sich die Richtung der Ursache-Wirkungs-Beziehung nicht sicher bestimmen.</p>
+        
+        <a href="AFG (K3:K1) Marckhoff, M., Siebald, M., Timmesfeld, N., Janßen, M., Romer, G. & Föcker, M. (2022). COVID- 19.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG (K3:K1) Marckhoff et al. (2022).pdf</a>
+
+        <div class="callout-box">
+            <p>⚠️ Klausurfalle: Zusammenhang ≠ Kausalität. Beispielsweise hängen weniger Bewegung und geringere Lebenszufriedenheit zusammen; daraus folgt nicht automatisch, dass das eine eindeutig das andere verursacht hat.</p>
+        </div>
+
+
+        <h2>17. Was zeigen die drei AKs?</h2>
+        <p>Hier ist die Gewichtung für LE3 ungewöhnlich eindeutig:</p>
+        
+        <p><strong>Marckhoff et al. = höchste Priorität</strong><br>
+        Marckhoff et al. wurde in allen drei vorliegenden AKs geprüft. Dabei wechselte der Fokus:</p>
+        <ul>
+            <li><strong>SoSe 25:</strong> Hypothesen (PA ↓, SST ↑, MWB ↓).</li>
+            <li><strong>WiSe 25/26:</strong> Methodik (PA über Selbstbericht bzw. an KiGGS/MoMo angelehnt; ΔPA als abhängige Variable; keine Fremdbeobachtung; Bildschirmzeit nicht automatisch aus Geräten ausgelesen).</li>
+            <li><strong>SoSe 26:</strong> Ergebnisse/Regression (Welche Variablen waren signifikant mit ΔPA verbunden?).</li>
+        </ul>
+        <p>Das heißt: Bei Marckhoff reicht es nicht, nur „Corona → weniger Bewegung“ zu wissen. Für die Klausur sollten Fragestellung, Messung und zentrale Ergebnisse sitzen.</p>
+
+        <p><strong>Schulprogramme</strong><br>
+        In SoSe 26 wurden zusätzlich direkt geprüft:</p>
+        <ul>
+            <li>Gute gesunde Schule → verbessert auch Bildungsqualität</li>
+            <li>Programme meistens durch Lehrpersonal/Erzieher:innen, nicht Gesundheitsfachkräfte</li>
+            <li>Lebenskompetenzprogramme = verhaltensunspezifisch</li>
+            <li>Standfestigkeitstrainings = Gruppendruck + soziale Normen</li>
+            <li>Klasse2000 = unter anderem Substanzmittelprävention</li>
+        </ul>
+        <p>In den beiden älteren AKs tauchte eine eigene direkte Schulkapitel-Frage dagegen nicht auf. Das heißt aber nicht, dass Piaget, Bronfenbrenner, Familie oder GO! unwichtig wären – sie gehören zu den expliziten Lernzielen des Kapitels und können jederzeit geprüft werden.</p>
+
+
+        <h2>18. Die Synergien von LE3</h2>
+        <p>LE3 greift sehr viel aus LE1 und LE2 wieder auf und macht es am Beispiel von Kindern konkret.</p>
+        
+        <p><strong>LE1 – ökologisch-systemisch:</strong><br>
+        Bronfenbrenners Modell erklärt, warum Gesundheit von Kind und Umwelt abhängt.</p>
+        
+        <p><strong>LE1 – Gesundheitsförderung vs. Prävention:</strong><br>
+        Schule kann Ressourcen stärken, individuelles Risikoverhalten verhindern und gleichzeitig Lebensbedingungen verändern.</p>
+        
+        <p><strong>LE1 – Setting-Ansatz:</strong><br>
+        Schule ist eine Lebenswelt → Gesundheitsförderung soll in den normalen Alltag integriert werden.</p>
+        
+        <p><strong>LE1 – Verhalten vs. Verhältnis:</strong><br>
+        Stresskompetenz trainieren = eher Verhalten verändern.<br>
+        Gesundes Schulessen anbieten = eher Verhältnisse verändern.</p>
+        
+        <p><strong>LE2 – Gesundheitsverhalten:</strong><br>
+        Verhalten wird in der Kindheit gelernt und kann zur Gewohnheit werden → frühes Eingreifen ist leichter als spätes Verändern.</p>
+        
+        <p><strong>LE2 – soziale Normen:</strong><br>
+        Gerade Jugendliche orientieren sich an Peers → Standfestigkeitstrainings korrigieren falsche Vorstellungen darüber, was „alle anderen“ angeblich tun.</p>
+        
+        <p><strong>LE2 – Zielgruppe:</strong><br>
+        Gesundheitsinformationen müssen zum Entwicklungsstand passen → Piaget und Schema-Ansatz erklären, wie komplex Gesundheitskommunikation für Kinder sein darf.</p>
+
+
+        <div class="conclusion-box">
+            <h3>LE3 in fünf Sätzen</h3>
+            <p>1. Kindheit prägt Gesundheitsgewohnheiten, Jugend erhöht Autonomie und Risikoverhalten.<br>
+            2. Gesundheitsverständnis entwickelt sich mit kognitiven Fähigkeiten, Wissen und Erfahrung.<br>
+            3. Familie, Schule und Gesellschaft beeinflussen Kinder gleichzeitig – Bronfenbrenner erklärt diese Systemebenen.<br>
+            4. Schulische Gesundheitsförderung reicht von individueller Verhaltensänderung bis zur „guten gesunden Schule“, die Gesundheit und Bildung gemeinsam verbessert.<br>
+            5. Marckhoff et al. ist der AK-Dauerbrenner: weniger PA, mehr Bildschirmzeit, schlechteres Wohlbefinden – und Methodik sowie signifikante Einflussgrößen unbedingt mitlernen.</p>
+        </div>
+    </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE4 - SB1/K3</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 4</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Welche Aussage beschreibt soziale Integration am treffendsten?",
+    "a": "Sie beschreibt die subjektive Erwartung, bei Bedarf Hilfe zu erhalten.",
+    "b": "Sie bezeichnet die Einbettung in ein soziales Netzwerk und fokussiert quantitative und strukturelle Merkmale sozialer Beziehungen.",
+    "c": "Sie bezeichnet ausschließlich tatsächlich ausgeführte Hilfehandlungen.",
+    "d": "Sie beschreibt die Bewertung der Wirksamkeit bereits erhaltener Hilfe.",
+    "richtig": "b",
+    "begruendung": "Bei sozialer Integration geht es um Struktur und Umfang sozialer Beziehungen, z. B. Zahl und Häufigkeit von Kontakten. Soziale Unterstützung betrifft dagegen deren qualitative und funktionale Seite[cite: 9]. AK-Falle: Integration ≠ Unterstützung[cite: 9]."
+  },
+  {
+    "frage": "Welches Merkmal gehört nicht zu den vier Netzwerkdimensionen nach Laireiter?",
+    "a": "Struktur des Netzwerks",
+    "b": "Beziehungen zu den Netzwerkmitgliedern",
+    "c": "Inhalt der Beziehungen",
+    "d": "Dichte des Netzwerks",
+    "richtig": "d",
+    "begruendung": "Die vier Dimensionen sind Struktur, Beziehungen, Inhalt und Evaluation (Bewertung). Die Dichte (Anteil vorhandener an möglichen Beziehungen) ist zwar ein Netzwerkparameter, aber keine der vier Laireiter-Dimensionen[cite: 9]. AK-Falle: Ein Begriff kann im Kapitel richtig sein und trotzdem nicht zum gefragten Modell gehören[cite: 9]."
+  },
+  {
+    "frage": "Was kennzeichnet soziale Unterstützung?",
+    "a": "Sie betrifft qualitative und funktionale Aspekte sozialer Beziehungen und soll Belastungen bzw. Aufgaben bewältigen helfen.",
+    "b": "Sie wird ausschließlich über die Anzahl sozialer Kontakte bestimmt.",
+    "c": "Sie ist gleichbedeutend mit sozialer Integration.",
+    "d": "Sie liegt nur vor, wenn ein Problem objektiv vollständig beseitigt wird.",
+    "richtig": "a",
+    "begruendung": "Unterstützung kann einen Problemzustand verändern oder lediglich sein Ertragen erleichtern. Sie muss das Problem also nicht vollständig beseitigen[cite: 9]. AK-Falle: „Nur wenn das Problem gelöst wird“ wäre zu eng[cite: 9]."
+  },
+  {
+    "frage": "Mara fährt ihre erkrankte Freundin zu einem Arzttermin. Welche Form sozialer Unterstützung liegt vor?",
+    "a": "Emotionale Unterstützung",
+    "b": "Informationelle Unterstützung",
+    "c": "Instrumentelle Unterstützung",
+    "d": "Wahrgenommene Unterstützung",
+    "richtig": "c",
+    "begruendung": "Instrumentelle Unterstützung meint konkrete praktische Hilfeleistungen. Trost wäre emotional, ein Ratschlag informationell[cite: 9]. AK-Falle: Nicht nach dem Zweck der Hilfe, sondern nach der Art der Handlung klassifizieren[cite: 9]."
+  },
+  {
+    "frage": "Welche Zuordnung ist korrekt?",
+    "a": "Wahrgenommene Unterstützung = behavioral und retrospektiv; erhaltene Unterstützung = kognitiv und prospektiv",
+    "b": "Wahrgenommene Unterstützung = kognitiv und prospektiv; erhaltene Unterstützung = behavioral und retrospektiv",
+    "c": "Beide Formen beziehen sich ausschließlich auf bereits erfolgte Hilfe.",
+    "d": "Beide Formen hängen notwendigerweise stark miteinander zusammen.",
+    "richtig": "b",
+    "begruendung": "Wahrgenommene Unterstützung bezeichnet die zukünftige Erwartung verfügbarer Hilfe; erhaltene Unterstützung tatsächlich stattgefundene Hilfen. Beide können relativ unabhängig voneinander sein[cite: 9]. AK-Falle: perceived = denken/erwarten, received = tatsächlich passiert[cite: 9]."
+  },
+  {
+    "frage": "Warum können Empfänger und Geber dieselbe Unterstützungsinteraktion unterschiedlich beurteilen?",
+    "a": "Weil unterstützend gemeintes Verhalten nicht zwingend als Unterstützung wahrgenommen wird und umgekehrt.",
+    "b": "Weil nur der Beobachter beurteilen kann, ob Unterstützung stattgefunden hat.",
+    "c": "Weil die Perspektive des Gebers grundsätzlich objektiver ist.",
+    "d": "Weil Unterstützung nur dann vorliegt, wenn Empfänger und Geber übereinstimmen.",
+    "richtig": "a",
+    "begruendung": "Die verschiedenen Perspektiven beruhen auf eigenen Interpretationen. Deshalb besteht zwischen Geber- und Empfängerurteil häufig nur eine begrenzte Übereinstimmung[cite: 9].\nAK-Falle: Intention des Gebers ≠ Wahrnehmung des Empfängers[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage entspricht den Befunden zur sozialen Integration?",
+    "a": "Alleinleben wirkt generell protektiv auf die Mortalität.",
+    "b": "Nur die Qualität, nicht aber die Größe sozialer Netzwerke hängt mit Gesundheit zusammen.",
+    "c": "Verheiratetsein erhöht generell das Mortalitätsrisiko.",
+    "d": "Soziale Isolation und Alleinleben können Risikofaktoren sein, während ein großes Netzwerk und Verheiratetsein protektiv wirken können.",
+    "richtig": "d",
+    "begruendung": "Soziale Integration wurde sowohl mit psychischem Wohlbefinden als auch mit körperlicher Gesundheit und günstigeren Krankheitsverläufen verbunden. Mortalität (Sterblichkeit) ist bei sozialer Isolation bzw. Alleinleben ungünstiger[cite: 9]. AK-Falle: Schutz- und Risikorichtung nicht vertauschen[cite: 9]."
+  },
+  {
+    "frage": "Welche Form sozialer Unterstützung zeigte besonders klare Zusammenhänge mit einem reduzierten Sterberisiko?",
+    "a": "Ausschließlich instrumentelle Unterstützung",
+    "b": "Tatsächlich erhaltene Unterstützung",
+    "c": "Wahrgenommene Unterstützung",
+    "d": "Ausschließlich informationelle Unterstützung",
+    "richtig": "c",
+    "begruendung": "Die Wahrnehmung, im Bedarfsfall über Unterstützung zu verfügen, hing prospektiv (vorausschauend) mit geringerem Sterberisiko zusammen. Für tatsächlich erhaltene Unterstützung zeigte sich dieser Effekt dort nicht eindeutig[cite: 9]. AK-Falle: Wahrgenommen ist gesundheitlich nicht die „schwächere“ Form, nur weil keine konkrete Handlung stattgefunden hat[cite: 9]."
+  },
+  {
+    "frage": "Warum kann tatsächlich erhaltene Unterstützung teilweise mit geringerem Wohlbefinden zusammenhängen?",
+    "a": "Hilfe kann als aufdringlich oder selbstwertbedrohend erlebt werden; außerdem erhalten besonders stark belastete Personen mehr Hilfe und haben bereits deshalb geringeres Wohlbefinden.",
+    "b": "Tatsächlich erhaltene Unterstützung besteht grundsätzlich aus belastenden sozialen Kontakten.",
+    "c": "Erhaltene Unterstützung senkt grundsätzlich die Selbstwirksamkeit.",
+    "d": "Nur wahrgenommene Unterstützung kann überhaupt gesundheitliche Wirkungen haben.",
+    "richtig": "a",
+    "begruendung": "Neben möglichen negativen Wirkungen konkreter Hilfe wird ein Artefakt (scheinbarer Zusammenhang durch einen anderen Faktor) diskutiert: Hohe Belastung führt sowohl zu mehr Hilfebedarf als auch zu geringerem Wohlbefinden[cite: 9]. AK-Falle: Zusammenhang ≠ automatisch Ursache[cite: 9]."
+  },
+  {
+    "frage": "Welche Zuordnung von Haupt- und Puffereffekt entspricht dem Studienbrief?",
+    "a": "Integration = Puffereffekt; wahrgenommene Unterstützung = Puffereffekt; erhaltene Unterstützung = Haupteffekt",
+    "b": "Alle drei zeigen ausschließlich Haupteffekte.",
+    "c": "Integration = Haupteffekt; beide Unterstützungsformen = Puffereffekt",
+    "d": "Integration und wahrgenommene Unterstützung = Haupteffekt; erhaltene Unterstützung = Puffereffekt",
+    "richtig": "d",
+    "begruendung": "Beim Haupteffekt besteht die günstige Wirkung unabhängig vom Stressniveau. Beim Puffereffekt wird insbesondere bei hoher Belastung die negative Stresswirkung abgeschwächt[cite: 9]. AK-Falle: Integration + perceived = Haupt; received = Puffer[cite: 9]."
+  },
+  {
+    "frage": "Was gehört zum verhaltensbezogenen Wirkweg sozialer Faktoren nach Uchino?",
+    "a": "Ausschließlich günstigere emotionale Zustände",
+    "b": "Günstigeres Gesundheitsverhalten und bessere Adhärenz an ärztliche Anweisungen",
+    "c": "Ausschließlich geringere Cortisolproduktion",
+    "d": "Ausschließlich eine höhere Beziehungszufriedenheit",
+    "richtig": "b",
+    "begruendung": "Adhärenz (Befolgung medizinischer Empfehlungen) und Gesundheitsverhalten bilden den verhaltensbezogenen Weg. Motivation und Information durch andere können diesen fördern[cite: 9]. AK-Falle: Biologische Prozesse sind nicht selbst der verhaltensbezogene Wirkweg[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zum zweiten Wirkweg nach Uchino ist korrekt?",
+    "a": "Er umfasst ausschließlich beobachtbares Gesundheitsverhalten.",
+    "b": "Er betrifft nur die Größe des sozialen Netzwerks.",
+    "c": "Er verläuft über Bewertungen, Emotionen und Kontrollüberzeugungen und kann anschließend biologische Prozesse beeinflussen.",
+    "d": "Er wirkt unabhängig von kardiovaskulären, immunologischen und neuroendokrinen Prozessen.",
+    "richtig": "c",
+    "begruendung": "Der psychologische Weg umfasst u. a. Stressbewertungen und Kontrollüberzeugungen (Überzeugung, eine Situation bewältigen zu können). Beide Wirkwege können anschließend kardiovaskuläre (Herz-Kreislauf), immunologische und neuroendokrine (Nerven- und Hormonsystem betreffende) Prozesse beeinflussen[cite: 9]. AK-Falle: Nicht psychologisch oder biologisch – psychologische Prozesse können biologische Prozesse anstoßen[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage beschreibt das VSA-Modell (Vulnerability-Stress-Adaptation-Modell; Modell zur Beziehungsqualität und -stabilität) korrekt?",
+    "a": "Adaptive Prozesse entstehen erst als Folge der Beziehungsstabilität.",
+    "b": "Stabile Charakteristika beeinflussen adaptive Prozesse; diese stehen mit der Beziehungszufriedenheit in Wechselwirkung, die wiederum die Beziehungsstabilität beeinflusst.",
+    "c": "Stresshafte Umstände spielen für das Modell keine Rolle.",
+    "d": "Persönlichkeit und Konfliktlöseverhalten gehören beide zu den stabilen Charakteristika.",
+    "richtig": "b",
+    "begruendung": "Adaptive Prozesse (Anpassungs- und Bewältigungsverhalten, z. B. Konfliktlösung) vermitteln wesentlich zwischen stabilen Merkmalen und der Beziehungsqualität; Stress wirkt ebenfalls ein[cite: 9]. AK-Falle: Konfliktlösung = adaptiver Prozess, nicht stabiles Persönlichkeitsmerkmal[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zu Neurotizismus (Tendenz zu emotionaler Instabilität und negativen Gefühlen) entspricht dem Studienbrief?",
+    "a": "Bei Singles hängt höherer Neurotizismus mit einer höheren Wahrscheinlichkeit zusammen, eine Beziehung einzugehen; in bestehenden Beziehungen dagegen mit geringerer Zufriedenheit und Stabilität.",
+    "b": "Hoher Neurotizismus reduziert sowohl bei Singles als auch in Partnerschaften die Wahrscheinlichkeit einer Beziehung.",
+    "c": "Neurotizismus beeinflusst nur die eigene, niemals die partnerschaftliche Zufriedenheit.",
+    "d": "Neurotizismus steht ausschließlich mit Beziehungsstabilität, nicht mit Beziehungszufriedenheit in Zusammenhang.",
+    "richtig": "a",
+    "begruendung": "Gerade diese unterschiedliche Richtung je nach Beziehungssituation ist wichtig: Singles gehen bei höherem Neurotizismus eher eine Beziehung ein, bestehende Beziehungen fallen jedoch ungünstiger aus[cite: 9]. AK-Falle: Gegenintuitiven Befund nicht „weglogisieren“[cite: 9]."
+  },
+  {
+    "frage": "Was bedeutet ein Partnereffekt?",
+    "a": "Ein Merkmal wirkt ausschließlich auf die Person selbst.",
+    "b": "Beide Partner besitzen dasselbe Persönlichkeitsmerkmal.",
+    "c": "Ein Merkmal einer Person beeinflusst eine Variable des Partners bzw. der Partnerin, z. B. dessen bzw. deren Beziehungszufriedenheit.",
+    "d": "Ein Effekt tritt nur auf, wenn beide Partner gemeinsam untersucht werden.",
+    "richtig": "c",
+    "begruendung": "Beim Akteureffekt (Wirkung auf die eigene Person) beeinflusst das eigene Merkmal das eigene Ergebnis; beim Partnereffekt wirkt das Merkmal einer Person auf den Partner bzw. die Partnerin[cite: 9]. AK-Falle: Akteur und Partner nicht vertauschen[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zum dispositionalen Optimismus (stabile positive Zukunftserwartung) ist korrekt?",
+    "a": "Optimismus erhöht nur die eigene Beziehungszufriedenheit.",
+    "b": "Optimismus hängt grundsätzlich mit geringerer Beziehungsstabilität zusammen.",
+    "c": "Der Zusammenhang mit Beziehungszufriedenheit wurde ausschließlich bei Männern gefunden.",
+    "d": "Optimist:innen und ihre Partner:innen sind zufriedener; ein positiver Effekt auf die Partnerschaftsstabilität wurde im Studienbrief nur bei Männern berichtet.",
+    "richtig": "d",
+    "begruendung": "Vermittelt werden die günstigen Effekte unter anderem durch kooperatives Problemlösen, konstruktive Problemdiskussion und wahrgenommene soziale Unterstützung[cite: 9]. AK-Falle: Zufriedenheit beider, aber Stabilitätseffekt nur Männer[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zum Bindungsstil entspricht dem Studienbrief?",
+    "a": "Sicher gebundene Personen zeigen eher konstruktive Konfliktlösungsstile und einen sozial verträglicheren Emotionsausdruck.",
+    "b": "Bindungserfahrungen aus der Kindheit haben keine Bedeutung für spätere Partnerschaften.",
+    "c": "Ängstliche und vermeidende Bindung erhöhen grundsätzlich die Beziehungsqualität.",
+    "d": "Bindung wirkt ausschließlich über die Persönlichkeit des Partners.",
+    "richtig": "a",
+    "begruendung": "Bindungserfahrungen können in relativ stabile innere Modelle eingehen und spätere Partnerschaften beeinflussen. Sichere Bindung ist mit günstigeren Interaktionsweisen verbunden[cite: 9]. AK-Falle: Kindliche Bindungserfahrung ≠ auf die Kindheit begrenzter Effekt[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zur Ähnlichkeit von Partner:innen trifft zu?",
+    "a": "Nur tatsächliche, nicht aber wahrgenommene Ähnlichkeit hängt mit Beziehungsqualität zusammen.",
+    "b": "Persönlichkeitsähnlichkeit wirkt negativ, Werteähnlichkeit dagegen positiv.",
+    "c": "Sowohl tatsächliche als auch wahrgenommene Ähnlichkeit hängen positiv mit Anziehung, Beziehungsqualität und Beziehungsstabilität zusammen.",
+    "d": "Die Befunde stützen eher „Gegensätze ziehen sich an“.",
+    "richtig": "c",
+    "begruendung": "Die Forschung unterstützt eher „Gleich und Gleich gesellt sich gern“. Ähnlichkeit bei Einstellungen, Werten, Persönlichkeit, Bindungsstil und Emotionen kann günstig sein[cite: 9]. AK-Falle: Auch wahrgenommene Ähnlichkeit zählt[cite: 9]."
+  },
+  {
+    "frage": "Welchen Einfluss hat die Eindeutigkeit eines Stressors auf Unterstützungsprozesse?",
+    "a": "Mehrdeutige Stressoren lösen mehr Unterstützung aus, weil der Hilfebedarf schwerer einzuschätzen ist.",
+    "b": "Eindeutigkeit spielt keine Rolle, solange die Beziehung eng ist.",
+    "c": "Nur die objektive Dauer des Stressors beeinflusst die Unterstützung.",
+    "d": "Mehrdeutige Stressoren rufen weniger Unterstützung hervor als Situationen mit eindeutigem Schaden oder Verlust.",
+    "richtig": "d",
+    "begruendung": "Ist unklar, ob tatsächlich eine Bedrohung oder ein Schaden besteht, sind potenzielle Geber weniger geneigt, Unterstützung bereitzustellen[cite: 9]. AK-Falle: Unsicherheit → weniger, nicht mehr Hilfe[cite: 9]."
+  },
+  {
+    "frage": "Welche Belastungsstärke des Unterstützungsempfängers ist laut Studienbrief am günstigsten für den Erhalt sozialer Unterstützung?",
+    "a": "Möglichst geringe emotionale Belastung",
+    "b": "Ein mittleres Maß emotionaler Belastung",
+    "c": "Möglichst starke emotionale Belastung",
+    "d": "Die Belastungsstärke hat keinen Zusammenhang mit Unterstützungsprozessen.",
+    "richtig": "b",
+    "begruendung": "Mittlere Belastung signalisiert Hilfebedarf, ohne den potenziellen Unterstützungsgeber zu stark zu beanspruchen. Extrem starke Belastung kann die Hilfsbereitschaft sogar reduzieren[cite: 9]. AK-Falle: „Je belasteter, desto mehr Hilfe“ ist nicht linear richtig[cite: 9]."
+  },
+  {
+    "frage": "Welches Bewältigungsmuster begünstigt den Erhalt sozialer Unterstützung am ehesten?",
+    "a": "Starke Fokussierung auf negative Emotionen und Rückzug",
+    "b": "Rumination und Vermeidung",
+    "c": "Vermeidung kombiniert mit passivem Abwarten",
+    "d": "Aktives Problemlösen, positive Uminterpretation und aktive Suche nach Unterstützung",
+    "richtig": "d",
+    "begruendung": "Rumination (wiederholtes Grübeln) und Vermeidung gelten hier als maladaptive Bewältigung (ungünstige Bewältigung) und senken Unterstützung; aktive und situationsangemessene Bewältigung fördert sie[cite: 9]. AK-Falle: Hilfsbedürftiges Verhalten ist nicht automatisch unterstützungsfördernd[cite: 9]."
+  },
+  {
+    "frage": "Wie beeinflusst die Kausalattribution (Ursachenzuschreibung) des Gebers die Hilfsbereitschaft?",
+    "a": "Kontrollierbare Ursachen lösen eher Mitleid und damit mehr Unterstützung aus.",
+    "b": "Unkontrollierbare Ursachen lösen eher Mitleid und Sympathie aus; kontrollierbare Ursachen eher Ärger und geringere Hilfsbereitschaft.",
+    "c": "Unkontrollierbare Ursachen erzeugen hauptsächlich Ärger.",
+    "d": "Die wahrgenommene Kontrollierbarkeit beeinflusst nur das Verhalten des Empfängers.",
+    "richtig": "b",
+    "begruendung": "Die zugeschriebene Kontrollierbarkeit beeinflusst Emotionen des Gebers und darüber die Unterstützungsbereitschaft[cite: 9]. AK-Falle: unkontrollierbar → Mitleid ↑ → Hilfe ↑; kontrollierbar → Ärger ↑ → Hilfe ↓[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zu den Charakteristika der Beziehung ist korrekt?",
+    "a": "Frühere Zurückweisung von Hilfe erhöht die spätere Hilfsbereitschaft.",
+    "b": "Frühere Unterstützungsinteraktionen haben keinen Einfluss auf zukünftige Hilfe.",
+    "c": "Hohe Intimität und Beziehungszufriedenheit fördern Unterstützung; frühere Zurückweisung senkt sie, während früher erhaltene Hilfe wegen Reziprozität spätere eigene Hilfe begünstigt.",
+    "d": "Reziprozität bedeutet, dass Unterstützung unabhängig von früheren Interaktionen erfolgt.",
+    "richtig": "c",
+    "begruendung": "Reziprozität (Gegenseitigkeit) bedeutet, dass früher erhaltene Unterstützung die eigene spätere Unterstützungsbereitschaft erhöhen kann. Wiederholte Zurückweisung eigener Hilfe wirkt dagegen ungünstig[cite: 9]. AK-Falle: Die Vergangenheit der Beziehung ist für aktuelle Hilfe nicht irrelevant[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zu Geschlechtsunterschieden in heterosexuellen Beziehungen entspricht dem Studienbrief?",
+    "a": "Einige Befunde sprechen dafür, dass Männer gesundheitlich generell stärker von Beziehungen profitieren, während bei Frauen die gesundheitlichen Vorteile stärker von der Beziehungsqualität abhängen.",
+    "b": "Frauen profitieren grundsätzlich stärker von jeder Partnerschaft, unabhängig von deren Qualität.",
+    "c": "Männer erhalten außerhalb von Partnerschaften mehr emotionale Unterstützung als Frauen und sind daher weniger auf Beziehungen angewiesen.",
+    "d": "Männer sind mit dem Singleleben zufriedener und initiieren häufiger Trennungen.",
+    "richtig": "a",
+    "begruendung": "Der Studienbrief berichtet, dass Männer außerhalb der Partnerschaft tendenziell weniger emotionale Unterstützung erhalten und daher stärker auf Partnerschaften angewiesen sein können. Bei Frauen hängt der gesundheitliche Nutzen stärker von der Qualität der Beziehung ab[cite: 9]. AK-Falle: „Wer profitiert mehr?“ lässt sich nicht ohne die Bedingung Beziehungsqualität beantworten[cite: 9]."
+  },
+  {
+    "frage": "Welche Zuordnung der vier Netzwerkdimensionen nach Laireiter ist korrekt?",
+    "a": "Struktur = Dauer und Häufigkeit der Kontakte; Beziehungen = Anzahl und Vernetzung",
+    "b": "Inhalt = subjektive Bewertung; Evaluation = unterstützende oder belastende Beziehung",
+    "c": "Struktur = Anzahl/Vernetzung; Beziehungen = Dauer/Art/Häufigkeit; Inhalt = unterstützend/belastend; Evaluation = Bewertung",
+    "d": "Struktur = Reziprozität; Beziehungen = Dichte; Inhalt = Dauer; Evaluation = Kontakthäufigkeit",
+    "richtig": "c",
+    "begruendung": "Laireiter unterscheidet genau diese vier Dimensionen mit den genannten Merkmalen. Dichte (Anteil tatsächlich vorhandener Beziehungen) und Reziprozität (Gegenseitigkeit) sind zwar Netzwerkmerkmale, aber keine eigenen Laireiter-Dimensionen[cite: 9]. AK-Falle: Richtige Begriffe aus dem Kapitel werden gern dem falschen Teil eines Modells zugeordnet[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zur wahrgenommenen sozialen Unterstützung und Mortalität entspricht dem Studienbrief?",
+    "a": "Unterstützung durch Freund:innen zeigte einen stärkeren Zusammenhang mit reduziertem Sterberisiko als Unterstützung durch Familienmitglieder.",
+    "b": "Nur tatsächlich erhaltene Unterstützung hing mit einem reduzierten Sterberisiko zusammen.",
+    "c": "Die Herkunft der wahrgenommenen Unterstützung spielte überhaupt keine Rolle.",
+    "d": "Wahrgenommene Unterstützung durch Familienmitglieder zeigte einen stärkeren Zusammenhang mit reduziertem Sterberisiko als die durch Freund:innen oder andere Personen.",
+    "richtig": "d",
+    "begruendung": "Besonders die wahrgenommene Unterstützung durch Familienmitglieder erwies sich als bedeutsam. Mortalität (Sterblichkeit) war dabei stärker mit familiärer wahrgenommener Unterstützung verbunden als mit Unterstützung aus anderen Teilen des Netzwerks[cite: 9]. AK-Falle: wahrgenommen ≠ tatsächlich erhalten[cite: 9]."
+  },
+  {
+    "frage": "Wie wurde soziale Unterstützung in der Studie von Kulik und Mahler (1989) bei Patienten vor und nach einer Bypass-Operation operationalisiert (messbar gemacht)?",
+    "a": "Über die subjektive Einschätzung der Patienten, jederzeit Unterstützung erhalten zu können",
+    "b": "Über die Größe des gesamten Freundeskreises",
+    "c": "Über die vom Klinikpersonal beobachtete Anzahl der Besuche durch Ehefrauen bzw. andere Personen",
+    "d": "Über die Häufigkeit telefonischer Kontakte nach der Entlassung",
+    "richtig": "c",
+    "begruendung": "Die Anzahl der Besuche wurde als objektiverer Indikator tatsächlicher Unterstützung verwendet. Bei verheirateten Patienten hing häufigerer Besuch unter anderem mit weniger Schmerzmedikation und kürzerem Krankenhausaufenthalt zusammen[cite: 9]. AK-Falle: Hier wurde erhaltene Unterstützung, nicht bloß die Erwartung zukünftiger Hilfe, erfasst[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zu geschlechtsspezifischen Befunden in heterosexuellen Beziehungen entspricht dem Studienbrief?",
+    "a": "Frauen profitieren gesundheitlich grundsätzlich stärker von einer Partnerschaft, unabhängig von deren Qualität.",
+    "b": "Männer scheinen gesundheitlich teilweise stärker von Beziehungen zu profitieren; bei Frauen hängt der gesundheitliche Vorteil stärker von der Beziehungsqualität ab.",
+    "c": "Männer erhalten außerhalb ihrer Partnerschaft mehr emotionale Unterstützung als Frauen.",
+    "d": "Frauen profitieren physiologisch grundsätzlich weniger von sozialer Unterstützung als Männer.",
+    "richtig": "b",
+    "begruendung": "Männer erhalten laut den berichteten Befunden außerhalb ihrer Partnerschaft eher weniger emotionale Unterstützung und können daher stärker auf Partnerschaften angewiesen sein. Bei Frauen spielt die Qualität der Beziehung für den gesundheitlichen Nutzen eine besonders wichtige Rolle[cite: 9]. AK-Falle: „Wer profitiert mehr?“ ist ohne die Bedingung Beziehungsqualität zu pauschal[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage über Charakteristika des Stressors ist korrekt?",
+    "a": "Nur die objektive Dauer eines Stressors beeinflusst Unterstützungsprozesse.",
+    "b": "Je mehrdeutiger eine Bedrohung ist, desto mehr Unterstützung wird angeboten.",
+    "c": "Subjektive Einschätzungen des Gebers spielen für Unterstützung keine Rolle.",
+    "d": "Intensität, Dauer und subjektive Einschätzung können relevant sein; stark stresshaft bewertete Situationen lösen eher Unterstützung aus, mehrdeutige Stressoren dagegen weniger.",
+    "richtig": "d",
+    "begruendung": "Sowohl objektive Merkmale als auch subjektive Bewertungen beeinflussen Unterstützungsprozesse. Ist unklar, ob überhaupt ein Schaden oder eine Bedrohung besteht, sinkt die Bereitschaft zur Hilfe[cite: 9]. AK-Falle: „mehr Unsicherheit → vorsichtshalber mehr Hilfe“ klingt plausibel, entspricht aber nicht dem Studienbrief[cite: 9]."
+  },
+  {
+    "frage": "Wie können eigene Erfahrungen des potenziellen Unterstützungsgebers die Hilfsbereitschaft beeinflussen?",
+    "a": "Eigene Belastungserfahrungen vermindern grundsätzlich die Empathie.",
+    "b": "Eigene Erfahrungen sind nur dann relevant, wenn dieselbe Belastung erneut auftritt.",
+    "c": "Eigene Erfahrungen als Empfänger oder Geber können Empathie und Vertrauen in die eigene Unterstützungskompetenz erhöhen und dadurch Hilfe begünstigen.",
+    "d": "Eigene Erfahrungen beeinflussen ausschließlich die wahrgenommene, nicht die tatsächliche Unterstützung.",
+    "richtig": "c",
+    "begruendung": "Frühere Erfahrungen können Empathie (Einfühlungsvermögen) fördern und Unsicherheit darüber reduzieren, wie wirksam geholfen werden kann. Der Studienbrief nennt außerdem, dass die Konfrontation mit Opfern kritischer Ereignisse die eigene Vulnerabilität (Verletzlichkeit) bewusst machen und dadurch auch unangenehme Reaktionen auslösen kann[cite: 9]. AK-Falle: Eigene Erfahrung wirkt nicht zwingend belastend – sie kann die Hilfskompetenz erhöhen[cite: 9]."
+  },
+  {
+    "frage": "Welche frühere Erfahrung kann die zukünftige Unterstützungsbereitschaft eines Gebers verringern?",
+    "a": "Der Geber hat früher selbst Unterstützung erhalten.",
+    "b": "Der Geber erlebt eine hohe Vertrautheit mit dem Empfänger.",
+    "c": "Der Geber ist mit der Beziehung sehr zufrieden.",
+    "d": "Frühere Hilfe wurde zurückgewiesen oder vom Geber als wirkungslos erlebt.",
+    "richtig": "d",
+    "begruendung": "Sowohl frühere Zurückweisung als auch wahrgenommene Ineffektivität (fehlende Wirksamkeit) eigener Hilfe können die spätere Unterstützungsbereitschaft reduzieren. Umgekehrt begünstigt früher selbst erhaltene Hilfe aufgrund von Reziprozität (Gegenseitigkeit) spätere eigene Hilfeleistungen[cite: 9]. AK-Falle: Nicht nur Zurückweisung – auch das Gefühl „Meine Hilfe hat ohnehin nichts gebracht“ kann spätere Unterstützung reduzieren[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zur wahrgenommenen Unterstützung trifft zu?",
+    "a": "Sie entspricht weitgehend der tatsächlich erhaltenen Unterstützung.",
+    "b": "Sie entsteht nur nach konkreten Hilfehandlungen.",
+    "c": "Sie kann relativ unabhängig von tatsächlich erhaltener Unterstützung sein und wird teilweise als relativ stabiles Persönlichkeitsmerkmal betrachtet.",
+    "d": "Sie beschreibt ausschließlich die Bewertung bereits erhaltener Hilfe.",
+    "richtig": "c",
+    "begruendung": "Wahrgenommene Unterstützung bezeichnet die prospektive (auf zukünftige Situationen gerichtete) Erwartung, bei Bedarf Hilfe erhalten zu können. Diese Einschätzung muss nicht mit tatsächlich erfolgter Unterstützung übereinstimmen[cite: 9]. AK-Falle: Viel wahrgenommene Unterstützung bedeutet nicht automatisch viel tatsächlich erhaltene Unterstützung[cite: 9]."
+  },
+  {
+    "frage": "Welche Aussage zur erhaltenen sozialen Unterstützung entspricht dem Studienbrief?",
+    "a": "Sie wirkt grundsätzlich negativ auf das psychische Wohlbefinden.",
+    "b": "Sie zeigt grundsätzlich keinen Zusammenhang mit Gesundheit.",
+    "c": "Sie wirkt immer stärker gesundheitsförderlich als wahrgenommene Unterstützung.",
+    "d": "Die Befunde sind uneinheitlich: Erhaltene Unterstützung kann ohne Effekt oder negativ sein, wurde in anderen Studien aber auch mit besserer Krankheitsanpassung und psychischer Gesundheit verbunden.",
+    "richtig": "d",
+    "begruendung": "Für tatsächlich erhaltene Unterstützung zeigen Studien keine einheitliche Wirkungsrichtung. Negative Effekte können z. B. entstehen, wenn Hilfe als aufdringlich erlebt wird; in anderen Kontexten, etwa Rehabilitation, wurden positive Zusammenhänge gefunden[cite: 9]. AK-Falle: Weder „erhaltene Unterstützung ist immer gut“ noch „immer schlecht“ ist richtig[cite: 9]."
+  },
+  {
+    "frage": "Warum kann der Kontakt mit einer Person nach einem kritischen Lebensereignis bei einem potenziellen Unterstützungsgeber auch negative Reaktionen auslösen?",
+    "a": "Weil kritische Lebensereignisse grundsätzlich als selbstverschuldet bewertet werden.",
+    "b": "Weil dadurch die eigene Vulnerabilität (Verletzlichkeit) stärker bewusst werden und der Glaube an eine gerechte Welt (Überzeugung, dass die Welt grundsätzlich gerecht geordnet ist) erschüttert werden kann.",
+    "c": "Weil eigene Erfahrungen mit Belastungen die Empathie grundsätzlich reduzieren.",
+    "d": "Weil Empathie normalerweise mit geringerer Unterstützungsbereitschaft verbunden ist.",
+    "richtig": "b",
+    "begruendung": "Die Begegnung mit Opfern kritischer Lebensereignisse kann beim Geber bedrohlich wirken, weil sie die eigene Verletzlichkeit vor Augen führt und grundlegende Annahmen über eine gerechte Welt infrage stellt. Dadurch können negative Gefühle und soziale Distanzierung entstehen[cite: 9]. AK-Falle: Empathie fördert Unterstützung grundsätzlich eher; hier geht es um einen anderen Mechanismus – die Bedrohung eigener Grundannahmen[cite: 9]."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>
