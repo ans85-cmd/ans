@@ -11,10 +11,10 @@
         "short_name": "J]L[M",
         "start_url": "LE_index.html",
         "display": "standalone",
-        "background_color": "#f1f5f9",
-        "theme_color": "#1e3a8a",
+        "background_color": "#fdf8f6",
+        "theme_color": "#831843",
         "icons": [{
-            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%23831843%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2780%27 fill=%27none%27 stroke=%27%23f5d0fe%27 stroke-width=%272%27 stroke-dasharray=%274 4%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fde68a%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
             "sizes": "192x192 512x512",
             "type": "image/svg+xml"
         }]
@@ -24,29 +24,32 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
-    <meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#831843">
     
-    <!-- Favicon für Browser-Tabs -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%23831843%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2780%27 fill=%27none%27 stroke=%27%23fde68a%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fde68a%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
 
-    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <!-- Schriftduo: Playfair Display & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --panel-bg: #ffffff;
-            --primary-blue: #1e3a8a;
-            --primary-blue-hover: #1e40af;
-            --accent-gold: #b45309;
-            --border-color: #cbd5e1;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            --bg-color: #fdf8f6;
+            --panel-bg: rgba(255, 255, 255, 0.92);
+            --primary-berry: #831843;
+            --primary-berry-light: #be185d;
+            --soft-blush: #fce7f3;
+            --blush-tint: #fff1f2;
+            --accent-rosegold: #b76e79;
+            --accent-gold: #c2855a;
+            --border-color: #f3e8ee;
+            --text-dark: #2d1b24;
+            --text-muted: #7a5c6b;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow-card: 0 20px 40px -15px rgba(131, 24, 67, 0.12), 0 4px 16px -4px rgba(183, 110, 121, 0.08);
         }
 
         * {
@@ -66,21 +69,84 @@
             align-items: center;
             padding: 20px;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+                radial-gradient(circle at 10% 10%, rgba(244, 114, 182, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 90% 85%, rgba(251, 191, 36, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 15%, rgba(190, 24, 93, 0.07) 0%, transparent 40%);
             background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- Sanft fliegende Herzchen im Hintergrund --- */
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -20px;
+            color: rgba(219, 112, 147, 0.35);
+            font-size: var(--size, 16px);
+            animation: floatUp var(--duration, 8s) infinite linear;
+            left: var(--pos, 50%);
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-105vh) translateX(var(--drift, 30px)) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .app-container {
             width: 100%;
             max-width: 480px;
             background: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: var(--shadow-card);
             border-radius: var(--radius-lg);
-            padding: 24px;
+            padding: 28px 24px;
             position: relative;
+            z-index: 10;
             overflow: hidden;
+            animation: cardEntrance 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Dekorative Botanische Line-Art im Hintergrund --- */
+        .botanical-decor {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 150px;
+            height: 150px;
+            pointer-events: none;
+            opacity: 0.35;
+            z-index: 0;
         }
 
         /* --- Moodle Header & Burger Menü --- */
@@ -88,9 +154,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
         }
 
         .brand-wrapper {
@@ -99,48 +167,55 @@
             gap: 12px;
         }
 
+        .logo-ring {
+            transition: transform 0.4s ease;
+        }
+        .brand-wrapper:hover .logo-ring {
+            transform: rotate(12deg) scale(1.05);
+        }
+
         .brand-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.15rem;
-            color: var(--primary-blue);
+            font-size: 1.25rem;
+            color: var(--primary-berry);
             font-weight: 700;
-            text-transform: uppercase;
+            letter-spacing: 0.5px;
             line-height: 1.2;
         }
 
         .brand-subtitle {
             font-size: 0.7rem;
-            color: var(--accent-gold);
+            color: var(--accent-rosegold);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             font-weight: 600;
         }
 
         /* Burger Menu Button */
         .burger-btn {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            width: 40px;
-            height: 40px;
+            background: var(--blush-tint);
+            border: 1px solid #fbcfe8;
+            border-radius: 12px;
+            width: 42px;
+            height: 42px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         .burger-btn:hover {
-            border-color: var(--primary-blue);
-            background: #eff6ff;
+            background: var(--soft-blush);
+            transform: scale(1.04);
         }
 
         .burger-line {
             width: 18px;
             height: 2px;
-            background-color: var(--primary-blue);
+            background-color: var(--primary-berry);
             border-radius: 2px;
             transition: 0.3s;
         }
@@ -152,14 +227,13 @@
             right: -100%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
+            background: rgba(253, 248, 246, 0.97);
+            backdrop-filter: blur(12px);
             z-index: 100;
-            padding: 25px;
+            padding: 28px 24px;
             display: flex;
             flex-direction: column;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .drawer-menu.open {
@@ -170,17 +244,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
         }
 
         .close-drawer {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-dark);
+            background: var(--blush-tint);
+            border: 1px solid #fbcfe8;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            color: var(--primary-berry);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .drawer-links {
@@ -190,8 +270,8 @@
         }
 
         .drawer-link {
-            padding: 12px 16px;
-            background: #f8fafc;
+            padding: 14px 18px;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             color: var(--text-dark);
@@ -199,30 +279,48 @@
             font-weight: 500;
             font-size: 0.95rem;
             transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(131, 24, 67, 0.03);
         }
 
         .drawer-link:hover {
-            background: #eff6ff;
-            border-color: var(--primary-blue);
-            color: var(--primary-blue);
+            background: var(--blush-tint);
+            border-color: #f9a8d4;
+            color: var(--primary-berry);
+            transform: translateX(4px);
         }
 
-        /* --- Newsfeed (Ankündigungen) --- */
+        /* --- Newsfeed (Eyecatcher Begrüßung) --- */
         .news-card {
-            background: #f8fafc;
-            border-left: 4px solid var(--accent-gold);
-            border-radius: 0 var(--radius-md) var(--radius-md) 0;
-            padding: 12px 15px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff1f2 0%, #fdf2f8 100%);
+            border: 1px solid #fbcfe8;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin-bottom: 22px;
             text-align: left;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .news-sparkle {
+            font-size: 1.3rem;
+            animation: pulseSparkle 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseSparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.18) rotate(8deg); }
         }
 
         .news-title {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            color: var(--accent-gold);
+            color: var(--primary-berry-light);
             text-transform: uppercase;
-            margin-bottom: 3px;
+            letter-spacing: 0.8px;
+            margin-bottom: 2px;
         }
 
         .news-text {
@@ -233,20 +331,24 @@
 
         /* --- Sektion / Kurse --- */
         .section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--primary-berry);
+            margin-bottom: 14px;
             text-align: left;
-            font-weight: 700;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
 
         .menu-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 11px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
         }
 
         .nav-btn {
@@ -254,70 +356,125 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            background: #f8fafc;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-dark);
-            padding: 14px 18px;
+            padding: 13px 16px;
             border-radius: var(--radius-md);
             font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 2px 10px rgba(131, 24, 67, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Roségold Lichtschimmer-Effekt bei Hover */
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 207, 232, 0.35), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.55s ease;
+        }
+
+        .nav-btn:hover::after {
+            left: 140%;
         }
 
         .nav-btn:hover {
-            border-color: var(--primary-blue);
-            background: #eff6ff;
-            color: var(--primary-blue);
-            transform: translateY(-1px);
+            border-color: #f472b6;
+            background: linear-gradient(90deg, #ffffff 0%, #fff1f2 100%);
+            color: var(--primary-berry);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -6px rgba(190, 24, 93, 0.16);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .le-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 100%);
+            color: var(--primary-berry);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 1px solid #fbcfe8;
+            transition: transform 0.25s ease;
+        }
+
+        .nav-btn:hover .le-badge {
+            transform: scale(1.08) rotate(-4deg);
+            background: linear-gradient(135deg, #f9a8d4 0%, #f0abfc 100%);
+            color: #ffffff;
         }
 
         .nav-arrow {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            color: var(--accent-rosegold);
+            font-size: 1rem;
+            transition: transform 0.25s ease;
         }
 
-        /* --- Ultra-schöne Support-Card --- */
+        .nav-btn:hover .nav-arrow {
+            transform: translateX(4px);
+            color: var(--primary-berry);
+        }
+
+        /* --- Feminine Support-Card --- */
         .support-card {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fde68a;
-            border-left: 4px solid var(--accent-gold);
+            background: linear-gradient(135deg, #fff1f2 0%, #fef3c7 100%);
+            border: 1px solid #fed7aa;
             border-radius: var(--radius-md);
             padding: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             display: flex;
-            gap: 15px;
+            gap: 14px;
             align-items: flex-start;
-            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.05);
+            box-shadow: 0 6px 18px rgba(183, 110, 121, 0.08);
             text-align: left;
+            position: relative;
+            z-index: 2;
         }
 
         .support-icon {
-            font-size: 1.8rem;
-            background: #fff;
-            width: 45px;
-            height: 45px;
+            font-size: 1.5rem;
+            background: #ffffff;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 10px rgba(131, 24, 67, 0.08);
+            border: 1px solid #fbcfe8;
             flex-shrink: 0;
         }
 
         .support-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            color: var(--accent-gold);
+            color: var(--primary-berry);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             margin-bottom: 4px;
         }
 
         .support-text {
-            font-size: 0.85rem;
-            color: #451a03;
+            font-size: 0.84rem;
+            color: #5c3a47;
             line-height: 1.5;
             margin-bottom: 12px;
         }
@@ -326,54 +483,79 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #0070ba;
+            background: linear-gradient(135deg, #9d174d 0%, #be185d 100%);
             color: #ffffff;
-            padding: 8px 14px;
-            border-radius: 20px;
+            padding: 9px 16px;
+            border-radius: 25px;
             font-size: 0.82rem;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 112, 186, 0.3);
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(190, 24, 93, 0.28);
         }
 
         .paypal-btn:hover {
-            background: #003087;
+            background: linear-gradient(135deg, #831843 0%, #9d174d 100%);
             transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(0, 112, 186, 0.4);
+            box-shadow: 0 6px 16px rgba(190, 24, 93, 0.38);
         }
 
         footer {
             font-size: 0.75rem;
             color: var(--text-muted);
-            border-top: 1px solid #e2e8f0;
-            padding-top: 12px;
-            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 14px;
+            margin-top: 8px;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
 
+    <!-- Sanft fliegende Herzen im Hintergrund -->
+    <div class="floating-hearts">
+        <div class="heart" style="--pos: 10%; --duration: 9s; --delay: 0s; --size: 14px; --drift: 20px;">❤</div>
+        <div class="heart" style="--pos: 25%; --duration: 12s; --delay: 3s; --size: 10px; --drift: -25px;">✨</div>
+        <div class="heart" style="--pos: 40%; --duration: 8s; --delay: 1.5s; --size: 18px; --drift: 15px;">💕</div>
+        <div class="heart" style="--pos: 60%; --duration: 10s; --delay: 4.5s; --size: 12px; --drift: -15px;">❤</div>
+        <div class="heart" style="--pos: 75%; --duration: 11s; --delay: 2s; --size: 16px; --drift: 30px;">✨</div>
+        <div class="heart" style="--pos: 90%; --duration: 9.5s; --delay: 5s; --size: 14px; --drift: -20px;">💖</div>
+    </div>
+
     <div class="app-container">
+        <!-- Zarte Botanische Line-Art Deko oben rechts -->
+        <svg class="botanical-decor" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M180 10 C130 40, 100 90, 80 160" stroke="#b76e79" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M145 45 C120 35, 105 45, 115 65 C128 62, 140 55, 145 45 Z" stroke="#b76e79" stroke-width="1.3"/>
+            <path d="M122 80 C95 72, 82 85, 95 102 C108 98, 118 90, 122 80 Z" stroke="#b76e79" stroke-width="1.3"/>
+            <path d="M150 68 C165 85, 158 102, 140 96 C140 84, 145 75, 150 68 Z" stroke="#b76e79" stroke-width="1.3"/>
+            <circle cx="70" cy="40" r="2.5" fill="#f472b6"/>
+            <circle cx="170" cy="120" r="2" fill="#d97706"/>
+        </svg>
+
         <!-- Moodle Header -->
         <div class="moodle-header">
             <div class="brand-wrapper">
-                <!-- Kleines Logo -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                <!-- Edles Beeren- & Roségold-Monogramm -->
+                <svg class="logo-ring" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="42" height="42">
                     <defs>
-                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#1e3a8a" />
-                            <stop offset="100%" stop-color="#0f172a" />
+                        <linearGradient id="berryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#9d174d" />
+                            <stop offset="100%" stop-color="#500724" />
                         </linearGradient>
-                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#fbbf24" />
-                            <stop offset="100%" stop-color="#b45309" />
+                        <linearGradient id="roseGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fde68a" />
+                            <stop offset="50%" stop-color="#fbcfe8" />
+                            <stop offset="100%" stop-color="#f59e0b" />
                         </linearGradient>
                     </defs>
-                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
-                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
-                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                    <circle cx="100" cy="100" r="88" fill="url(#berryGrad)" />
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="url(#roseGoldGrad)" stroke-width="2" stroke-dasharray="5 4" />
+                    <text x="100" y="120" font-family="'Playfair Display', Georgia, serif" font-size="56" font-style="italic" font-weight="bold" fill="url(#roseGoldGrad)" text-anchor="middle">J</text>
+                    <!-- Kleine Funkel-Sterne -->
+                    <path d="M148 52 L150 58 L156 60 L150 62 L148 68 L146 62 L140 60 L146 58 Z" fill="#fde68a"/>
                 </svg>
                 <div>
                     <div class="brand-title">J]L[M</div>
@@ -391,11 +573,11 @@
         <!-- Slide-out Burger Menü (Drawer) -->
         <div class="drawer-menu" id="drawerMenu">
             <div class="drawer-header">
-                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.15rem; color: var(--primary-berry);">Navigation ✨</span>
                 <button class="close-drawer" onclick="toggleMenu()">✕</button>
             </div>
             <div class="drawer-links">
-                <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">🏠 Home</a>
+                <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">🏡 Home</a>
                 <a href="jmoodle.html" class="drawer-link">📚 PDF-Sammlung</a>
                 <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
             </div>
@@ -403,23 +585,41 @@
 
         <!-- Newsfeed / Ankündigungen -->
         <div class="news-card">
-            <div class="news-title">Neuigkeiten</div>
-            <div class="news-text">Lerneinheiten für das Wintersemester freigeschaltet. Viel Erfolg bei der Prüfungsvorbereitung!</div>
+            <div class="news-sparkle">✨</div>
+            <div>
+                <div class="news-title">Neuigkeiten</div>
+                <div class="news-text">Lerneinheiten für das Wintersemester freigeschaltet. Viel Erfolg bei deiner Prüfungsvorbereitung!</div>
+            </div>
         </div>
 
         <!-- Kursbereich -->
-        <div class="section-title">Verfügbare Lerneinheiten:</div>
+        <div class="section-title">Deine Lerneinheiten</div>
         <div class="menu-list">
-            <a href="LE1_index.html" class="nav-btn"><span>Lerneinheit 1</span> <span class="nav-arrow">→</span></a>
-            <a href="LE2_index.html" class="nav-btn"><span>Lerneinheit 2</span> <span class="nav-arrow">→</span></a>
-            <a href="LE3_index.html" class="nav-btn"><span>Lerneinheit 3</span> <span class="nav-arrow">→</span></a>
-            <a href="LE4_index.html" class="nav-btn"><span>Lerneinheit 4</span> <span class="nav-arrow">→</span></a>
-            <a href="inarbeit.html" class="nav-btn"><span>Lerneinheit 5</span> <span class="nav-arrow">→</span></a>
+            <a href="LE1_index.html" class="nav-btn">
+                <span class="nav-left"><span class="le-badge">🌸</span> Lerneinheit 1</span>
+                <span class="nav-arrow">→</span>
+            </a>
+            <a href="LE2_index.html" class="nav-btn">
+                <span class="nav-left"><span class="le-badge">📖</span> Lerneinheit 2</span>
+                <span class="nav-arrow">→</span>
+            </a>
+            <a href="LE3_index.html" class="nav-btn">
+                <span class="nav-left"><span class="le-badge">🌿</span> Lerneinheit 3</span>
+                <span class="nav-arrow">→</span>
+            </a>
+            <a href="LE4_index.html" class="nav-btn">
+                <span class="nav-left"><span class="le-badge">🧠</span> Lerneinheit 4</span>
+                <span class="nav-arrow">→</span>
+            </a>
+            <a href="LE5_index.html" class="nav-btn">
+                <span class="nav-left"><span class="le-badge">✨</span> Lerneinheit 5</span>
+                <span class="nav-arrow">→</span>
+            </a>
         </div>
 
         <!-- Support-Card -->
         <div class="support-card">
-            <div class="support-icon">☕</div>
+            <div class="support-icon">🧋</div>
             <div class="support-content">
                 <div class="support-title">Unterstützung & Danke</div>
                 <div class="support-text">
@@ -433,12 +633,11 @@
 
         <!-- Fußzeile -->
         <footer>
-            ans85-cmd &bull; WiSe26
+            ans85-cmd &bull; WiSe26 &hearts;
         </footer>
     </div>
 
     <script>
-        // Funktion zum Öffnen und Schließen des Burger-Menüs
         function toggleMenu() {
             const drawer = document.getElementById('drawerMenu');
             drawer.classList.toggle('open');

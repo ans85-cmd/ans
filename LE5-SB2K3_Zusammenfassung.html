@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* Tabellen Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            color: var(--text-muted);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE5_index.html" class="drawer-link">Zurück zur Startseite</a>
+                <a href="LE5_SB2K3_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE5_index.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung -->
+    <div class="content-body">
+        <h1>LE – Forschungsmethoden in der Gesundheitspsychologie</h1>
+
+        <h2>1. Wozu braucht Gesundheitspsychologie Forschungsmethoden?</h2>
+        <p>Forschungsmethoden sollen vermutete Zusammenhänge systematisch überprüfen, Erkenntnisse in die Praxis übertragen und kontrollieren, ob Interventionen tatsächlich wirksam sind. Ohne empirische Prüfung können Maßnahmen wirkungslos oder sogar schädlich sein. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        
+        <p>Die drei großen Lernziele des Kapitels sind deshalb:</p>
+        <ul>
+            <li>Forschungsziele und Forschungsschwerpunkte unterscheiden</li>
+            <li>Forschungsdesigns mit Vor- und Nachteilen verstehen</li>
+            <li>Erhebungsmethoden mit ihren Einsatzmöglichkeiten und Problemen unterscheiden. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <h2>2. Forschungsziele – SEHR AK-RELEVANT</h2>
+        <p>Hier musst du Beispiele zuordnen können:</p>
+        <ul>
+            <li><strong>Deskriptiv</strong> = beschreiben, wie etwas ist.<br><em>Beispiel:</em> „Wie stark fühlen sich Studierende gestresst?“ (Keine Erklärung, keine Vorhersage – nur Beschreibung).</li>
+            <li><strong>Induktiv</strong> = aus empirischen Beobachtungen Theorien/Modelle entwickeln (vom Einzelnen/Beobachteten zur allgemeinen Theorie).</li>
+            <li><strong>Prognostisch</strong> = etwas Zukünftiges vorhersagen.<br><em>Beispiel:</em> „Sagt Gesundheitskompetenz den späteren Krankheitsverlauf voraus?“</li>
+            <li><strong>Explanativ</strong> = erklären, warum etwas geschieht bzw. kausale Zusammenhänge erschließen.<br><em>Beispiel:</em> „Warum bewegen sich bestimmte Personengruppen zu wenig?“ <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <p>Zusätzlich gibt es <strong>Forschungsschwerpunkte</strong>:</p>
+        <ul>
+            <li><strong>Strukturierung von Wissen</strong> → z. B. Mediations- und Moderationseffekte untersuchen.</li>
+            <li><strong>Theorie-/Modellentwicklung</strong> → neues Modell entwickeln oder bestehendes verbessern.</li>
+            <li><strong>Theorie-/Modellprüfung bzw. statistische Modellierung</strong> → prüfen, ob ein bestehendes Modell Daten erklären oder Verhalten vorhersagen kann.</li>
+            <li><strong>Maßnahmenentwicklung/-optimierung/-testung / Evaluation</strong> (systematische Bewertung) von Maßnahmen. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <div class="callout-box">
+            <p>📌 <strong>AK-Falle (SoSe-2026-AK):</strong><br>
+            • „Wie stark sind Studierende gestresst?“ → deskriptiv ✅<br>
+            • „Gesundheitskompetenz sagt zukünftigen Krankheitsverlauf voraus“ → prognostisch, NICHT induktiv.<br>
+            • „Selbstwirksamkeit vermittelt den Zusammenhang zwischen Aktivität und Ernährung“ → Strukturierung von Wissen (Mediationseffekt).<br>
+            • „Wie viel Varianz erklärt die Theorie des überlegten Handelns?“ → Modellprüfung, NICHT explanativ. <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></p>
+        </div>
+
+        <p><strong>Merker:</strong> beschreiben → deskriptiv | vorhersagen → prognostisch | warum/kausal → explanativ | aus Daten Theorie bauen → induktiv | Mediator/Moderator → Strukturierung von Wissen | bestehende Theorie testen → Modellprüfung</p>
+
+        <h2>3. Experimente</h2>
+        <p>Ein Experiment dient besonders der Prüfung von Ursache-Wirkungs-Hypothesen und bietet starke Evidenz für Kausalität. Typisch sind:</p>
+        <ul>
+            <li><strong>UV</strong> (unabhängige Variable) wird manipuliert</li>
+            <li><strong>AV</strong> (abhängige Variable) wird gemessen</li>
+            <li>Personen werden möglichst <strong>randomisiert</strong> (zufällig) verschiedenen Gruppen zugeteilt</li>
+            <li>Kontrollgruppe wird mit Untersuchungsgruppe verglichen. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <p><strong>Manipulationstest:</strong> Nach einer Manipulation muss geprüft werden, ob sie überhaupt funktioniert hat (z. B. ob manipulierte Risikowahrnehmungen sich zwischen den Gruppen tatsächlich unterscheiden). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+
+        <h2>4. Randomisierung – extrem wichtig</h2>
+        <p>Randomisierung = zufällige Zuteilung der Teilnehmenden zu den Untersuchungsbedingungen. Ziel ist es, dass sich Gruppen nicht systematisch schon vor der Intervention (Alter, Geschlecht, Risikofaktoren usw.) unterscheiden. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        <p><em>Beispiel:</em> Bei freiwilligen Stressinterventionen nehmen oft ohnehin weniger belastete Personen teil. Ohne Randomisierung droht ein methodisches Artefakt (scheinbarer Effekt). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        <div class="callout-box">
+            <p>📌 <strong>Merksatz:</strong> Randomisierung macht Gruppen vor der Intervention möglichst vergleichbar.</p>
+        </div>
+
+        <h2>5. RCT – Randomized Controlled Trial</h2>
+        <p>RCT = Experiment zur Prüfung der Wirksamkeit einer Intervention. Typischer Ablauf: Stichprobe → Randomisierung → Untersuchungsgruppe/Kontrollgruppe → Prätest → Intervention → Posttest → Follow-up. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        <ul>
+            <li><strong>Prätest / Posttest:</strong> Messung vor bzw. nach der Behandlung.</li>
+            <li><strong>Follow-up:</strong> Spätere Messung zur Prüfung der Nachhaltigkeit.</li>
+            <li><strong>Kontrollgruppen-Varianten:</strong> Keine Behandlung, TAU (Treatment as usual / Standardbehandlung), Placebo oder Wartelisten-Kontrollgruppe. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+        <p><em>AK-Bezug:</em> RCTs werden häufig eingesetzt, um die Wirksamkeit von Interventionen zu überprüfen → WAHR. <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></p>
+
+        <h2>6. Interne, externe und ökologische Validität</h2>
+        <ul>
+            <li><strong>Interne Validität:</strong> Wie sicher kann ich sagen, dass die UV die AV verursacht hat? (Störfaktoren ausgeschlossen? Durch Randomisierung, Kontrolle, Verblindung hoch in Experimenten/RCTs). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+            <li><strong>Externe Validität:</strong> Übertragbarkeit auf andere Personen/Situationen/Alltag.</li>
+            <li><strong>Ökologische Validität:</strong> Realitätsnähe im natürlichen Alltag. (Laborexperimente haben oft hohe interne, aber geringere ökologische Validität). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+        <p><strong>Super-Merker:</strong> intern = stimmt der Ursache-Wirkungs-Schluss IN der Studie? | extern = gilt das Ergebnis auch DRAUSSEN? | ökologisch = ist die Situation ALLTAGSNAH?</p>
+
+        <h2>7. Verblindung</h2>
+        <p>Reduziert Erwartungseffekte (z. B. Nikotinpflaster-Beispiel). Bei der <strong>doppelten Verblindung</strong> wissen weder Teilnehmende noch Versuchsleitung, wer in welcher Bedingung ist. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        <div class="callout-box">
+            <p>⚠️ <strong>AK-Falle:</strong> Randomisierung (Wer kommt in welche Gruppe?) ≠ Verblindung (Wer weiß, wer in welcher Gruppe ist?).</p>
+        </div>
+
+        <h2>8. Quasiexperiment & Analogexperiment</h2>
+        <ul>
+            <li><strong>Quasiexperiment:</strong> Es fehlt die randomisierte Zuteilung (z. B. aus ethischen oder praktischen Gründen wie dem Vergleich von Kranken und Gesunden). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+            <li><strong>Analogexperiment:</strong> Personen sollen sich eine Situation vorstellen (z. B. schwere Diagnose). Problem: Kann abstrakt sein; Reaktion muss nicht einem echten Ereignis entsprechen. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a> (In SoSe 2026 direkt geprüft ✅). <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></li>
+        </ul>
+
+        <h2>9. Längsschnitt-, Kohorten- und Querschnittstudien</h2>
+        <ul>
+            <li><strong>Längsschnittstudie:</strong> Untersuchung über längeren Zeitraum / mehrere Zeitpunkte. Hilft bei der zeitlichen Reihenfolge, schließt dritte Variablen aber nicht automatisch aus. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+            <li><strong>Kohortenstudie:</strong> Gruppe mit bekannter Exposition/Merkmal wird beobachtet (Outcome offen). Kann <strong>prospektiv</strong> (in die Zukunft) oder <strong>retrospektiv</strong> (rückwirkend) sein (in SoSe 2026 als „WAHR“ geprüft). Hohe externe Validität, aber teuer und anfällig für Dropouts. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a> <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></li>
+            <li><strong>Querschnittstudie:</strong> Messung zu einem Zeitpunkt. Gut für Beschreibung, aber Kausalität ist kaum ableitbar (Richtung unklar). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <h2>10. Die Designs im direkten Vergleich</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Design</th>
+                    <th>Zeit</th>
+                    <th>Manipulation</th>
+                    <th>Randomisierung</th>
+                    <th>Kausalität</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Experiment/RCT</strong></td>
+                    <td>meist mehrere Zeitpunkte</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>am stärksten</td>
+                </tr>
+                <tr>
+                    <td><strong>Quasiexperiment</strong></td>
+                    <td>unterschiedlich</td>
+                    <td>teilweise / vorgegeben</td>
+                    <td>❌</td>
+                    <td>eingeschränkter</td>
+                </tr>
+                <tr>
+                    <td><strong>Analogexperiment</strong></td>
+                    <td>experimentell vorgestellt</td>
+                    <td>Situation simuliert</td>
+                    <td>möglich</td>
+                    <td>eingeschränkte Realitätsnähe</td>
+                </tr>
+                <tr>
+                    <td><strong>Längsschnitt</strong></td>
+                    <td>mehrere Zeitpunkte</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                    <td>zeitliche Richtung besser</td>
+                </tr>
+                <tr>
+                    <td><strong>Kohorte</strong></td>
+                    <td>meist längsschnittlich</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                    <td>gute Hinweise, Störvariablen bleiben</td>
+                </tr>
+                <tr>
+                    <td><strong>Querschnitt</strong></td>
+                    <td>ein Zeitpunkt</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                    <td>kaum kausal</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>11. Erhebungsmethoden: Fragebogen & Operationalisierung</h2>
+        <p>Ein Fragebogen muss zum theoretischen Konstrukt passen (<strong>Operationalisierung</strong>).<br>
+        <em>Beispiel Stresskonzepte:</em> PSS (Perceived Stress Scale misst transaktionales Geschehen / Bewertung) vs. SRRS (Social Readjustment Rating Scale misst ereignisbezogene Life Change Units). Beide können valide sein, messen aber Unterschiedliches! <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        <p><strong>Probleme von Fragebögen:</strong> Antworttendenzen (Extreme / Mitte), Negative Affektivität (führt zu systematisch negativer Bewertung, weshalb Kontrollvariablen sinnvoll sind) und unklare Vergleichsstandards. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+
+        <h2>12. Physiologische und biologische Messungen</h2>
+        <p>Beispiele: immunologisch (Entzündungsmarker), endokrinologisch (Kortisolsystem), kardiovaskulär (Herzfrequenz).<br>
+        <strong>Vorteil:</strong> Kein Selbstbericht (keine Verzerrung).<br>
+        <strong>Nachteil:</strong> Aufwendig, teuer (AK-Falle: „geringe Kosten“ ist FALSCH!), Labor notwendig. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a> <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></p>
+
+        <h2>13. EMA – Ecological Momentary Assessment</h2>
+        <p>Alltagsnahe wiederholte Erfassung im Moment bzw. in Echtzeit (auch Ambulatory Assessment / Experience Sampling). Höhere ökologische Validität, weniger Erinnerungsverzerrung (Recall-Bias). In SoSe 2026 direkt als „WAHR“ geprüft. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a> <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a></p>
+
+        <p><strong>Die vier EMA-Protokolle:</strong></p>
+        <ul>
+            <li><strong>Signalbasiert:</strong> Smartphone signalisiert zufällig (z. B. Stimmung, Schmerz). Vorteil: unvorhersehbar; Nachteil: unterbricht Alltag.</li>
+            <li><strong>Intervallbasiert:</strong> Feste Zeitpunkte (z. B. 4x täglich). Gut für zyklische Phänomene (Müdigkeit).</li>
+            <li><strong>Ereignisbasiert:</strong> Bei Eintritt eines bestimmten Ereignisses (z. B. Zigarette, Konflikt). Nur für mäßig häufige Ereignisse geeignet.</li>
+            <li><strong>Dauerhafte Erhebung:</strong> Kontinuierliche Sensoren (Puls, GPS, Bewegung). <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <h2>14. Quantitative vs. qualitative Forschung</h2>
+        <ul>
+            <li><strong>Quantitativ:</strong> Hypothesen/Theorien systematisch prüfen, eher deduktiv, Zahlen, Skalen, Statistik.</li>
+            <li><strong>Qualitativ:</strong> Neues/wenig erforschtes Gebiet erkunden, explorativ, eher induktiv, Interviews, Fokusgruppen. Ideal für neue/seltene Phänomene und komplexes subjektives Erleben. <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></li>
+        </ul>
+
+        <div class="conclusion-box">
+            <h3>Die wichtigste Denklogik für die Klausur</h3>
+            <p>Geh bei Studienbeispielen immer diese Reihenfolge durch: 
+            1. Was will die Studie? (beschreiben / vorhersagen / erklären / prüfen) | 
+            2. Wann wird gemessen? | 
+            3. Wird etwas manipuliert? | 
+            4. Werden Personen zufällig zugeteilt? | 
+            5. Wie wird gemessen? | 
+            6. Was darf ich daraus schließen (Korrelation vs. Kausalität)? <a href="SB2_K3-Forschung.pdf" target="_blank" class="pdf-link">📄 SB2_K3-Forschung.pdf öffnen</a></p>
+        </div>
+    </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

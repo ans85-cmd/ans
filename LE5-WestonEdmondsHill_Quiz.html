@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz - LE5</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 5</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Was war die zentrale Fragestellung von Weston et al. (2020)?",
+    "a": "Ob Persönlichkeit ausschließlich den BMI vorhersagt",
+    "b": "Wie Big-Five-Persönlichkeitsmerkmale mit Ernährungsverhalten zusammenhängen",
+    "c": "Ob Ernährungsverhalten die Persönlichkeit verändert",
+    "d": "Ob SES die Big Five verursacht",
+    "richtig": "b",
+    "begruendung": "Im Zentrum standen die Zusammenhänge zwischen Persönlichkeit und gesundem bzw. ungesundem Essverhalten. Zusätzlich wurden Gesundheit und SES untersucht. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: SES war eine zusätzliche Moderatorvariable, nicht die Hauptfragestellung."
+  },
+  {
+    "frage": "Welche Stichprobe wurde untersucht?",
+    "a": "665 Jugendliche aus Deutschland",
+    "b": "2.418 ältere Erwachsene aus Europa",
+    "c": "665 Personen aus der Hawaii Personality and Health Cohort",
+    "d": "414 Personen mit Typ-II-Diabetes",
+    "richtig": "c",
+    "begruendung": "Die analysierte Teilstichprobe bestand aus 665 Personen.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Persönlichkeitseigenschaft hing positiv mit gesundem Essen zusammen?",
+    "a": "Neurotizismus",
+    "b": "Extraversion",
+    "c": "Offenheit",
+    "d": "Keine der Big Five",
+    "richtig": "c",
+    "begruendung": "Offenheit war positiv mit gesundem und negativ mit ungesundem Essen assoziiert. Genau diese Richtung wurde bereits in der AK geprüft.\nAK-Falle: Offenheit → gesund + / ungesund −."
+  },
+  {
+    "frage": "Welche Aussage zu Neurotizismus entspricht den Ergebnissen?",
+    "a": "Neurotizismus hing positiv mit gesundem Essen zusammen.",
+    "b": "Neurotizismus hing negativ mit gesundem und negativ mit ungesundem Essen zusammen.",
+    "c": "Neurotizismus zeigte keinen Zusammenhang mit Ernährung.",
+    "d": "Höherer Neurotizismus hing mit weniger gesundem und mehr ungesundem Essen zusammen.",
+    "richtig": "d",
+    "begruendung": "Neurotizismus zeigte genau die entgegengesetzte Richtung zu Verträglichkeit, Gewissenhaftigkeit und Offenheit. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: In der SoSe-2026-AK wurde „Neurotizismus korreliert negativ mit ungesundem Essen“ angeboten – falsch, die Korrelation war positiv.\n\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Aussage zu Verträglichkeit ist richtig?",
+    "a": "Verträglichkeit hing positiv mit ungesundem Essen zusammen.",
+    "b": "Verträglichkeit hatte keinerlei Zusammenhang mit Ernährung.",
+    "c": "Höhere Verträglichkeit hing mit mehr gesundem und weniger ungesundem Essen zusammen.",
+    "d": "Höhere Verträglichkeit hing ausschließlich mit einem niedrigeren BMI zusammen.",
+    "richtig": "c",
+    "begruendung": "Verträglichkeit gehört gemeinsam mit Gewissenhaftigkeit und Offenheit zum Muster „mehr gesund – weniger ungesund“.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Aussage über Gewissenhaftigkeit trifft zu?",
+    "a": "Höhere Gewissenhaftigkeit hing mit mehr ungesundem Essen zusammen.",
+    "b": "Höhere Gewissenhaftigkeit hing mit mehr gesundem und weniger ungesundem Essen zusammen.",
+    "c": "Gewissenhaftigkeit hing ausschließlich mit Diabetes zusammen.",
+    "d": "Gewissenhaftigkeit zeigte nur bei niedrigem SES Zusammenhänge mit Ernährung.",
+    "richtig": "b",
+    "begruendung": "Gewissenhaftigkeit zeigte dasselbe Grundmuster wie Verträglichkeit und Offenheit.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Persönlichkeitseigenschaft zeigte keinen signifikanten Zusammenhang mit gesundem oder ungesundem Essverhalten?",
+    "a": "Offenheit",
+    "b": "Verträglichkeit",
+    "c": "Neurotizismus",
+    "d": "Extraversion",
+    "richtig": "d",
+    "begruendung": "Extraversion war die Ausnahme unter den Big Five. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: Genau deshalb war in der AK „Extraversion korreliert positiv mit gesundem Essen“ falsch.\n\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Eselsbrücke gibt die zentralen Persönlichkeitsbefunde korrekt wieder?",
+    "a": "ACO ungesund – N gesund – E wichtig",
+    "b": "ACN gesund – O ungesund – E egal",
+    "c": "ACO gesund – N ungesund – E egal",
+    "d": "ACE gesund – N und O egal",
+    "richtig": "c",
+    "begruendung": "A = Agreeableness, C = Conscientiousness, O = Openness → eher gesund. N = Neurotizismus → eher ungesund. E = Extraversion → kein signifikanter Ernährungszusammenhang."
+  },
+  {
+    "frage": "Wie wurde das Ernährungsverhalten hauptsächlich erfasst?",
+    "a": "Durch direkte Beobachtung sämtlicher Mahlzeiten",
+    "b": "Durch Blutuntersuchungen",
+    "c": "Durch Smartphone-EMA",
+    "d": "Durch einen Food Frequency Questionnaire zur Häufigkeit konkreter Lebensmittel",
+    "richtig": "d",
+    "begruendung": "Die Teilnehmenden berichteten, wie häufig sie bestimmte Lebensmittel konsumierten; daraus wurden Faktoren für gesundes und ungesundes Essen gebildet.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Warum fragten die Forschenden nach konkreten Lebensmitteln statt einfach „Ernähren Sie sich gesund?“?",
+    "a": "Um die Persönlichkeit nicht messen zu müssen",
+    "b": "Um Selbstaufwertungsverzerrungen bei der Einschätzung der eigenen Ernährung zu reduzieren",
+    "c": "Um SES nicht statistisch kontrollieren zu müssen",
+    "d": "Um eine experimentelle Manipulation zu erzeugen",
+    "richtig": "b",
+    "begruendung": "Die Forschenden wollten vermeiden, dass Personen ihr eigenes Essverhalten selbst als „gesund“ oder „ungesund“ klassifizieren und sich dabei möglicherweise zu positiv darstellen.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Aussage über gesunde Ernährung und Gesundheit entspricht den Ergebnissen?",
+    "a": "Gesunde Ernährung hing ausschließlich mit Diabetes zusammen.",
+    "b": "Gesunde Ernährung hing mit einem höheren BMI zusammen.",
+    "c": "Mehr gesundes Essen hing mit besserer selbst eingeschätzter Gesundheit und niedrigerem BMI zusammen.",
+    "d": "Es bestanden keinerlei Zusammenhänge zwischen Ernährung und Gesundheitsindikatoren.",
+    "richtig": "c",
+    "begruendung": "Zusätzlich bestand zunächst auch ein Zusammenhang mit geringerer Wahrscheinlichkeit für Typ-II-Diabetes.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Was geschah beim Zusammenhang zwischen ungesundem Essen und BMI, nachdem Alter und Geschlecht kontrolliert wurden?",
+    "a": "Der Zusammenhang wurde deutlich stärker.",
+    "b": "Er blieb unverändert hoch.",
+    "c": "Er wurde positiv und signifikant.",
+    "d": "Er war nicht mehr signifikant; der Zusammenhang mit schlechterer selbst eingeschätzter Gesundheit blieb bestehen.",
+    "richtig": "d",
+    "begruendung": "Vor der Kontrolle hing ungesundes Essen auch mit höherem BMI zusammen; nach Kontrolle von Alter und Geschlecht blieb vor allem die schlechtere subjektive Gesundheit bestehen. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: Immer darauf achten, ob von Zero-Order-Korrelationen oder kontrollierten Zusammenhängen gesprochen wird."
+  },
+  {
+    "frage": "Welche Aussage zur Moderation durch SES ist korrekt?",
+    "a": "SES moderierte sämtliche Persönlichkeit-Ernährungs-Zusammenhänge deutlich.",
+    "b": "Niedriger SES verstärkte grundsätzlich alle Effekte der Persönlichkeit.",
+    "c": "Hoher SES beseitigte sämtliche Persönlichkeitseffekte.",
+    "d": "Insgesamt gab es keine überzeugende Evidenz dafür, dass SES die Zusammenhänge moderierte.",
+    "richtig": "d",
+    "begruendung": "Ein einzelner Neurotizismus×SES-Effekt trat auf, war aber bei Sensitivitätsanalysen nicht robust und könnte aufgrund multipler Tests zufällig signifikant geworden sein. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: Ein signifikanter Einzelbefund ≠ überzeugende Gesamtevidenz."
+  },
+  {
+    "frage": "Warum war der einzelne signifikante Neurotizismus×SES-Effekt mit Vorsicht zu interpretieren?",
+    "a": "Weil Neurotizismus nicht gemessen wurde",
+    "b": "Weil nur zwei Personen untersucht wurden",
+    "c": "Weil viele separate Tests durchgeführt wurden und dadurch das Risiko eines Typ-I-Fehlers anstieg",
+    "d": "Weil SES ausschließlich experimentell manipuliert worden war",
+    "richtig": "c",
+    "begruendung": "Bei vielen statistischen Tests steigt die Wahrscheinlichkeit, dass mindestens ein Ergebnis zufällig signifikant wird. Der Effekt erwies sich außerdem nicht als robust gegenüber anderen SES-Operationalisierungen.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Schlussfolgerung aus Weston et al. (2020) ist am angemessensten?",
+    "a": "Persönlichkeit verursacht eindeutig bestimmtes Ernährungsverhalten.",
+    "b": "Ernährung verursacht eindeutig die Big-Five-Persönlichkeit.",
+    "c": "SES erklärt vollständig den Zusammenhang zwischen Persönlichkeit und Ernährung.",
+    "d": "Bestimmte Persönlichkeitseigenschaften hängen systematisch mit Ernährungsverhalten zusammen; Ernährung könnte ein möglicher Weg zwischen Persönlichkeit und Gesundheit sein.",
+    "richtig": "d",
+    "begruendung": "Die Studie zeigt Assoziationen (statistische Zusammenhänge) und unterstützt die Idee, dass Ernährungsverhalten ein möglicher Mechanismus zwischen Persönlichkeit und Gesundheit sein könnte. Daraus folgt aber kein eindeutiger Kausalnachweis. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: „predict“ im Titel heißt nicht automatisch „kausal verursacht“."
+  },
+  {
+    "frage": "Welche Aussage zur zeitlichen Erhebung in Weston et al. (2020) ist korrekt?",
+    "a": "Persönlichkeit und Ernährung wurden ausschließlich am selben Tag erhoben.",
+    "b": "Persönlichkeit wurde vor der Ernährung experimentell manipuliert.",
+    "c": "Die verwendeten Daten stammten aus unterschiedlichen Erhebungszeitpunkten der Hawaii-Kohorte.",
+    "d": "Sämtliche Variablen wurden bereits im Kindesalter erhoben.",
+    "richtig": "c",
+    "begruendung": "Die Ernährungsdaten stammten aus 1999, die Erwachsenenpersönlichkeit aus 2008, Gesundheitsdaten teilweise aus späteren Erhebungen. Deshalb sollte man aus den Persönlichkeit-Ernährungs-Korrelationen keine einfache Kausalrichtung ableiten. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: Der Titel enthält „predict“, aber Zusammenhang ≠ automatisch kausale Vorhersage."
+  },
+  {
+    "frage": "Warum kontrollierten die Forschenden bei den zentralen Korrelationen unter anderem Alter und Geschlecht?",
+    "a": "Weil Alter und Geschlecht Bestandteile der Big Five sind.",
+    "b": "Weil sich insbesondere Ernährungsverhalten zwischen Alters- bzw. Geschlechtsgruppen unterschied und diese Unterschiede Zusammenhänge mit Persönlichkeit mit erklären könnten.",
+    "c": "Damit aus der Studie ein Experiment wurde.",
+    "d": "Damit SES nicht mehr erhoben werden musste.",
+    "richtig": "b",
+    "begruendung": "Frauen berichteten mehr gesundes und weniger ungesundes Essen; auch das Alter hing mit dem Essverhalten zusammen. Die Persönlichkeit-Ernährungs-Zusammenhänge blieben nach statistischer Kontrolle bestehen.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Aussage zur Beziehung zwischen Ernährung und Gesundheit traf in der Diskussion besonders zu?",
+    "a": "Die Zusammenhänge waren grundsätzlich stärker für Diabetes als für subjektive Gesundheit.",
+    "b": "Objektive und subjektive Gesundheitsmaße zeigten exakt dieselben Zusammenhänge.",
+    "c": "BMI war der mit Abstand stärkste Gesundheitsindikator.",
+    "d": "Die Zusammenhänge waren stärker für die subjektiv eingeschätzte Gesundheit als für objektivere Maße wie BMI und Diabetes.",
+    "richtig": "d",
+    "begruendung": "Die Autor:innen betonen ausdrücklich diesen Unterschied zwischen subjektiver Gesundheit und objektiveren Gesundheitsindikatoren. AFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf\nAK-Falle: „Gesundheit“ ist nicht automatisch ein einziges einheitliches Outcome."
+  },
+  {
+    "frage": "Welche Personengruppe könnte nach Ansicht der Autor:innen besonders von Ernährungsinterventionen profitieren?",
+    "a": "Personen mit hoher Verträglichkeit, Gewissenhaftigkeit und Offenheit sowie niedrigem Neurotizismus",
+    "b": "ausschließlich Personen mit niedrigem SES",
+    "c": "Personen mit niedriger Verträglichkeit, Gewissenhaftigkeit und Offenheit sowie hohem Neurotizismus",
+    "d": "ausschließlich hoch extravertierte Personen",
+    "richtig": "c",
+    "begruendung": "Genau diese Persönlichkeitskonstellation war mit ungünstigerem Essverhalten verbunden. Die Autor:innen leiten daraus eine mögliche Zielgruppe für Ernährungsinterventionen ab. Die Notwendigkeit sollte nach ihren Ergebnissen nicht wesentlich vom SES abhängen.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  },
+  {
+    "frage": "Welche Einschränkung der Generalisierbarkeit (Übertragbarkeit) nennen Weston et al.?",
+    "a": "Die Studie untersuchte ausschließlich Kinder.",
+    "b": "Die Ernährung wurde ausschließlich im Labor manipuliert.",
+    "c": "Die spezielle Hawaii-Stichprobe, der begrenzte Altersbereich und kulturell unterschiedliche Lebensmittel können die Übertragbarkeit einschränken.",
+    "d": "Es wurden keine Persönlichkeitsmerkmale erhoben.",
+    "richtig": "c",
+    "begruendung": "Zusätzlich war die Ernährung trotz konkreter Lebensmittelabfrage ein Selbstbericht und damit potenziell verzerrungsanfällig.\n\nAFG (K1:K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf"
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

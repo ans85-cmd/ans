@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* Tabellen Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            color: var(--text-muted);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE5_index.html" class="drawer-link">Zurück zur Startseite</a>
+                <a href="LE5_SB1K4_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE5_index.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung -->
+        <div class="content-body">
+            <h1>LE – Persönlichkeit und Gesundheit</h1>
+
+            <div class="callout-box">
+                <p>📌 <b>AK-Gewichtung zuerst:</b> In der SoSe-2026-AK wurde dispositionaler Optimismus (über Situationen hinweg relativ stabile positive Ergebniserwartung) direkt als Fallaufgabe geprüft[cite: 2]. Dabei musste man nicht nur die Definition kennen, sondern Wirkungen und Bewältigungsstrategien anwenden: weniger Schmerz, weniger Einsamkeit, größeres soziales Netzwerk, bessere Akzeptanz sowie bei unkontrollierbaren Situationen eher emotionsorientierte statt problemorientierte Bewältigung[cite: 2]. <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>[cite: 2]</p>
+                <p style="margin-top: 8px;">Direkt danach kam Weston et al. (2020) als eigene Aufgabe[cite: 2]. Diese Studie gehört zur LE, ist aber nicht Bestandteil des jetzt hochgeladenen Kapitels[cite: 2]. Die würde ich deshalb getrennt behandeln[cite: 2]. <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>[cite: 2]</p>
+            </div>
+
+            <h2>1. Grundidee: Wie kann Persönlichkeit Gesundheit beeinflussen?</h2>
+            <p>Persönlichkeit = relativ stabiles und einzigartiges Muster von Gedanken, Gefühlen und Verhalten[cite: 2]. Persönlichkeit hängt sowohl mit psychischem Wohlbefinden als auch mit Morbidität (Krankheitshäufigkeit) und Mortalität (Sterblichkeit) zusammen[cite: 2]. Entscheidend ist aber: Es gibt nicht nur einen Wirkweg[cite: 2]. Mehrere Mechanismen können gleichzeitig zusammenspielen[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+            
+            <p>Die zentralen Wirkwege sind:</p>
+            <ul>
+                <li><strong>Kognitive Prozesse (Denken/Bewerten):</strong> Persönlichkeit beeinflusst, wie Situationen bewertet werden[cite: 2]. Eine hohe internale Kontrollüberzeugung (Überzeugung, selbst Einfluss nehmen zu können) geht z. B. mit höher eingeschätzter Kontrollierbarkeit und besseren Bewältigungsmöglichkeiten einher → weniger Stress[cite: 2]. Neurotizismus hängt dagegen stärker mit Wunschdenken und weniger kognitiver Umstrukturierung (eine Situation gedanklich anders bewerten) zusammen → mehr Stress[cite: 2].</li>
+                <li><strong>Affektive Prozesse (emotionale Prozesse):</strong> Negative Affektivität (Neigung zu negativen Gefühlen) hängt mit Ängstlichkeit, Niedergeschlagenheit, Nervosität usw. zusammen[cite: 2]. Negative emotionale Zustände können kardiovaskuläre (Herz-Kreislauf-) und immunologische Prozesse ungünstig beeinflussen; positive Affektivität kann günstig wirken[cite: 2].</li>
+                <li><strong>Verhalten:</strong> Persönlichkeit beeinflusst Gesundheits- und Risikoverhalten[cite: 2]. Hohe Gewissenhaftigkeit → weniger Alkohol-/Drogenkonsum, ungesunde Ernährung und riskantes Sexualverhalten[cite: 2]. Hohes Sensation Seeking (Suche nach intensiven/reizvollen Erfahrungen) → mehr riskantes Verhalten[cite: 2].</li>
+                <li><strong>Bewältigung:</strong> Persönlichkeit beeinflusst Coping (Umgang mit Belastungen)[cite: 2]. Coping kann als Mediator (vermittelnder Zwischenschritt) zwischen Persönlichkeit und Gesundheit wirken[cite: 2]. Beispiel: Persönlichkeit → bestimmte Bewältigungsstrategie → Gesundheit[cite: 2].</li>
+                <li><strong>Moderation:</strong> Persönlichkeit kann auch ein Moderator (verändert Stärke/Richtung eines Zusammenhangs) sein[cite: 2]. Beispiel: Hohe Selbstwirksamkeit schwächt den negativen Zusammenhang zwischen Stress und Gemüsekonsum ab[cite: 2].</li>
+                <li><strong>Soziale Prozesse:</strong> Optimismus und emotionale Intelligenz hängen mit größeren sozialen Netzwerken und mehr wahrgenommener Unterstützung zusammen → das kann Gesundheit schützen[cite: 2].</li>
+            </ul>
+
+            <p><strong>Sehr wichtig: Persönlichkeit muss nicht immer die Ursache sein[cite: 2].</strong></p>
+            <ul>
+                <li><strong>Umgekehrte Wirkrichtung:</strong> Krankheit kann Persönlichkeit verändern, z. B. Alzheimer oder depressive Symptome[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Gemeinsame genetische Prädisposition (genetische Veranlagung):</strong> Persönlichkeit und Krankheit können beide durch dieselben genetischen/biologischen Faktoren beeinflusst werden, ohne dass Persönlichkeit die Krankheit verursacht[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+            </ul>
+
+            <div class="callout-box">
+                <p>📌 <strong>Merksatz:</strong> Persönlichkeit → Denken, Gefühle, Verhalten, Soziales → Gesundheit[cite: 2].<br>Aber auch: Krankheit → Persönlichkeit oder Gene → beides[cite: 2].</p>
+            </div>
+
+            <h2>2. Studiendesigns – wichtig für die Frage „Ist Persönlichkeit wirklich Ursache?“</h2>
+            <p>Das ist aus meiner Sicht ein sehr prüfungsrelevanter Block, weil das Kapitel ausdrücklich verlangt, Studien kritisch beurteilen zu können[cite: 2]. Alle beschriebenen Designs sind Beobachtungsstudien (keine experimentelle Manipulation)[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Design</th>
+                        <th>Wann Persönlichkeit gemessen?</th>
+                        <th>Aussagekraft</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Prospektive Kohortenstudie</strong></td>
+                        <td>bei zunächst gesunden Personen, Krankheit erst Jahre später</td>
+                        <td>beste Qualität / stärkste Kausalaussage[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quasi-prospektiv</strong></td>
+                        <td>kurz vor Diagnose, meist bei Verdacht/Risikopersonen</td>
+                        <td>eingeschränkt[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fall-Kontroll / Querschnitt</strong></td>
+                        <td>erst nach Diagnose</td>
+                        <td>schwächste Kausalaussage[cite: 2]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Prospektiv:</strong> Persönlichkeit wird vor Entstehung der Krankheit gemessen[cite: 2]. Deshalb ist die zeitliche Reihenfolge klar[cite: 2]. Nachteile: teuer, langwierig und anfällig für Dropout (Studienabbruch von Teilnehmenden)[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Quasi-prospektiv:</strong> Persönlichkeit wird kurz vor der Diagnose gemessen[cite: 2]. Vorteil: schnell und kostengünstig[cite: 2]. Problem: Die Person weiß möglicherweise bereits von einem Krankheitsverdacht → das könnte ihre Persönlichkeit bzw. ihr Erleben schon beeinflussen[cite: 2]. Außerdem werden oft Hochrisikopersonen untersucht[cite: 2]. Keine direkte Kausalaussage[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Fall-Kontroll / Querschnitt:</strong> Persönlichkeit wird nach der Diagnose gemessen[cite: 2]. Dann weiß man nicht mehr: Persönlichkeit → Krankheit? oder Krankheit → Persönlichkeit?[cite: 2] Bei Querschnittstudien kommt zusätzlich hinzu, dass Erkrankungen häufig per Selbstauskunft erhoben werden, was weniger valide (zuverlässig/gültig) sein kann[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <div class="callout-box">
+                <p>📌 <strong>AK-Merker:</strong> Je früher die Persönlichkeit gemessen wurde, desto besser kann man die Richtung beurteilen[cite: 2].</p>
+            </div>
+
+            <h2>3. Typ A-Verhaltensmuster und KHK</h2>
+            <p>Typ A ist gekennzeichnet durch Zeitdruck, Ruhelosigkeit, Ehrgeiz, starke Tatkraft, Aggressivität, Feindseligkeit, Konkurrenzdenken, Leistungsdruck und Ungeduld[cite: 2]. Typ B = weitgehende Abwesenheit dieser Merkmale, entspannter und stärker auf außerberufliche Aktivitäten orientiert[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p>Frühe Studien fanden bei Typ A ungefähr ein erhöhtes Risiko für KHK (koronare Herzkrankheit; Erkrankung der Herzkranzgefäße)[cite: 2].<br>
+            Aber: Spätere Forschung zeigte, dass nicht das gesamte Typ-A-Muster entscheidend ist, sondern vor allem <strong>Feindseligkeit</strong>[cite: 2]. Und selbst deren Effekt ist klein[cite: 2]. Besonders die behaviorale Komponente (sichtbares Verhalten) wie Ärgerausdruck und Aggression scheint relevanter zu sein als rein zynische Gedanken[cite: 2]. Effekte waren stärker bei Männern[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p>Feindseligkeit kann über mehrere Wege wirken[cite: 2]:</p>
+            <ul>
+                <li><strong>intern:</strong> stärkere Stressreaktionen → mehr kardiovaskuläre Belastung[cite: 2].</li>
+                <li><strong>extern:</strong> schlechtere soziale Beziehungen → weniger soziale Unterstützung; zusätzlich mehr Rauchen/Alkohol[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+            </ul>
+
+            <div class="callout-box">
+                <p>⚠️ <strong>Wichtig nicht lernen:</strong> „Typ A verursacht Herzinfarkt.“[cite: 2]<br><strong>Lernen:</strong> Typ A insgesamt → Evidenz später schwächer[cite: 2]. Feindseligkeit → relevantere Teilkomponente, aber nur kleiner Risikofaktor[cite: 2].</p>
+            </div>
+
+            <h2>4. Typ C-Persönlichkeit und Krebs</h2>
+            <p>Typ C wurde als „cancer-prone personality (angeblich krebsanfällige Persönlichkeit)“ vorgeschlagen[cite: 2].<br>
+            <strong>Merkmale:</strong> kooperativ + geduldig + wenig durchsetzungsfähig + unterdrückt negative Gefühle, besonders Ärger + fügt sich Autoritäten[cite: 2].<br>
+            Typ C wurde als Gegenpol zu Typ A verstanden; Typ B liegt dazwischen[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Das Entscheidende ist aber die Evidenz[cite: 2]:</strong></p>
+            <ul>
+                <li>Frühe quasi-prospektive Studien zeigten teilweise Zusammenhänge[cite: 2].</li>
+                <li>Hochwertige prospektive Studien konnten jedoch keinen überzeugenden kausalen Zusammenhang zwischen Typ C und Krebsentstehung zeigen[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+            </ul>
+
+            <p>Auch für den Krankheitsverlauf gibt es keine überzeugende Evidenz[cite: 2]. Hoffnungslosigkeit/Hilflosigkeit zeigt höchstens einen schwachen Zusammenhang mit schlechterem Überleben[cite: 2]. Der bekannte „fighting spirit (kämpferische Haltung)“ konnte nicht überzeugend repliziert werden[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <div class="callout-box">
+                <p>⚠️ <strong>AK-Falle:</strong> Typ C = Merkmale kennen[cite: 2]. Aber nicht behaupten, Typ C sei nachweislich eine Ursache von Krebs[cite: 2]. Das ist vermutlich genau die Art Aussage, die der Prof umdrehen könnte[cite: 2].</p>
+            </div>
+
+            <h2>5. Dispositionaler Optimismus – SEHR HOCH priorisieren</h2>
+            <p>Dispositionaler Optimismus = generalisierte positive Ergebniserwartung: Man erwartet grundsätzlich, dass sich Dinge eher gut entwickeln – unabhängig davon, ob durch eigenes Handeln, Glück oder andere Ursachen[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p>Optimismus ist ein protektiver Faktor (Schutzfaktor)[cite: 2].<br>
+            <strong>Psychisch</strong> hängt er zusammen mit: weniger Leidensdruck, Sorgen, Angst, Depression, Einsamkeit und Stress sowie mehr Lebensqualität, positiver Stimmung, Anpassung und Selbstwert[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Körperlich</strong> sind die Zusammenhänge etwas schwächer, aber Optimismus hängt u. a. mit weniger Schmerzen/Erschöpfung, besserer subjektiver Gesundheit, längerer Lebensdauer und günstigeren kardiovaskulären Ergebnissen zusammen[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Wirkmechanismen von Optimismus:</strong></p>
+            <ul>
+                <li><strong>Kognition:</strong> Situationen erscheinen kontrollierbarer, eigene Bewältigungsmöglichkeiten günstiger → weniger Stress[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Coping:</strong> Optimist:innen bewältigen flexibel und situationsangemessen[cite: 2].
+                    <ul>
+                        <li>Kontrollierbare Situation → eher problemorientiert[cite: 2].</li>
+                        <li>Unkontrollierbare Situation → eher emotionsorientiert[cite: 2].</li>
+                    </ul>
+                    Außerdem mehr aktive Problemlösung, positive Neubewertung, Akzeptanz und Suche nach Unterstützung; weniger Verleugnung, Wunschdenken und Disengagement (mentaler Rückzug)[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]
+                </li>
+                <li><strong>Verhalten:</strong> mehr Bewegung/gesunde Ernährung, weniger Rauchen/Alkohol[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Soziales:</strong> größeres Netzwerk, höhere soziale Akzeptanz sowie mehr wahrgenommene und erhaltene Unterstützung[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Physiologisch:</strong> meistens geringere Stresshormonausschüttung, geringere kardiovaskuläre Stressreaktion und bessere Immunfunktion[cite: 2]. Aber: Bei komplexen Situationen mit Zielkonflikten kann Optimismus kurzfristig sogar höhere physiologische Kosten verursachen, weil Optimist:innen stärker engagiert bleiben[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+            </ul>
+
+            <div class="callout-box">
+                <p>📌 <strong>Genau so prüfte es die AK:</strong> Bei einer unkontrollierbaren Verletzung war „vorwiegend problemorientiertes Coping“ falsch[cite: 2]. Genau diese Kontrollierbarkeit musst du bei Fällen beachten[cite: 2]. <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>[cite: 2]</p>
+            </div>
+
+            <h2>6. Negative Affektivität / Neurotizismus</h2>
+            <p>Negative Affektivität bzw. Neurotizismus = generelle Neigung zu Ängstlichkeit, Niedergeschlagenheit, Nervosität, Unsicherheit und Besorgtheit[cite: 2]. Betroffene fühlen sich häufiger gestresst und unzufrieden[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p>Psychisch besteht eine erhöhte Anfälligkeit insbesondere für Angststörungen und Depressionen, außerdem u. a. Essstörungen und PTBS[cite: 2]. Bei bestehender Depression kann hoher Neurotizismus besonders zusammen mit chronischem Stress mit schwererer Symptomatik verbunden sein[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <div class="callout-box">
+                <p>⚠️ <strong>Ganz wichtige methodische Falle:</strong> Wenn Neurotizismus über negative Gefühle definiert wird und gleichzeitig Gesundheit über selbstberichtete negative Symptome gemessen wird, überlappen Prädiktor (Vorhersagevariable) und Kriterium (zu erklärendes Ergebnis)[cite: 2]. Dann kann der Zusammenhang künstlich stärker wirken[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+            </div>
+
+            <p>Trotzdem gibt es auch prospektive Hinweise auf Zusammenhänge mit späterer Morbidität und Mortalität[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+
+            <p><strong>Wirkmechanismen:</strong></p>
+            <ul>
+                <li><strong>Kognition:</strong> Situationen werden eher als bedrohlich bewertet[cite: 2].</li>
+                <li><strong>Coping:</strong> mehr Vermeidung, Wunschdenken, Rückzug, Verleugnung, negative Emotionsfokussierung und Substanzgebrauch; weniger Problemlösung, positive Neubewertung und Akzeptanz[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Verhalten:</strong> mehr Rauchen, Alkohol und körperliche Inaktivität[cite: 2]. Diese Verhaltensweisen vermitteln teilweise den Zusammenhang mit Gesundheit/Mortalität[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+                <li><strong>Physiologische Wirkung:</strong> Hier ist die Evidenz überraschend schwach[cite: 2]. Es gibt keine klaren Belege dafür, dass Neurotizismus allgemein mit stärkerer physiologischer Stressreaktivität oder Entzündungsprozessen zusammenhängt[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</li>
+            </ul>
+
+            <div class="callout-box">
+                <p>📌 Das ist eine schöne AK-Falle, weil „Neurotizismus → mehr Stress → sicher höhere körperliche Stressreaktion“ plausibel klingt, aber vom Studienbrief so nicht gestützt wird[cite: 2].</p>
+            </div>
+
+            <h2>Das musst du für 75 %+ wirklich bombenfest können</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thema</th>
+                        <th>Was sitzen muss</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Wirkwege Persönlichkeit → Gesundheit</strong></td>
+                        <td>kognitiv, affektiv, Verhalten, sozial + umgekehrte Wirkrichtung + gemeinsame genetische Prädisposition[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Studiendesigns</strong></td>
+                        <td>prospektiv > quasi-prospektiv > Fall-Kontroll/Querschnitt bezüglich Kausalaussage[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Typ A</strong></td>
+                        <td>Merkmale; Feindseligkeit relevanter als Gesamt-Typ-A; Effekt klein[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Typ C</strong></td>
+                        <td>Merkmale kennen; keine überzeugende Evidenz, dass Typ C Krebs verursacht[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimismus</strong></td>
+                        <td>Definition + psychische/körperliche Wirkungen + flexibles Coping je nach Kontrollierbarkeit + soziale Unterstützung[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neurotizismus</strong></td>
+                        <td>negative Affektivität, mehr maladaptives Coping/Risikoverhalten; methodische Überlappung bei Selbstberichten; physiologische Evidenz dünn[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mediator vs. Moderator</strong></td>
+                        <td>Mediator = erklärt wie ein Effekt zustande kommt; Moderator = verändert wann/wie stark ein Zusammenhang ist[cite: 2]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Mein Prioritätsranking für die Klausur</h2>
+            <ul>
+                <li>🔥 <strong>Sehr hoch:</strong> Optimismus, Studiendesigns/Kausalität, Typ A vs. Feindseligkeit, Typ C + fehlende Evidenz, Neurotizismus-Wirkwege[cite: 2].</li>
+                <li><strong>Hoch:</strong> die sechs allgemeinen Wirkmodelle, Mediator/Moderator, soziale Prozesse[cite: 2].</li>
+                <li><strong>Niedriger:</strong> exakte Risikoquoten, exakte Prävalenzen von KHK/Krebs, Autorennamen/Jahreszahlen und einzelne Erkrankungslisten[cite: 2].</li>
+            </ul>
+
+            <div class="conclusion-box">
+                <h3>Der rote Faden</h3>
+                <p>Und der wichtigste Satz für dieses Kapitel ist eigentlich: <strong>Persönlichkeit kann Gesundheit beeinflussen – aber ein Zusammenhang bedeutet noch lange nicht, dass Persönlichkeit die Krankheit verursacht.</strong> Das ist der rote Faden durch Wirkmechanismen, Studiendesigns, Typ A und vor allem Typ C[cite: 2]. <a href="SB1_K4-Persönlichkeit.pdf" target="_blank" class="pdf-link">📄 SB1_K4-Persönlichkeit.pdf öffnen</a>[cite: 2]</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

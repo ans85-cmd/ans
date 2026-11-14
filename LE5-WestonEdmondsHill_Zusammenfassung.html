@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* Tabellen Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            color: var(--text-muted);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE5_index.html" class="drawer-link">Zurück zur Startseite</a>
+                <a href="LE5-WestonEdmondsHill_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE5_index.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung -->
+    <div class="content-body">
+        <h1>Weston, Edmonds & Hill (2020)</h1>
+        <p style="font-style: italic; margin-bottom: 20px;">„Personality Traits Predict Dietary Habits in Middle-to-Older Adults“ (Persönlichkeitseigenschaften als Prädiktoren für Ernährungsgewohnheiten im mittleren bis höheren Erwachsenenalter)</p>
+
+        <h2>1. Fragestellung</h2>
+        <p>Die Studie untersucht, wie die Big Five-Persönlichkeitsmerkmale mit Ernährungsverhalten zusammenhängen[cite: 3]. Zusätzlich wurde geprüft[cite: 3]:</p>
+        <ul>
+            <li>ob gesunde bzw. ungesunde Ernährung mit Gesundheitsindikatoren zusammenhängt[cite: 3],</li>
+            <li>und ob der SES (sozioökonomischer Status; z. B. Einkommen und Bildung) die Zusammenhänge zwischen Persönlichkeit und Ernährung moderiert (verändert, wie stark ein Zusammenhang ist)[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</li>
+        </ul>
+        <p>Grundidee: <strong>Persönlichkeit → Ernährungsverhalten → Gesundheit</strong>[cite: 3]. Ernährung könnte also ein Wirkmechanismus (vermittelnder Weg) sein, über den Persönlichkeit langfristig Gesundheit beeinflusst[cite: 3].</p>
+
+        <h2>2. Stichprobe</h2>
+        <ul>
+            <li>Untersucht wurden <strong>665 Personen</strong> aus der Hawaii Personality and Health Cohort[cite: 3].</li>
+            <li>Etwa 48 % Frauen[cite: 3].</li>
+            <li>Durchschnittsalter bei der Ernährungserhebung: ca. 44 Jahre[cite: 3].</li>
+            <li>Ursprünglich stammten die Teilnehmenden aus einer großen Kohorte, die bereits als Kinder untersucht worden war[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</li>
+        </ul>
+        <div class="callout-box">
+            <p>📌 <strong>Für die Klausur reicht:</strong> $n = 665$, mittleres bis höheres Erwachsenenalter, Hawaii-Kohorte[cite: 3].</p>
+        </div>
+
+        <h2>3. Was wurde gemessen?</h2>
+        <ul>
+            <li><strong>Persönlichkeit:</strong> Die Big Five (Extraversion, Verträglichkeit, Gewissenhaftigkeit, Neurotizismus, Offenheit) erfasst mit einem 120-Item-Instrument[cite: 3].</li>
+            <li><strong>Ernährung:</strong> Food Frequency Questionnaire (Fragebogen zur Häufigkeit bestimmter Lebensmittel)[cite: 3]. Daraus wurden zwei Faktoren gebildet:
+                <ul>
+                    <li><em>Ungesunde Lebensmittel:</em> z. B. Hamburger, Wurst, Pommes, Chips, Donuts, Pizza, kohlenhydratreiche/frittierte Lebensmittel[cite: 3].</li>
+                    <li><em>Gesunde Lebensmittel:</em> z. B. Gemüse, Vollkornprodukte, fettarme Milch, Huhn, Fisch, Tofu[cite: 3].</li>
+                </ul>
+            </li>
+            <li><strong>Gesundheit:</strong> Self-rated health (selbst eingeschätzte Gesundheit), BMI, Typ-II-Diabetes[cite: 3].</li>
+            <li><strong>SES:</strong> Gebildet aus Einkommen + Bildungsniveau[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</li>
+        </ul>
+
+        <h2>4. Die wichtigsten Ergebnisse – SEHR klausurrelevant</h2>
+        <p><strong>Gesünderes Essverhalten:</strong> Mehr gesunde Lebensmittel waren verbunden mit Verträglichkeit ↑, Gewissenhaftigkeit ↑, Offenheit ↑ und Neurotizismus ↓[cite: 3].</p>
+        <p><strong>Ungesünderes Essverhalten:</strong> Mehr ungesunde Lebensmittel waren verbunden mit Verträglichkeit ↓, Gewissenhaftigkeit ↓, Offenheit ↓ und Neurotizismus ↑[cite: 3].</p>
+        <p>Diese Zusammenhänge blieben auch bestehen, nachdem Alter und Geschlecht kontrolliert wurden[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+
+        <div class="callout-box">
+            <p>⚠️ <strong>Extraversion-AK-Falle:</strong> Extraversion zeigte <em>keinen</em> bedeutsamen Zusammenhang mit gesundem oder ungesundem Essen[cite: 3].</p>
+        </div>
+
+        <h2>5. Super-Merker für die Big Five</h2>
+        <p>Du kannst dir merken:</p>
+        <ul>
+            <li><strong>Gesundes Essen:</strong> A – C – O hoch, N niedrig (A = Verträglichkeit, C = Gewissenhaftigkeit, O = Offenheit, N = Neurotizismus)[cite: 3].</li>
+            <li>Oder noch kürzer: <strong>„ACO gesund – N ungesund.“</strong>[cite: 3]</li>
+            <li>Extraversion bleibt außen vor[cite: 3].</li>
+        </ul>
+
+        <h2>6. Ernährung und Gesundheit</h2>
+        <p>Mehr gesunde Lebensmittel waren verbunden mit[cite: 3]:</p>
+        <ul>
+            <li>besserer selbst eingeschätzter Gesundheit[cite: 3],</li>
+            <li>niedrigerem BMI[cite: 3],</li>
+            <li>geringerer Wahrscheinlichkeit für Typ-II-Diabetes[cite: 3].</li>
+        </ul>
+        <p>Mehr ungesunde Lebensmittel waren zunächst verbunden mit schlechterer selbst eingeschätzter Gesundheit und höherem BMI[cite: 3]. Nach Kontrolle von Alter und Geschlecht blieb bei ungesundem Essen aber vor allem der Zusammenhang mit schlechterer selbst eingeschätzter Gesundheit bestehen[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+        <p><strong>Wichtig:</strong> Die Zusammenhänge waren insgesamt stärker für subjektive Gesundheit als für objektivere Maße wie BMI oder Diabetes[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+
+        <h2>7. SES als Moderator</h2>
+        <p>Die Autor:innen wollten wissen: Wirkt Persönlichkeit bei Menschen mit hohem oder niedrigem SES unterschiedlich stark auf Ernährung?[cite: 3] Es gab zunächst einen signifikanten Effekt: Bei hohem SES hing Neurotizismus stärker mit ungesundem Essen zusammen[cite: 3]. ABER durch viele Tests steigt das Risiko eines $\alpha$-Fehlers (Typ-I-Fehler), und bei anderen Operationalisierungen des SES verschwand der Effekt wieder[cite: 3]. Deshalb lautet die Schlussfolgerung: <strong>SES moderiert den Zusammenhang zwischen Persönlichkeit und Ernährung insgesamt nicht überzeugend</strong>[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+
+        <h2>8. Geschlechts- und Alterseffekte</h2>
+        <ul>
+            <li><strong>Frauen</strong> berichteten mehr gesundes und weniger ungesundes Essen[cite: 3].</li>
+            <li><strong>Ältere Personen</strong> zeigten ebenfalls mehr gesundes und weniger ungesundes Essen[cite: 3].</li>
+        </ul>
+        <p>Deshalb wurden Alter und Geschlecht bei den zentralen Analysen statistisch kontrolliert[cite: 3]. Für die Klausur ist vor allem wichtig: Die Persönlichkeit-Ernährungs-Zusammenhänge blieben nach dieser Kontrolle bestehen[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+
+        <h2>9. Methodische Besonderheit & Grenzen</h2>
+        <p><strong>Methodik:</strong> Es wurde nach Häufigkeit konkreter Lebensmittel gefragt (zur Reduktion von Selbstaufwertungsverzerrungen), allerdings blieb es ein Selbstbericht (Erinnerungs- und Antwortverzerrungen möglich)[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+        <p><strong>Limitationen:</strong> Spezielle Hawaii-Stichprobe (eingeschränkte Generalisierbarkeit), relativ enger Altersbereich, kulturelle Unterschiede in verfügbaren Lebensmitteln, SES-Moderation sollte repliziert werden[cite: 3]. <a href="AFG (K1_K4) Weston, S. J., Edmonds, G. W. & Hill, P. L. (2020). Personality traits predict dietary habits in middle-to-older adults. Psychology, Health & Medicine.pdf" target="_blank" class="pdf-link">📄 Weston et al. (2020) öffnen</a>[cite: 3]</p>
+
+        <div class="conclusion-box">
+            <h3>Das muss für die AK sitzen</h3>
+            <p>
+            • <strong>Gesundes Essen:</strong> A ↑ C ↑ O ↑ N ↓<br>
+            • <strong>Ungesundes Essen:</strong> A ↓ C ↓ O ↓ N ↑<br>
+            • <strong>Extraversion:</strong> kein relevanter Zusammenhang[cite: 3].<br>
+            • <strong>SES:</strong> insgesamt keine überzeugende Moderation[cite: 3].<br>
+            • <strong>Gesunde Ernährung:</strong> bessere subjektive Gesundheit + niedrigerer BMI + Zusammenhang mit weniger Typ-II-Diabetes[cite: 3].<br>
+            • <strong>Designlogik:</strong> Persönlichkeit und Ernährung sind assoziiert – daraus folgt nicht automatisch, dass Persönlichkeit Ernährung kausal verursacht[cite: 3].
+            </p>
+        </div>
+    </div>
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

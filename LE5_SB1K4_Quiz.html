@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz - LE5</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 5</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Was versteht der Studienbrief unter Persönlichkeit?",
+    "a": "Ausschließlich angeborene Eigenschaften eines Menschen",
+    "b": "Kurzfristige emotionale Reaktionen auf bestimmte Situationen",
+    "c": "Ein relativ stabiles und einzigartiges Muster von Gedanken, Gefühlen und Verhalten",
+    "d": "Ausschließlich beobachtbares Verhalten",
+    "richtig": "c",
+    "begruendung": "Persönlichkeit umfasst Gedanken, Gefühle und Verhalten und beeinflusst die Anpassung an die Umwelt. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Persönlichkeit ist relativ stabil, aber nicht unveränderlich."
+  },
+  {
+    "frage": "Welche Aussage zu den Wirkwegen zwischen Persönlichkeit und Gesundheit ist korrekt?",
+    "a": "Persönlichkeit wirkt ausschließlich über physiologische Prozesse.",
+    "b": "Mehrere Wirkwege können gleichzeitig miteinander interagieren.",
+    "c": "Soziale Prozesse spielen keine Rolle.",
+    "d": "Jeder Persönlichkeitseigenschaft kann genau ein Wirkmechanismus zugeordnet werden.",
+    "richtig": "b",
+    "begruendung": "Kognitive, affektive, behaviorale, soziale und physiologische Prozesse können miteinander zusammenspielen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Die Modelle schließen sich nicht gegenseitig aus."
+  },
+  {
+    "frage": "Eine Person mit hoher internaler Kontrollüberzeugung hält eine belastende Situation eher für kontrollierbar und schätzt ihre Bewältigungsmöglichkeiten günstig ein. Welcher Wirkweg steht hier im Vordergrund?",
+    "a": "Genetischer Wirkweg",
+    "b": "Sozialer Wirkweg",
+    "c": "Affektiver Wirkweg",
+    "d": "Kognitiver Wirkweg",
+    "richtig": "d",
+    "begruendung": "Entscheidend sind hier Bewertungen und Einschätzungen. Diese können wiederum das Stresserleben beeinflussen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: „Stress“ im Ergebnis macht daraus noch keinen affektiven Mechanismus. Entscheidend ist der vermittelnde Prozess."
+  },
+  {
+    "frage": "Welches Beispiel beschreibt einen affektiven Wirkmechanismus?",
+    "a": "Negative Affektivität geht mit häufigeren negativen Gefühlen einher, die körperliche Prozesse ungünstig beeinflussen können.",
+    "b": "Gewissenhaftigkeit führt zu weniger Alkoholkonsum.",
+    "c": "Optimismus führt zu einem größeren sozialen Netzwerk.",
+    "d": "Eine Erkrankung verändert nachträglich die Persönlichkeit.",
+    "richtig": "a",
+    "begruendung": "Affektive Prozesse betreffen das Erleben und die Regulation von Emotionen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Verhalten, soziale Beziehungen und Emotionen sind verschiedene Wirkwege."
+  },
+  {
+    "frage": "Welche Zuordnung entspricht dem Studienbrief?",
+    "a": "Gewissenhaftigkeit → mehr riskante Sexualpraktiken",
+    "b": "Sensation Seeking → weniger Risikoverhalten",
+    "c": "Gewissenhaftigkeit → weniger Risikoverhalten",
+    "d": "Sensation Seeking → grundsätzlich gesundheitsförderliches Verhalten",
+    "richtig": "c",
+    "begruendung": "Hohe Gewissenhaftigkeit hängt mit weniger Alkohol-/Drogenkonsum und anderem Risikoverhalten zusammen. Sensation Seeking (Suche nach starken Reizen) dagegen mit mehr riskantem Verhalten. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Die Richtung nicht vertauschen."
+  },
+  {
+    "frage": "Aggressives Verhalten führt dazu, dass andere Menschen weniger Unterstützung anbieten. Persönlichkeit beeinflusst dadurch indirekt die Gesundheit. Welcher Mechanismus liegt vor?",
+    "a": "Ausschließlich genetischer Mechanismus",
+    "b": "Sozialer Mechanismus über veränderte soziale Beziehungen",
+    "c": "Ausschließlich physiologischer Mechanismus",
+    "d": "Rückwirkung von Krankheit auf Persönlichkeit",
+    "richtig": "b",
+    "begruendung": "Verhalten beeinflusst die soziale Umwelt → weniger Unterstützung → möglicher Einfluss auf Gesundheit. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Der erste Schritt ist Verhalten, der gesundheitliche Effekt läuft hier aber über soziale Unterstützung."
+  },
+  {
+    "frage": "Was bedeutet es, wenn Coping den Zusammenhang zwischen Persönlichkeit und Gesundheit mediiert?",
+    "a": "Coping verhindert jeden Einfluss der Persönlichkeit.",
+    "b": "Coping verstärkt grundsätzlich jeden Zusammenhang.",
+    "c": "Persönlichkeit und Gesundheit sind unabhängig voneinander.",
+    "d": "Persönlichkeit beeinflusst das Coping, welches wiederum die Gesundheit beeinflusst.",
+    "richtig": "d",
+    "begruendung": "Ein Mediator (vermittelnder Zwischenschritt) erklärt, wie ein Zusammenhang zustande kommt. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Mediator ≠ Moderator."
+  },
+  {
+    "frage": "Selbstwirksamkeit verändert, wie stark Stress mit ungesundem Ernährungsverhalten zusammenhängt. Welche Rolle übernimmt die Selbstwirksamkeit?",
+    "a": "Moderator",
+    "b": "Mediator",
+    "c": "Outcome",
+    "d": "Confounder",
+    "richtig": "a",
+    "begruendung": "Ein Moderator (Einflussfaktor auf Stärke/Richtung eines Zusammenhangs) verändert, wie stark bzw. unter welchen Bedingungen zwei Variablen zusammenhängen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Mediator = wie/warum, Moderator = wann/wie stark."
+  },
+  {
+    "frage": "Welche Aussage beschreibt die umgekehrte Wirkrichtung korrekt?",
+    "a": "Persönlichkeit verursacht grundsätzlich jede spätere Erkrankung.",
+    "b": "Gene beeinflussen ausschließlich Persönlichkeit.",
+    "c": "Erkrankungen können Veränderungen von Persönlichkeit, Erleben und Verhalten hervorrufen.",
+    "d": "Persönlichkeit bleibt auch bei schweren Erkrankungen grundsätzlich unverändert.",
+    "richtig": "c",
+    "begruendung": "Beispielsweise können Alzheimer oder depressive Symptome Veränderungen der Persönlichkeit hervorrufen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Ein Zusammenhang Persönlichkeit ↔ Krankheit sagt noch nichts über die Richtung aus."
+  },
+  {
+    "frage": "Was nimmt das Constitutional-Predisposition-Modell (Modell gemeinsamer genetischer Veranlagung) an?",
+    "a": "Persönlichkeit verursacht genetische Veränderungen.",
+    "b": "Krankheit verursacht genetische Persönlichkeitseigenschaften.",
+    "c": "Persönlichkeit und Krankheit verursachen sich gegenseitig.",
+    "d": "Ein gemeinsamer genetischer Faktor kann sowohl Persönlichkeit als auch Krankheitsprozesse beeinflussen.",
+    "richtig": "d",
+    "begruendung": "Persönlichkeit und Krankheit können gemeinsame biologische/genetische Ursachen haben, ohne sich gegenseitig direkt zu verursachen.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welches Studiendesign besitzt laut Studienbrief die höchste Qualität zur Untersuchung eines möglichen kausalen Einflusses von Persönlichkeit auf Krankheit?",
+    "a": "Querschnittstudie",
+    "b": "Fall-Kontroll-Studie",
+    "c": "Prospektive Kohortenstudie",
+    "d": "Quasi-prospektive Studie",
+    "richtig": "c",
+    "begruendung": "Die Persönlichkeit wird bei zunächst gesunden Personen erfasst und Krankheit/Mortalität erst später erhoben. Dadurch ist die zeitliche Reihenfolge klar. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Prospektiv ist nicht automatisch ein Experiment – auch das bleibt eine Beobachtungsstudie."
+  },
+  {
+    "frage": "Was ist ein wesentlicher Nachteil prospektiver Kohortenstudien?",
+    "a": "Persönlichkeit wird erst nach der Diagnose gemessen.",
+    "b": "Sie sind zeit- und kostenintensiv und anfällig für Dropouts.",
+    "c": "Es können nur Personen mit bestehender Erkrankung untersucht werden.",
+    "d": "Erkrankungen können ausschließlich per Selbstauskunft erhoben werden.",
+    "richtig": "b",
+    "begruendung": "Lange Laufzeiten erhöhen Kosten und das Risiko von Dropouts (Studienabbrüchen).\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Wann wird bei einem quasi-prospektiven Design typischerweise die Persönlichkeit erhoben?",
+    "a": "Viele Jahre vor jedem Krankheitsverdacht",
+    "b": "Nach gesicherter Diagnose",
+    "c": "Gleichzeitig mit einer retrospektiven Befragung nach Genesung",
+    "d": "Kurz vor der Diagnose, beispielsweise bei Personen mit Krankheitsverdacht",
+    "richtig": "d",
+    "begruendung": "Genau das ist gleichzeitig das Problem: Der Verdacht auf eine Erkrankung könnte das Erleben bereits beeinflussen.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Warum erlauben Fall-Kontroll- und Querschnittstudien keine eindeutige Kausalaussage zwischen Persönlichkeit und Erkrankung?",
+    "a": "Weil Persönlichkeit erst nach der Diagnose erhoben wird und die Erkrankung die Persönlichkeit bereits verändert haben könnte.",
+    "b": "Weil Persönlichkeit grundsätzlich nicht messbar ist.",
+    "c": "Weil ausschließlich gesunde Personen untersucht werden.",
+    "d": "Weil diese Designs immer Jahrzehnte dauern.",
+    "richtig": "a",
+    "begruendung": "Ursache und Folge lassen sich dadurch nicht eindeutig trennen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Zusammenhang ≠ Ursache."
+  },
+  {
+    "frage": "Welches Merkmal gehört typischerweise zum Typ-A-Verhaltensmuster?",
+    "a": "geringe Durchsetzungsfähigkeit und starke Emotionsunterdrückung",
+    "b": "Gelassenheit und Fokus auf außerberufliche Aktivitäten",
+    "c": "Zeitliche Dringlichkeit, Konkurrenzstreben und Ungeduld",
+    "d": "ausgeprägte Vermeidung jeder Leistungssituation",
+    "richtig": "c",
+    "begruendung": "Typ A umfasst unter anderem Zeitdruck, Ehrgeiz, Konkurrenzstreben, Aggressivität, Feindseligkeit und Ungeduld.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Aussage zur Beziehung zwischen Typ A und KHK (koronarer Herzkrankheit) entspricht der heutigen im Studienbrief dargestellten Evidenz am besten?",
+    "a": "Sämtliche Typ-A-Merkmale sind starke unabhängige Ursachen von KHK.",
+    "b": "Typ A weist keinerlei Zusammenhang mit KHK.",
+    "c": "Typ B weist das höchste KHK-Risiko auf.",
+    "d": "Vor allem Feindseligkeit scheint die relevante Komponente zu sein, wobei der Effekt eher klein ist.",
+    "richtig": "d",
+    "begruendung": "Spätere Forschung relativierte den gesamten Typ-A-Effekt. Vor allem Feindseligkeit blieb als Risikofaktor übrig, allerdings mit geringer Effektstärke. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Frühe Studien ≠ heutige Schlussfolgerung."
+  },
+  {
+    "frage": "Welche Komponente der Feindseligkeit scheint für KHK eher relevant zu sein?",
+    "a": "Die behaviorale/affektive Komponente mit Ärgerausdruck und aggressivem Verhalten",
+    "b": "Ausschließlich zynische Gedanken ohne Verhaltensausdruck",
+    "c": "Ausschließlich eine geringe Extraversion",
+    "d": "Die Unterdrückung positiven Affekts",
+    "richtig": "a",
+    "begruendung": "Die Befunde sprechen eher für die behaviorale (verhaltensbezogene) als für die rein kognitive Komponente.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Wie kann Feindseligkeit über einen externalen Wirkmechanismus das KHK-Risiko erhöhen?",
+    "a": "Durch automatisch verbesserte Immunfunktion",
+    "b": "Durch stärkere genetische Veränderungen",
+    "c": "Durch ungünstige soziale Beziehungen, weniger Unterstützung und Risikoverhalten wie Rauchen",
+    "d": "Ausschließlich durch erhöhte Intelligenz",
+    "richtig": "c",
+    "begruendung": "Externale Mechanismen betreffen soziale Beziehungen und Verhalten; internale Mechanismen eher körperliche Stressreaktionen. SB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Merkmalskombination beschreibt die klassische Typ-C-Persönlichkeit am besten?",
+    "a": "Konkurrenzorientiert, aggressiv und ungeduldig",
+    "b": "Kooperativ, geduldig, wenig durchsetzungsfähig und Unterdrückung negativer Emotionen",
+    "c": "Extrovertiert, impulsiv und risikofreudig",
+    "d": "Gelassen, unabhängig und stark emotionsausdrückend",
+    "richtig": "b",
+    "begruendung": "Besonders charakteristisch ist die Unterdrückung negativer Emotionen, insbesondere Ärger, verbunden mit geringer Durchsetzungsfähigkeit.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Schlussfolgerung ist hinsichtlich Typ C und Krebsentstehung am besten durch hochwertige Studien gestützt?",
+    "a": "Typ C verdoppelt das Krebsrisiko.",
+    "b": "Emotionsunterdrückung verursacht eindeutig Krebs.",
+    "c": "Typ C schützt vor Krebs.",
+    "d": "Es gibt keinen überzeugenden Nachweis eines kausalen Zusammenhangs.",
+    "richtig": "d",
+    "begruendung": "Gerade prospektive und andere hochwertigere Untersuchungen konnten den postulierten Zusammenhang nicht überzeugend bestätigen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: „Cancer-prone personality“ ist die ursprüngliche Hypothese, nicht die heutige Evidenzlage."
+  },
+  {
+    "frage": "Welche Aussage zum Einfluss der Typ-C-Persönlichkeit auf den Verlauf einer Krebserkrankung ist korrekt?",
+    "a": "Fighting Spirit verlängert nachweislich deutlich das Überleben.",
+    "b": "Typ C ist ein starker Prognosefaktor.",
+    "c": "Der prädiktive Wert ist insgesamt gering; Hoffnungslosigkeit/Hilflosigkeit zeigt allenfalls einen schwachen Zusammenhang.",
+    "d": "Optimismus und Typ C sind identisch.",
+    "richtig": "c",
+    "begruendung": "Der zunächst berichtete starke Effekt eines „fighting spirit“ konnte nicht ausreichend repliziert werden.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Was ist dispositionaler Optimismus nach Scheier und Carver?",
+    "a": "Die Überzeugung, jedes Ereignis vollständig kontrollieren zu können",
+    "b": "Eine kurzfristige positive Stimmung",
+    "c": "Die Unterschätzung objektiver Risiken",
+    "d": "Eine generalisierte positive Ergebniserwartung",
+    "richtig": "d",
+    "begruendung": "Optimist:innen erwarten grundsätzlich eher positive Ergebnisse – unabhängig davon, ob diese durch eigene Anstrengung, Glück oder andere Faktoren entstehen.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Aussage über Optimismus ist korrekt?",
+    "a": "Optimismus hängt besonders deutlich mit besserem psychischem Wohlbefinden zusammen; Zusammenhänge mit körperlicher Gesundheit bestehen ebenfalls, sind aber schwächer.",
+    "b": "Optimismus beeinflusst ausschließlich körperliche Gesundheit.",
+    "c": "Optimismus ist grundsätzlich mit mehr Angst und Depression verbunden.",
+    "d": "Für Optimismus gibt es keinerlei Zusammenhang mit Gesundheit.",
+    "richtig": "a",
+    "begruendung": "Die psychischen Zusammenhänge sind besonders robust; körperliche Zusammenhänge bestehen ebenfalls. SB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Eine optimistische Person befindet sich in einer kontrollierbaren Belastungssituation, beispielsweise bei der Vorbereitung auf eine Prüfung. Welche Bewältigungsstrategie ist besonders zu erwarten?",
+    "a": "Verleugnung",
+    "b": "Rückzug",
+    "c": "Annäherndes problemorientiertes Coping, z. B. aktives Problemlösen",
+    "d": "Ausschließlich emotionsorientierte Bewältigung",
+    "richtig": "c",
+    "begruendung": "Optimist:innen passen ihre Bewältigung an die Kontrollierbarkeit an. Kontrollierbar → eher problemorientiert. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Optimist:innen verwenden nicht immer dieselbe Copingstrategie."
+  },
+  {
+    "frage": "Eine optimistische Person ist mit einer weitgehend unkontrollierbaren gesundheitlichen Belastung konfrontiert. Was ist am ehesten zu erwarten?",
+    "a": "Ausschließlich aktives Problemlösen zur Beseitigung des Stressors",
+    "b": "Annähernde emotionsorientierte Strategien wie Akzeptanz und positive Neubewertung",
+    "c": "Mehr Verleugnung als bei pessimistischen Personen",
+    "d": "Vollständiges Disengagement vom Problem",
+    "richtig": "b",
+    "begruendung": "Bei nicht kontrollierbaren Belastungen nutzen Optimist:innen eher adaptive emotionsorientierte Strategien. Genau diese Falllogik wurde auch in der AK geprüft.\nAK-Falle: Unkontrollierbar → nicht primär problemorientiert."
+  },
+  {
+    "frage": "Welche soziale Wirkung ist mit Optimismus verbunden?",
+    "a": "Kleinere soziale Netzwerke und weniger Unterstützung",
+    "b": "Mehr soziale Isolation trotz besserer Stimmung",
+    "c": "Keine Beziehung zu sozialen Prozessen",
+    "d": "Größere soziale Netzwerke sowie mehr wahrgenommene und erhaltene Unterstützung",
+    "richtig": "d",
+    "begruendung": "Soziale Ressourcen stellen einen der Wirkwege zwischen Optimismus und Gesundheit dar.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Aussage zu den physiologischen Effekten von Optimismus ist am präzisesten?",
+    "a": "Optimismus reduziert in jeder Situation sämtliche körperlichen Stressreaktionen.",
+    "b": "Optimismus erhöht grundsätzlich Cortisol und Herzfrequenz.",
+    "c": "Meist bestehen günstigere physiologische Reaktionen, bei komplexen Zielkonflikten können kurzfristig aber höhere physiologische Kosten auftreten.",
+    "d": "Es gibt keinerlei physiologische Zusammenhänge.",
+    "richtig": "c",
+    "begruendung": "Bei schwierigen Zielkonflikten kann stärkeres Engagement kurzfristig mehr physiologische Aktivierung verursachen, obwohl Optimismus langfristig günstig sein kann. SB1_K4-Persönlichkeit.pdf\nAK-Falle: „Optimismus = immer physiologisch besser“ wäre zu absolut."
+  },
+  {
+    "frage": "Was kennzeichnet hohe negative Affektivität/Neurotizismus?",
+    "a": "Ausgeprägte positive Ergebniserwartungen",
+    "b": "Häufigeres Erleben von Ängstlichkeit, Nervosität, Unsicherheit und Besorgtheit",
+    "c": "Besonders hohe emotionale Stabilität",
+    "d": "Ausschließlich geringe Gewissenhaftigkeit",
+    "richtig": "b",
+    "begruendung": "Neurotizismus beschreibt eine allgemeine Neigung zum Erleben negativer emotionaler Zustände.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welches methodische Problem besteht, wenn Neurotizismus mit ausschließlich selbstberichteten Gesundheitsbeschwerden in Zusammenhang gebracht wird?",
+    "a": "Neurotizismus kann nur objektiv gemessen werden.",
+    "b": "Selbstberichte unterschätzen grundsätzlich alle Beschwerden.",
+    "c": "Prädiktor und Kriterium können sich inhaltlich überlappen, weil beide negative Befindlichkeit erfassen.",
+    "d": "Dadurch wird automatisch ein experimenteller Kausalnachweis möglich.",
+    "richtig": "c",
+    "begruendung": "Wer definitionsgemäß stärker zu negativer Befindlichkeit neigt, berichtet möglicherweise auch mehr Beschwerden. Dadurch kann ein Zusammenhang überschätzt werden. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Starker Zusammenhang bei zwei ähnlichen Selbstberichten ≠ automatisch starker biologischer Effekt."
+  },
+  {
+    "frage": "Welche Copingstrategie ist bei hohem Neurotizismus eher zu erwarten?",
+    "a": "Planvolles Problemlösen und positive Neubewertung",
+    "b": "Flexible Wahl adaptiver Strategien je nach Kontrollierbarkeit",
+    "c": "Besonders häufige Akzeptanz und aktive Annäherung",
+    "d": "Vermeidung, Wunschdenken, Rückzug und Verleugnung",
+    "richtig": "d",
+    "begruendung": "Neurotizismus hängt stärker mit maladaptiven (ungünstigen) vermeidenden Strategien und weniger mit adaptiven annähernden Strategien zusammen.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Verhaltensweisen treten bei hohem Neurotizismus häufiger auf?",
+    "a": "Rauchen, Alkoholkonsum und körperliche Inaktivität",
+    "b": "ausschließlich gesunde Ernährung und Sport",
+    "c": "geringerer Substanzkonsum",
+    "d": "ausschließlich soziale Unterstützungsuche",
+    "richtig": "a",
+    "begruendung": "Solches Risikoverhalten kann den Zusammenhang zwischen Neurotizismus und späterer Gesundheit teilweise mediieren (vermitteln). SB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Welche Aussage über Neurotizismus und physiologische Stressreaktionen entspricht dem Studienbrief?",
+    "a": "Hoher Neurotizismus führt nachweislich immer zu stark erhöhter Cortisolausschüttung.",
+    "b": "Hoher Neurotizismus verursacht eindeutig chronische Entzündungen.",
+    "c": "Der physiologische Wirkmechanismus ist besser belegt als der Verhaltensweg.",
+    "d": "Die Evidenz für einen direkten Zusammenhang mit physiologischer Stressreaktivität und Entzündungsprozessen ist bislang eher schwach.",
+    "richtig": "d",
+    "begruendung": "Mehrere Untersuchungen fanden gerade keine eindeutigen Zusammenhänge mit physiologischer Stressreaktivität oder Entzündungsstatus. SB1_K4-Persönlichkeit.pdf\nAK-Falle: „Psychisch mehr Stress“ bedeutet nicht automatisch, dass auch objektiv eine stärkere physiologische Stressreaktion nachgewiesen wurde."
+  },
+  {
+    "frage": "Welche Zuordnung ist vollständig korrekt?",
+    "a": "Typ A → Krebs; Typ C → KHK; Optimismus → Risikofaktor; Neurotizismus → Schutzfaktor",
+    "b": "Typ A → Feindseligkeit irrelevant; Typ C → starke Krebsevidenz; Optimismus → Vermeidung",
+    "c": "Typ A → Feindseligkeit wichtig; Typ C → keine überzeugende Krebsevidenz; Optimismus → flexibles Coping; Neurotizismus → eher maladaptives Coping",
+    "d": "Typ A → Emotionsunterdrückung; Typ C → Konkurrenzstreben; Optimismus → Rückzug; Neurotizismus → adaptive Neubewertung",
+    "richtig": "c",
+    "begruendung": "Das sind die vier zentralen Zuordnungen des Kapitels.\nAK-Falle: Hier sind jeweils echte Fachbegriffe enthalten – nur beim falschen Konstrukt."
+  },
+  {
+    "frage": "Welche Aussage fasst das Kapitel am besten zusammen?",
+    "a": "Bestimmte Persönlichkeitstypen verursachen eindeutig bestimmte Erkrankungen.",
+    "b": "Persönlichkeit hat nur Einfluss auf psychische, nicht auf körperliche Gesundheit.",
+    "c": "Gesundheit wirkt auf Persönlichkeit, Persönlichkeit selbst jedoch nicht auf Gesundheit.",
+    "d": "Persönlichkeit steht über verschiedene direkte und indirekte Wirkwege mit Gesundheit in Zusammenhang, wobei Kausalität sorgfältig geprüft werden muss.",
+    "richtig": "d",
+    "begruendung": "Genau deshalb sind Wirkmechanismen und Studiendesigns so zentral: Zusammenhang ≠ eindeutige Ursache.\n\nSB1_K4-Persönlichkeit.pdf"
+  },
+  {
+    "frage": "Wie können Persönlichkeitseigenschaften über die Selektion von Umwelten auf die Gesundheit wirken?",
+    "a": "Menschen wählen unabhängig von ihrer Persönlichkeit immer dieselben Umwelten.",
+    "b": "Persönlichkeit beeinflusst ausschließlich die Bewertung bereits bestehender Situationen.",
+    "c": "Menschen können abhängig von ihren Eigenschaften gesundheitsfördernde oder gesundheitsgefährdende Situationen aufsuchen oder mitgestalten.",
+    "d": "Umweltselektion bezeichnet ausschließlich genetische Einflüsse auf Persönlichkeit.",
+    "richtig": "c",
+    "begruendung": "Menschen wählen oder schaffen teilweise Umwelten, die zu ihren Bedürfnissen, Zielen und Fähigkeiten passen. Diese Umwelten können wiederum gesundheitlich relevant sein. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Persönlichkeit wirkt nicht nur darauf, wie man eine Situation erlebt, sondern teilweise auch darauf, in welche Situationen man überhaupt gerät."
+  },
+  {
+    "frage": "Welche Aussage über Fall-Kontroll-Studien und Querschnittstudien ist korrekt?",
+    "a": "In beiden Designs wird Persönlichkeit lange vor einer Erkrankung erhoben.",
+    "b": "In beiden wird Persönlichkeit erst nach der Diagnose erfasst; bei Querschnittstudien werden Erkrankungen häufig per Selbstauskunft erhoben.",
+    "c": "Nur Querschnittstudien erlauben sichere Kausalaussagen.",
+    "d": "Fall-Kontroll-Studien untersuchen ausschließlich gesunde Personen.",
+    "richtig": "b",
+    "begruendung": "Beide Designs haben das Problem, dass die Erkrankung die Persönlichkeit bereits beeinflusst haben könnte. Zusätzlich können Selbstauskünfte über Erkrankungen in Querschnittstudien weniger valide (gültig) sein. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Fall-Kontroll und Querschnitt sind ähnlich problematisch für die Kausalität, aber nicht völlig identisch."
+  },
+  {
+    "frage": "Wie werden Typ A, Typ B und Typ C im Studienbrief zueinander eingeordnet?",
+    "a": "Typ B ist die extremste Form von Typ A.",
+    "b": "Typ C entspricht Typ A mit höherer Extraversion.",
+    "c": "Typ A und Typ C sind weitgehend identisch.",
+    "d": "Typ C wurde als Gegenpol zu Typ A konzipiert; Typ B kann zwischen diesen Extrempolen eingeordnet werden.",
+    "richtig": "d",
+    "begruendung": "Typ C ist kooperativ, wenig durchsetzungsfähig und emotionsunterdrückend, während Typ A eher durch Konkurrenz, Ungeduld, Aggressivität usw. gekennzeichnet ist. Typ B liegt konzeptuell dazwischen. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Typ B ≠ Typ C."
+  },
+  {
+    "frage": "Welcher Unterschied zwischen Typ A und Typ C wurde in einem Erklärungsmodell vorgeschlagen?",
+    "a": "Typ A weist hohen Neurotizismus auf, Typ C niedrigen Neurotizismus.",
+    "b": "Typ C weist hohe Extraversion auf, Typ A niedrige.",
+    "c": "Beide können hohe Neurotizismuswerte aufweisen; Typ A eher hohe und Typ C eher niedrige Extraversion.",
+    "d": "Beide unterscheiden sich ausschließlich in der Gewissenhaftigkeit.",
+    "richtig": "c",
+    "begruendung": "Um widersprüchliche Befunde zu erklären, wurde vorgeschlagen: beide hoch in Neurotizismus, aber Typ A eher extravertiert, Typ C eher weniger extravertiert. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Der Unterschied liegt in diesem Modell nicht im Neurotizismus, sondern vor allem in der Extraversion."
+  },
+  {
+    "frage": "Welche Aussage zu Optimismus und unerreichbaren Zielen ist korrekt?",
+    "a": "Optimist:innen halten grundsätzlich an jedem Ziel fest, unabhängig von dessen Erreichbarkeit.",
+    "b": "Optimist:innen geben nach Scheitern grundsätzlich sämtliche Ziele auf.",
+    "c": "Optimist:innen reagieren vor allem mit Verleugnung.",
+    "d": "Bei einem unerreichbaren Ziel kann Optimismus mit stärkerem Engagement für alternative Ziele einhergehen.",
+    "richtig": "d",
+    "begruendung": "Optimismus bedeutet nicht blindes Festhalten. Wenn ein Ziel nicht erreichbar ist, kann die Energie auf alternative Ziele gelenkt werden. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Optimismus = flexible Anpassung, nicht stumpfes Durchhalten um jeden Preis."
+  },
+  {
+    "frage": "Welche Aussage zu Optimismus und sozialer Unterstützung ist besonders wichtig?",
+    "a": "Optimismus hängt nur mit objektiv beobachtbarer Unterstützung zusammen.",
+    "b": "Optimismus hat keinen Zusammenhang mit sozialer Unterstützung.",
+    "c": "Optimismus hängt mit mehr wahrgenommener und erhaltener Unterstützung zusammen; gesundheitliche Vorteile zeigten sich besonders für die selbst wahrgenommene Unterstützung.",
+    "d": "Optimist:innen benötigen aufgrund ihrer positiven Einstellung grundsätzlich keine Unterstützung.",
+    "richtig": "c",
+    "begruendung": "Optimismus ist mit größeren Netzwerken und mehr sozialer Unterstützung verbunden. Interessant ist, dass besonders die subjektiv wahrgenommene Unterstützung gesundheitlich relevant war und nicht immer mit der Einschätzung des Umfelds übereinstimmte. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Wahrgenommene Unterstützung ≠ zwingend tatsächlich von anderen berichtete Unterstützung."
+  },
+  {
+    "frage": "Welche Aussage zu Neurotizismus und psychischer Gesundheit entspricht dem Studienbrief?",
+    "a": "Neurotizismus steht nur mit körperlichen Erkrankungen in Zusammenhang.",
+    "b": "Hoher Neurotizismus schützt vor Angststörungen, solange kein chronischer Stress besteht.",
+    "c": "Neurotizismus ist ausschließlich Folge psychischer Erkrankungen und kein möglicher Risikofaktor.",
+    "d": "Hoher Neurotizismus ist mit einer erhöhten Anfälligkeit insbesondere für Angststörungen und Depressionen verbunden.",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief nennt außerdem Zusammenhänge mit Essstörungen und PTBS. Bei bereits bestehender Depression kann hoher Neurotizismus, besonders zusammen mit chronischem Stress, mit schwererer Symptomatik und ungünstigerem Verlauf verbunden sein. SB1_K4-Persönlichkeit.pdf\nAK-Falle: Das methodische Überlappungsproblem bei Selbstberichten bedeutet nicht, dass alle Zusammenhänge mit psychischen Störungen bedeutungslos sind."
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>
