@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Tabellen-Styling */
+        .summary-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin: 12px 0 16px 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: #fff;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            color: var(--text-muted);
+            vertical-align: top;
+        }
+
+        .summary-table th {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .callout-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 25px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .conclusion-box p {
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .conclusion-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE7_index.html" class="drawer-link">Zurück zu LE7</a>
+                <a href="LE7_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE7_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung (1 zu 1 aus LE7_Zusammenfassung.docx übernommen) -->
+        <div class="content-body">
+            <h1>LE7 – Regulation gesundheitsbezogenen Verhaltens</h1>
+
+            <h2>1. Grundidee: Warum tun Menschen nicht immer das, was gesund wäre?</h2>
+            <p>Menschen wissen häufig, welches Verhalten gesund wäre, setzen dieses Wissen aber trotzdem nicht um. Gesundheitsverhalten wird nämlich nicht nur bewusst und rational gesteuert. Neben Selbstregulation (gezielte Steuerung des eigenen Verhaltens auf persönliche Ziele hin) spielen auch Selbstkontrolle, Impulse, automatisierte Prozesse und Gewohnheiten eine Rolle.</p>
+            <p>Das Kapitel betrachtet deshalb zwei große Bereiche:<br>
+            bewusste Verhaltenssteuerung → Ziele, Selbstregulation, Selbstkontrolleundweniger bzw. nicht bewusst gesteuerte Verhaltenssteuerung → Impulse, duale Prozesse und Gewohnheiten.</p>
+            <p>Zusätzlich wird mit dem Common-Sense-Modell erklärt, wie Menschen ihr Verhalten regulieren, wenn sie mit Krankheit oder gesundheitlicher Bedrohung konfrontiert sind.</p>
+
+            <h2>2. Selbstregulation</h2>
+            <p>Selbstregulation bedeutet, eigene Gedanken, Gefühle und Verhaltensweisen so zu steuern, dass selbstgesetzte persönliche Ziele erreicht werden.</p>
+            <p>Dazu gehören:</p>
+            <ul>
+                <li>Verhalten initiieren,</li>
+                <li>eigenes Verhalten überwachen,</li>
+                <li>Abweichungen vom Ziel feststellen,</li>
+                <li>Verhalten oder Strategien verändern,</li>
+                <li>langfristig am Ziel bleiben.</li>
+            </ul>
+            <p>Selbstregulation ist also kein einzelner Moment von Willenskraft, sondern ein fortlaufender Prozess.</p>
+            <p><strong>Persönliche Ziele</strong><br>
+            Persönliche Ziele sind eng mit Selbstregulation verbunden. Dabei sind unter anderem wichtig:</p>
+            <ul>
+                <li>Inhalt eines Ziels,</li>
+                <li>Wichtigkeit,</li>
+                <li>Schwierigkeit bzw. Realisierbarkeit,</li>
+                <li>bisheriger Fortschritt,</li>
+                <li>kurz- oder langfristige Ausrichtung,</li>
+                <li>konkreter oder abstrakter Charakter.</li>
+            </ul>
+            <p>Je wichtiger ein Ziel ist, desto mehr selbstregulative Aktivität wird normalerweise investiert.</p>
+
+            <h2>3. Zielorganisation – sehr AK-relevant</h2>
+            <p>Nach Brunstein et al. ist das persönliche Zielsystem hierarchisch (in über- und untergeordnete Ebenen gegliedert) aufgebaut.</p>
+            <p>Beispiel:<br>
+            „Ich möchte gesund leben.“↓„Ich möchte mich regelmäßig bewegen.“↓„Ich gehe dreimal pro Woche laufen.“</p>
+            <p><strong>Vertikale Differenzierung</strong><br>
+            Vertikale Differenzierung = Ableitung konkreter untergeordneter Ziele aus übergeordneten Zielen.</p>
+            <p><strong>Horizontale Kohärenz</strong><br>
+            Horizontale Kohärenz = Widerspruchsfreiheit zwischen verschiedenen gleichzeitig bestehenden Zielen.<br>
+            Beispiel: Ein sehr zeitintensives berufliches Ziel kann mit einem ebenfalls zeitintensiven Freizeitziel konkurrieren.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK: Genau diese Begriffe wurden bereits geprüft:<br>
+                Zielorganisation = hierarchisch ✅<br>
+                Widerspruchsfreiheit = horizontale Kohärenz ✅</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p><strong>Merker</strong><br>
+            vertikal = oben ↕ untenhorizontal = nebeneinander ohne Widerspruch</p>
+
+            <h2>4. Zielinhalte und Zielanpassung</h2>
+            <p>Ziele können Annäherungsziele (gewünschten Zustand erreichen) oder Vermeidungsziele (unerwünschten Zustand verhindern) sein.</p>
+            <p>Beispiele:<br>
+            Annäherung: „Ich möchte einen Halbmarathon laufen.“<br>
+            Vermeidung: „Ich möchte eine Grippeinfektion verhindern.“</p>
+            <p>Erfolgreiche Selbstregulation bedeutet außerdem nicht, an jedem Ziel um jeden Preis festzuhalten. Wird ein Ziel tatsächlich unerreichbar, kann eine Zielentbindung (Loslassen des bisherigen Ziels) notwendig sein. Für eine gute Anpassung ist zusätzlich eine Zielneubindung (Aufbau neuer erreichbarer Ziele) wichtig.</p>
+            <p>Gesundheit kann dabei selbst ein Ziel sein, Voraussetzung für andere Ziele darstellen oder gemeinsam mit anderen Zielen erreicht werden.</p>
+
+            <h2>5. Sozial-kognitives Verständnis</h2>
+            <p>Ein wichtiger Ausgangspunkt ist die sozial-kognitive Sichtweise: Verhalten wird wesentlich durch bewusste Gedanken, Erwartungen und Bewertungen beeinflusst.</p>
+            <p>Eine besondere Rolle spielt die Selbstwirksamkeitserwartung (Überzeugung, eine notwendige Handlung selbst erfolgreich ausführen zu können).</p>
+            <p>Vereinfacht:<br>
+            „Glaube ich überhaupt, dass ich das schaffen kann?“</p>
+            <p>Diese Einschätzung beeinflusst, welche Ziele eine Person verfolgt und wie stark sie sich dafür anstrengt.</p>
+
+            <h2>6. Belohnungsaufschub – AK!</h2>
+            <p>Belohnungsaufschub (delay of gratification) bedeutet:<br>
+            Auf eine kurzfristige attraktive Belohnung verzichten, um später eine bedeutsamere Belohnung bzw. ein langfristiges Ziel zu erreichen.</p>
+            <p>Beispiel:<br>
+            Schokolade jetzt = kurzfristige Belohnung.Gewichtsreduktion langfristig = bedeutsameres Ziel.</p>
+            <p>Gerade Gesundheitsziele erfordern häufig wiederholtes Verhalten, das nicht sofort belohnend ist. Deshalb sind selbstregulative Fähigkeiten für langfristige Gesundheitsziele besonders bedeutsam.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK:<br>
+                besonders wichtig für langfristige, nicht kurzfristige Ziele ✅<br>
+                Begriff = Belohnungsaufschub, nicht „Zielaufschub“ ✅</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <h2>7. Selbstregulationstheorie von Carver &amp; Scheier</h2>
+            <p>Hier ist die zentrale Idee eine Feedbackschleife (fortlaufender Vergleich mit Rückmeldung).</p>
+            <p>Die Person vergleicht:<br>
+            Soll-Zustand = gewünschtes ZielmitIst-Zustand = aktueller Stand.</p>
+            <p>Besteht eine Diskrepanz (Abweichung), kann das Verhalten angepasst werden.</p>
+            <p>Beispiel:<br>
+            Ziel: dreimal pro Woche Sport.Ist: bisher einmal Sport.<br>
+            → Abweichung erkennen→ Verhalten oder Planung verändern→ erneut überprüfen.</p>
+            <p>Langfristige Ziele verlaufen also nicht einfach linear. Es gibt Fort- und Rückschritte und entsprechend müssen Strategien angepasst werden.</p>
+            <p>Auch Gefühle haben eine Informationsfunktion:<br>
+            erfolgreiche Annäherung an ein Ziel → eher positive Gefühle<br>
+            fehlender Fortschritt → eher negative Gefühle.</p>
+            <p>Diese Gefühle können wiederum anzeigen, dass eine Verhaltensänderung nötig ist.</p>
+
+            <h2>8. Selbstregulation vs. Selbstkontrolle – absolute AK-Falle</h2>
+            <p>Die Begriffe werden manchmal synonym verwendet, im Studienbrief aber voneinander unterschieden.</p>
+            <p>Selbstregulation<br>
+            = gesamter Prozess der zielgerichteten Verhaltenssteuerung</p>
+            <p>Selbstkontrolle<br>
+            = Fähigkeit, eigenen Impulsen, Wünschen oder gewohnheitsmäßigen Reaktionen zu widerstehen oder sie zu verändern.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK:„Impulsen, Wünschen oder Gewohnheiten widerstehen“ = Selbstkontrolle ✅, nicht Selbstregulation.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p><strong>Merker</strong><br>
+            Selbstregulation = steuernSelbstkontrolle = widerstehen</p>
+
+            <h2>9. Strength Model of Self-Control</h2>
+            <p>Das Strength Model of Self-Control (Ressourcenmodell der Selbstkontrolle) geht davon aus, dass Selbstkontrolle:</p>
+            <ul>
+                <li>eine relativ allgemeine Ressource ist und</li>
+                <li>nur begrenzt zur Verfügung steht.</li>
+            </ul>
+            <p>Wird viel Selbstkontrolle verbraucht, soll für eine unmittelbar folgende Aufgabe weniger davon verfügbar sein.</p>
+            <p>Dieser Zustand wird als Ego-Depletion (Ego-Erschöpfung; vorübergehend verminderte Selbstkontrollressource) bezeichnet.</p>
+            <p>Beispiel:<br>
+            Sehr anstrengende Prüfungsphase → viel Selbstkontrolle nötig → danach möglicherweise schwieriger, zusätzlich eine Diät einzuhalten.</p>
+            <p>Wichtig: Der Studienbrief stellt dieses Modell nicht als unumstrittene Tatsache dar. Es gibt unterstützende Befunde, aber auch konzeptuelle und methodische Kritik, unter anderem wegen der starken Nutzung von Laborexperimenten.</p>
+
+            <h2>10. Nicht alles wird bewusst gesteuert</h2>
+            <p>Bewusste Selbstregulation kann nicht erklären, warum Menschen manchmal wider besseres Wissen handeln.</p>
+            <p>Deshalb werden auch nicht-bewusste Prozesse berücksichtigt:</p>
+            <ul>
+                <li>Impulse,</li>
+                <li>automatische Reaktionen,</li>
+                <li>Gewohnheiten.</li>
+            </ul>
+            <p>Hier kommen die dualen Prozessmodelle ins Spiel.</p>
+
+            <h2>11. Zweisystem-Theorie nach Hofmann et al. – AK!</h2>
+            <p>Die Theorie unterscheidet zwei Systeme:</p>
+            <p><strong>Reflektives System</strong><br>
+            reflektiv (bewusst, rational, willentlich)<br>
+            Es:</p>
+            <ul>
+                <li>plant,</li>
+                <li>bewertet,</li>
+                <li>berücksichtigt Konsequenzen,</li>
+                <li>braucht Zeit und kognitive Ressourcen,</li>
+                <li>ist flexibel.</li>
+            </ul>
+            <p><strong>Impulsives System</strong><br>
+            impulsiv (spontan, automatisiert, nicht bewusst gesteuert)<br>
+            Es:</p>
+            <ul>
+                <li>verarbeitet schnell,</li>
+                <li>braucht wenig kognitive Ressourcen,</li>
+                <li>beruht stärker auf gelernten Assoziationen,</li>
+                <li>aktiviert spontane Annäherungs- oder Vermeidungstendenzen.</li>
+            </ul>
+            <p>Im impulsiven System spielen hedonistische Affekte (Gefühle, die auf Lustgewinn bzw. Vermeidung von Unlust gerichtet sind) eine wichtige Rolle.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <p>Beispiel:<br>
+            Reflektives System:„Ich sollte zum Sport.“<br>
+            Impulsives System:„Sofa fühlt sich gerade besser an.“<br>
+            Wenn beide Systeme unterschiedliche Verhaltensweisen aktivieren, hängt das tatsächlich ausgeführte Verhalten davon ab, welche Verhaltenstendenz stärker aktiviert ist.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK<br>
+                Systeme = reflektiv + impulsiv<br>
+                ❌ kein „behaviorales System“<br>
+                hedonistische Affekte spielen eine zentrale Rolle ✅</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <h2>12. Gewohnheiten – ebenfalls AK!</h2>
+            <p>Gewohnheiten sind Verhaltensweisen, die:</p>
+            <ul>
+                <li>durch situative Hinweisreize ausgelöst werden,</li>
+                <li>automatisiert ablaufen,</li>
+                <li>auf erlernten Reiz-Reaktions-Mustern beruhen.</li>
+            </ul>
+            <p>Durch häufige Wiederholung verbindet sich ein bestimmter Kontext mit einem bestimmten Verhalten.</p>
+            <p>Beispiel:<br>
+            Autotür schließen → Sicherheitsgurt greifen.<br>
+            Irgendwann ist dafür keine bewusste Entscheidung mehr nötig.<br>
+            Der Kontextreiz (Hinweis aus der Situation) aktiviert das gelernte Verhalten automatisch.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK:<br>
+                Spezifische Kontextreize können die automatisierte Ausführung erworbener Gewohnheiten auslösen.<br>
+                ✅ Wahr.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p><strong>Bedeutung für Interventionen</strong><br>
+            Gesunde Verhaltensweisen können durch häufige Wiederholung zu Gewohnheiten werden.<br>
+            Bei schädlichen Gewohnheiten sollte dagegen nicht nur das sichtbare Verhalten verändert werden. Wichtig sind auch die zugrunde liegenden Assoziationen (erlernten Verknüpfungen zwischen Situation und Verhalten).</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+
+            <h2>13. Common-Sense-Modell der Selbstregulation – CSM</h2>
+            <p>Das Common-Sense-Modell (CSM) erklärt die Reaktion auf Krankheit bzw. gesundheitliche Bedrohungen.</p>
+            <p>Auslöser können beispielsweise sein:</p>
+            <ul>
+                <li>Symptome,</li>
+                <li>eine Diagnose,</li>
+                <li>Informationen über eine Gesundheitsgefahr.</li>
+            </ul>
+            <p>Das CSM besitzt ebenfalls zwei parallele Prozesse. Aber ganz wichtig:<br>
+            Hier bedeutet „dual“ NICHT reflektiv vs. impulsiv.</p>
+            <p>Das CSM unterscheidet:</p>
+            <p><strong>kognitiven Reaktionsarm</strong><br>
+            kognitiv (gedankliche Verarbeitung)<br>
+            → Was ist das für eine Krankheit?→ Was verursacht sie?→ Wie lange dauert sie?→ Kann sie kontrolliert werden?<br>
+            Dabei entstehen kognitive Repräsentationen (gedankliche Vorstellungen) bzw. subjektive Krankheitstheorien.</p>
+            <p><strong>emotionalen Reaktionsarm</strong><br>
+            affektiv/emotional (gefühlsbezogene Verarbeitung)<br>
+            → Angst→ Furcht→ Niedergeschlagenheit usw.</p>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <p>Aus beiden Repräsentationen werden Bewältigungsstrategien abgeleitet. Danach wird deren Wirkung bewertet und das Ergebnis beeinflusst die weitere Wahrnehmung, die Repräsentationen und zukünftige Bewältigung. Das CSM funktioniert also als Rückkopplungsprozess.</p>
+
+            <h2>14. Gefahrenkontrolle vs. Furchtkontrolle – AK-Falle</h2>
+            <p>In der Abbildung des CSM:<br>
+            kognitive Repräsentation → Gefahrenkontrolle<br>
+            emotionale Repräsentation → Furchtkontrolle</p>
+            <p>Das bedeutet:<br>
+            Gefahrenkontrolle versucht mit der gesundheitlichen Bedrohung umzugehen.<br>
+            Furchtkontrolle richtet sich auf den negativen emotionalen Zustand.</p>
+            <div class="callout-box">
+                <p>AK: Die Aussage<br>
+                „Furchtkontrolle gehört zum kognitiven Reaktionsarm“<br>
+                war falsch. Sie gehört zum emotionalen Reaktionsarm.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <h2>15. Subjektive Krankheitstheorien</h2>
+            <p>Subjektive Krankheitstheorien sind die persönlichen Vorstellungen einer Person darüber, wie ihre Krankheit funktioniert.</p>
+            <p>Sie beeinflussen beispielsweise:</p>
+            <ul>
+                <li>welche Bewältigungsstrategien jemand wählt,</li>
+                <li>wie die Erkrankung interpretiert wird,</li>
+                <li>welche Behandlung sinnvoll erscheint,</li>
+                <li>wie viel Kontrolle eine Person über die Krankheit wahrnimmt.</li>
+            </ul>
+            <p>Zwei Personen mit derselben objektiven Erkrankung können deshalb sehr unterschiedlich damit umgehen.</p>
+            <p><strong>Dimensionen</strong><br>
+            Subjektive Krankheitstheorien umfassen Vorstellungen über:</p>
+            <ul>
+                <li>Symptomatik/Identität – welche Symptome gehören zur Krankheit?</li>
+                <li>Zeitverlauf – wie lange dauert sie?</li>
+                <li>Ursachen – wodurch ist sie entstanden?</li>
+                <li>Konsequenzen – welche Folgen hat sie?</li>
+                <li>Kontrollierbarkeit – kann sie beeinflusst werden?</li>
+            </ul>
+            <p>Der IPQ-R (Illness Perception Questionnaire – Revised; Fragebogen zur Erfassung subjektiver Krankheitsvorstellungen) erhebt zusätzlich:</p>
+            <ul>
+                <li>Kohärenz (wie verständlich die Erkrankung für die Person erscheint)</li>
+                <li>emotionale Repräsentationen (Gefühle in Bezug auf die Erkrankung).</li>
+            </ul>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <div class="callout-box">
+                <p>AK:Subjektive Krankheitstheorien werden häufig mit dem IPQ-R erfasst → ✅ wahr.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <h2>16. Bedeutung subjektiver Krankheitstheorien</h2>
+            <p>Krankheitstheorien sind nicht nur theoretisch interessant. Sie können gezielt durch Interventionen verändert werden.</p>
+            <p>Im Studienbrief wird eine Intervention nach Herzinfarkt beschrieben. Durch die Intervention zeigten Betroffene unter anderem:</p>
+            <ul>
+                <li>realistischere Ursachenannahmen,</li>
+                <li>besseres Krankheitsverständnis,</li>
+                <li>weniger Angst vor der Rückkehr zur Arbeit</li>
+                <li>und höhere Rückkehrquoten zur Arbeit.</li>
+            </ul>
+            <p>Damit zeigt das Kapitel: Wie eine Person ihre Erkrankung versteht, kann ihr tatsächliches Bewältigungsverhalten beeinflussen.</p>
+
+            <h2>17. Weiterentwicklung des CSM</h2>
+            <p>Das ursprüngliche Modell nimmt vor allem an:<br>
+            Repräsentation → Bewältigung → Anpassung<br>
+            Anpassung (körperlicher und psychischer Zustand nach der Auseinandersetzung mit der Erkrankung).</p>
+            <p>Neuere Befunde sprechen dafür, zusätzlich direkte Zusammenhänge anzunehmen:<br>
+            kognitive/emotionale Repräsentation → direkt Anpassung</p>
+            <p>Außerdem schlagen Hagger et al. vor, zwischen Repräsentationen und Verhalten zusätzliche Prozesse genauer einzubauen:</p>
+            <ul>
+                <li>Intentionsbildung (Entstehung einer Handlungsabsicht)</li>
+                <li>Handlungspläne (konkrete Planung der Handlung).</li>
+            </ul>
+            <a href="AFG Modul 36611 SB1.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG Modul 36611 SB1.pdf</a>
+            <p>Für die Klausur würde ich das verstehen, aber gegenüber den AK-Themen deutlich niedriger priorisieren.</p>
+
+            <h2>AK-Fokus – das muss sitzen</h2>
+            <p>Die beiden verfügbaren K1K5-Aufgaben zeigen ziemlich eindeutig, wie das Kapitel geprüft wird: weniger Detailstudien, dafür sehr genaue Begriffsabgrenzungen.</p>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p><strong>Höchste Priorität</strong></p>
+            <ul>
+                <li>Zielsystem<br>
+                hierarchisch<br>
+                vertikale Differenzierung = Unterziele ableiten<br>
+                horizontale Kohärenz = Widerspruchsfreiheit</li>
+                <li>Selbstregulation vs. Selbstkontrolle<br>
+                Regulation = gesamter Steuerungsprozess<br>
+                Kontrolle = Impulsen/Wünschen/Gewohnheiten widerstehen</li>
+                <li>Belohnungsaufschub<br>
+                kurzfristige Belohnung aufgeben<br>
+                zugunsten langfristiger bedeutsamerer Verstärkung</li>
+                <li>Hofmann<br>
+                reflektives + impulsives System<br>
+                hedonistische Affekte im impulsiven System</li>
+                <li>Gewohnheit<br>
+                Kontextreiz → automatisiertes gelerntes Verhalten</li>
+                <li>CSM<br>
+                kognitiv + emotional<br>
+                Gefahrenkontrolle = kognitiv<br>
+                Furchtkontrolle = emotional</li>
+                <li>IPQ-R<br>
+                subjektive Krankheitstheorien</li>
+            </ul>
+
+            <h2>Die wichtigsten AK-Fallen</h2>
+            <div class="summary-table-wrap">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Verwechslung</th>
+                            <th>Richtig</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Zielsystem = zyklisch ❌</td>
+                            <td>hierarchisch</td>
+                        </tr>
+                        <tr>
+                            <td>Widerspruchsfreiheit = vertikale Differenzierung ❌</td>
+                            <td>horizontale Kohärenz</td>
+                        </tr>
+                        <tr>
+                            <td>Impulsen widerstehen = Selbstregulation ❌</td>
+                            <td>Selbstkontrolle</td>
+                        </tr>
+                        <tr>
+                            <td>langfristige Belohnung zurückstellen ❌</td>
+                            <td>kurzfristige Belohnung wird aufgeschoben</td>
+                        </tr>
+                        <tr>
+                            <td>„Zielaufschub“ ❌</td>
+                            <td>Belohnungsaufschub</td>
+                        </tr>
+                        <tr>
+                            <td>reflektives + behaviorales System ❌</td>
+                            <td>reflektives + impulsives System</td>
+                        </tr>
+                        <tr>
+                            <td>impulsives System = rein rational ❌</td>
+                            <td>hedonistische Affekte + Assoziationen</td>
+                        </tr>
+                        <tr>
+                            <td>Gewohnheit braucht bewusste Entscheidung ❌</td>
+                            <td>Kontextreiz kann sie automatisch auslösen</td>
+                        </tr>
+                        <tr>
+                            <td>CSM = bewusst vs. unbewusst ❌</td>
+                            <td>kognitiv vs. emotional</td>
+                        </tr>
+                        <tr>
+                            <td>Furchtkontrolle = kognitiv ❌</td>
+                            <td>emotional</td>
+                        </tr>
+                        <tr>
+                            <td>Gefahrenkontrolle = emotional ❌</td>
+                            <td>kognitiv</td>
+                        </tr>
+                        <tr>
+                            <td>IPQ-R = Selbstkontrolle ❌</td>
+                            <td>subjektive Krankheitstheorien</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="conclusion-box">
+                <h3>LE7 in 5 einfachen Sätzen</h3>
+                <p>Menschen handeln nicht nur nach dem, was sie vernünftig für richtig halten, sondern auch nach Impulsen und Gewohnheiten. Selbstregulation bedeutet, das eigene Verhalten langfristig auf ein Ziel auszurichten; Selbstkontrolle braucht man besonders dann, wenn man einer unmittelbaren Versuchung widerstehen muss. Das reflektive System denkt und plant, während das impulsive System schnell auf Lust, Gefühle und gelernte Verknüpfungen reagiert. Gewohnheiten laufen irgendwann fast automatisch ab, sobald der passende Kontextreiz auftaucht. Bei Krankheit kommt noch dazu, was jemand über seine Krankheit denkt und fühlt – genau das beschreibt das Common-Sense-Modell und diese persönlichen Vorstellungen nennt man subjektive Krankheitstheorien.</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

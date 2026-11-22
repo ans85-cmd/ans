@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="J]M[L">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 580px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Slide-out Burger Menu (Drawer) --- */
+        .drawer-menu {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+        }
+
+        .drawer-menu.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Aufklappbare Zusammenfassung (Accordion) --- */
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .summary-header {
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .summary-header:hover {
+            background: #fefce8;
+        }
+
+        .summary-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .summary-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-main-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .summary-toggle-icon {
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8fafc;
+            padding: 0 16px;
+            text-align: left;
+        }
+
+        .summary-content.open {
+            max-height: 4500px;
+            padding: 16px;
+            overflow-y: auto;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Schöne Formatierung im Innenteil */
+        .summary-content h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .summary-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .summary-content p, .summary-content li {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .summary-content ul {
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 4px 0 10px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        .callout-box {
+            background: #fefce8;
+            border-left: 3px solid var(--accent-gold);
+            padding: 10px 12px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 10px 0;
+        }
+        
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .callout-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin: 10px 0 12px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            color: var(--text-muted);
+            vertical-align: top;
+        }
+
+        .summary-table th {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* --- Sektion / Kurse --- */
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .nav-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <div class="brand-wrapper">
+                <!-- Kleines Logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </div>
+            <!-- Burger Menu Button -->
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Slide-out Burger Menü (Drawer) -->
+        <div class="drawer-menu" id="drawerMenu">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">🏠 Startseite</a>
+                <a href="https://ans85-cmd.github.io/ans/jmoodle.html" class="drawer-link">📚 PDF-Sammlung</a>
+                <a href="LE6_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE6_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+            </div>
+        </div>
+
+        <!-- Zusammenfassung als aufklappbare Karte (Inhalt 1 zu 1 aus LE6_UltraKurz.docx übernommen) -->
+        <div class="summary-card">
+            <div class="summary-header" onclick="toggleSummary()">
+                <div class="summary-title-wrapper">
+                    <span class="summary-tag">📚 Übersicht & Inhalte</span>
+                    <span class="summary-main-title">LE6 – Intervention Mapping: Kurzfassung</span>
+                </div>
+                <span class="summary-toggle-icon" id="toggleIcon">▼</span>
+            </div>
+            <div class="summary-content" id="summaryContent">
+
+                <h3>LE6 – Intervention Mapping: Kurzfassung</h3>
+                <p>Intervention Mapping = systematisches, theorie- und evidenzbasiertes (auf Theorien und empirischen Befunden beruhendes) Protokoll zur Planung, Umsetzung und Evaluation von Gesundheitsförderungsprogrammen. Es betrachtet Gesundheit ökologisch, also nicht nur auf Ebene der einzelnen Person, sondern auch Familie, Organisation, Gemeinde und Gesellschaft. Die Zielgruppe und relevante Akteur:innen sollen partizipieren (aktiv in die Entwicklung einbezogen werden).</p>
+
+                <h3>Die 6 Schritte – unbedingt können</h3>
+                <ul>
+                    <li><b>Bedarfsanalyse (Needs and Assets Assessment)</b><br>Ist-Zustand mit Soll-Zustand vergleichen: Was ist das Problem, warum, für wen und wodurch entsteht es?<br>Dazu gehören Entwicklungsgruppe bilden, logisches Modell des Problems, Stärken/Ressourcen der Zielgruppe erfassen, Verhaltens- und Umweltfaktoren bewerten und das Interventionsziel formulieren.</li>
+                    <li><b>Programmziele erstellen</b><br>Jetzt Wechsel von der Problemlogik zur Veränderungslogik: Was muss sich verändern?<br>Hier entstehen Verhaltensziele, Umweltziele, Handlungsziele, Determinanten und Veränderungsziele.</li>
+                    <li><b>Theoriebasierte Methoden und Anwendungen auswählen</b><br>Methode = allgemeine theoretische Technik.<br>Anwendung = konkrete Umsetzung dieser Methode in der Intervention.<br>Wirkparameter = Bedingungen, die erfüllt sein müssen, damit die Methode funktioniert. Werden sie ignoriert, ist die Wirkung nicht gesichert.</li>
+                    <li><b>Programmentwicklung</b><br>Intervention konkret bauen: Materialien und Komponenten entwickeln, an Zielgruppe/Kontext anpassen und anschließend Prätest (Einzelbestandteile testen) und Pilotversuch (gesamtes Programm testen) durchführen.</li>
+                    <li><b>Annahme und Umsetzung</b><br>Annehmende (Personen, die über Einführung entscheiden) und Umsetzende (Personen, die das Programm tatsächlich durchführen) identifizieren. Wichtig sind:<br>Annahme, Umsetzungsgenauigkeit (korrekte/vollständige Durchführung) und Nachhaltigkeit (langfristige Integration in den Alltag/die Routine).</li>
+                    <li><b>Evaluation</b><br>Prüfen, ob das Programm funktioniert hat und korrekt umgesetzt wurde. Unterschieden werden Effektevaluation und Prozessevaluation.</li>
+                </ul>
+                <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention.pdf öffnen</a>
+
+                <h3>Die Zielarten – sehr AK-relevant</h3>
+                <div class="summary-table-wrap">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Begriff</th>
+                                <th>Bedeutung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Programmziel</b></td>
+                                <td>Übergeordnetes, messbares Ziel der Intervention</td>
+                            </tr>
+                            <tr>
+                                <td><b>Verhaltensziel</b></td>
+                                <td>Welches Verhalten soll die Zielgruppe am Ende zeigen?</td>
+                            </tr>
+                            <tr>
+                                <td><b>Umweltziel</b></td>
+                                <td>Was muss sich in der Umwelt ändern?</td>
+                            </tr>
+                            <tr>
+                                <td><b>Handlungsziel</b></td>
+                                <td>Welche konkreten Einzelschritte muss jemand tun, um das Verhaltens-/Umweltziel zu erreichen?</td>
+                            </tr>
+                            <tr>
+                                <td><b>Determinante</b></td>
+                                <td>Faktor, der Verhalten beeinflusst, z. B. Wissen, Einstellung, Selbstwirksamkeit</td>
+                            </tr>
+                            <tr>
+                                <td><b>Veränderungsziel</b></td>
+                                <td>Wie muss sich eine Determinante verändern, damit ein Handlungsziel erreicht wird?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Der Zusammenhang ist:<br>Veränderungsziel → Determinante verändert sich → Handlungsziel wird erreicht → Verhaltens-/Umweltziel → bessere Gesundheit/Lebensqualität.</p>
+                <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention(1).pdf öffnen</a>
+
+                <h3>Beispiel</h3>
+                <p>Verhaltensziel: immer Kondom verwenden.<br>Handlungsziele: Kondome kaufen → mitnehmen → Verwendung besprechen → korrekt anwenden.<br>Determinanten: z. B. Einstellung, Selbstwirksamkeit, subjektive Norm.<br>Veränderungsziel: z. B. Selbstwirksamkeit so erhöhen, dass die Person sicher weiß, wie sie ein Kondom korrekt verwendet.</p>
+                <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention(1).pdf öffnen</a>
+
+                <h3>Logische Modelle</h3>
+                <p>Es gibt drei:<br>Logisches Modell des Problems → Was ist das Problem und wodurch entsteht es?<br>Logisches Modell der Veränderung → Was muss sich konkret verändern?<br>Logisches Modell der Intervention → Wie soll die gesamte Intervention diese Veränderungen bewirken?<br>Wichtig: Die Kausalität läuft von links nach rechts, beim Planen wird aber vom gewünschten Endzustand rückwärts gedacht.</p>
+                <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention(1).pdf öffnen</a>
+
+                <h3>Methode – Anwendung – Wirkparameter</h3>
+                <p>Das ist eine gute Klausurfalle:<br>Methode = theoretisch/allgemein→ z. B. Modeling (Lernen am Modell)<br>Anwendung = konkrete Umsetzung→ z. B. Video mit einer Person, die erfolgreich ein Verhalten verändert.<br>Wirkparameter = Bedingungen, damit Modeling funktioniert→ z. B. Aufmerksamkeit, Identifikation mit dem Modell, ausreichende Selbstwirksamkeit usw.</p>
+                <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention(1).pdf öffnen</a>
+
+                <p>Ein klassisches Beispiel aus dem SB sind Furchtappelle (angstauslösende Botschaften). Angst allein reicht nicht: u. a. Selbstwirksamkeit, Handlungswirksamkeit und persönliche Anfälligkeit müssen berücksichtigt werden. Sonst können defensive Reaktionen wie Leugnen oder Ignorieren auftreten.</p>
+                <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention(1).pdf öffnen</a>
+
+                <h3>Effekt- vs. Prozessevaluation</h3>
+                <p>Effektevaluation = WAS hat sich verändert?<br>Also z. B.:<br>Gesundheit, Lebensqualität, Verhalten, Determinanten und Ziele.<br>Prozessevaluation = WIE wurde das Programm umgesetzt?<br>Also z. B.:<br>korrekte Durchführung, Umsetzungsgenauigkeit, Reichweite und Kontextbedingungen.</p>
+                <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 SB2_K4-Intervention.pdf öffnen</a>
+
+                <h3>Merker</h3>
+                <p>Effekt = Ergebnis<br>Prozess = Durchführung</p>
+
+                <h3>Was die AK konkret verlangt</h3>
+                <p>In SoSe 2026 wurde gefragt, was zur Bedarfsanalyse (Schritt 1) gehört.<br>✅ Bewertung von Verhaltens- und Umweltfaktoren<br>Nicht Schritt 1:<br>Produktion von Programmmaterialien ❌ → Schritt 4<br>Prätest/Pilotversuch ❌ → Schritt 4<br>Umweltziele identifizieren ❌ → Schritt 2<br>logisches Modell der Veränderung ❌ → Schritt 2<br>In Schritt 1 entsteht stattdessen das logische Modell des Problems.</p>
+                <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>
+
+                <p>Die zweite AK-Aufgabe prüfte genau diese Begriffe:<br>Nach Bedarfsanalyse → Programmziele ✅<br>Verhaltensziel → erwartetes Verhalten der Zielgruppe ✅<br>Nachhaltigkeit → langfristige Umsetzung ✅<br>Umsetzungsgenauigkeit + Reichweite → Prozessevaluation ✅<br>Kontext → Einfluss des sozialen Umfelds ✅</p>
+                <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 AFG_AK2026SoSe.pdf öffnen</a>
+
+                <div class="callout-box">
+                    <p><b>Ultrakurz-Merker</b><br>
+                    1 Bedarf = Problem verstehen<br>
+                    2 Ziele = Was muss sich ändern?<br>
+                    3 Methoden = Wie verändern wir es theoretisch?<br>
+                    4 Programm = Intervention bauen und testen<br>
+                    5 Umsetzung = Wer übernimmt und führt sie durch?<br>
+                    6 Evaluation = Hat es funktioniert und wurde es richtig gemacht?</p>
+                    <p>Und für die Begriffe:<br>
+                    Verhaltensziel = WAS soll jemand tun?<br>
+                    Handlungsziel = WELCHE SCHRITTE muss er dafür tun?<br>
+                    Determinante = WARUM tut er es bzw. nicht?<br>
+                    Veränderungsziel = WAS muss sich an diesem Warum verändern?</p>
+                    <p>Das ist für die AK aus meiner Sicht der absolute Lernkern von LE6.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Kursbereich -->
+        <div class="section-title">Inhalte:</div>
+        <div class="menu-list">
+            <a href="LE6_Zusammenfassung.html" class="nav-btn"><span>LE6 Zusammenfassung</span> <span class="nav-arrow">→</span></a>
+            <a href="https://notebooklm.link.google/q57brpBgW45a" class="nav-btn"><span>LE6 Video</span> <span class="nav-arrow">→</span></a>
+            <a href="LE6_Quiz1.html" class="nav-btn"><span>LE6 Quiz 1</span> <span class="nav-arrow">→</span></a>
+        </div>
+
+        <footer>
+            ans85-cmd &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        // Burger-Menü Steuerung
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Aufklapp-Funktion für die Zusammenfassung
+        function toggleSummary() {
+            const content = document.getElementById('summaryContent');
+            const icon = document.getElementById('toggleIcon');
+            content.classList.toggle('open');
+            if (content.classList.contains('open')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>

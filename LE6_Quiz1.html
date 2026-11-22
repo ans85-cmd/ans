@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE6</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 6</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Was beschreibt Intervention Mapping am treffendsten?",
+    "a": "Eine Methode zur rein statistischen Evaluation bestehender Programme",
+    "b": "Ein Protokoll zur Planung, Umsetzung und Evaluation theorie- und evidenzbasierter Gesundheitsprogramme",
+    "c": "Eine qualitative Forschungsmethode zur Erfassung von Gesundheitsverhalten",
+    "d": "Eine Theorie zur Erklärung individuellen Gesundheitsverhaltens",
+    "richtig": "b",
+    "begruendung": "Intervention Mapping strukturiert die Entwicklung von Gesundheitsinterventionen auf Basis von Theorie und Evidenz (empirischen Befunden). SB2_K4-Intervention(1).pdfAK-Falle: Intervention Mapping ist keine einzelne Verhaltenstheorie."
+  },
+  {
+    "frage": "Welche Aussage zur ökologischen Perspektive des Intervention Mapping ist richtig?",
+    "a": "Gesundheit wird ausschließlich als Ergebnis individueller Entscheidungen verstanden.",
+    "b": "Nur biologische und psychologische Faktoren werden berücksichtigt.",
+    "c": "Umweltfaktoren werden erst bei der Evaluation relevant.",
+    "d": "Gesundheit entsteht durch Wechselwirkungen zwischen Individuum und verschiedenen Umweltebenen.",
+    "richtig": "d",
+    "begruendung": "Interventionen können deshalb auch Familie, Organisationen, Gemeinden oder politische Akteur:innen einbeziehen. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Warum ist Partizipation (aktive Beteiligung) der Zielgruppe wichtig?",
+    "a": "Sie bringt Wissen und Perspektiven ein, verbessert die externe Validität und fördert Akzeptanz und Umsetzung.",
+    "b": "Sie ersetzt die spätere Programmevaluation.",
+    "c": "Sie macht eine theoretische Grundlage überflüssig.",
+    "d": "Sie ist nur in Schritt 1 vorgesehen.",
+    "richtig": "a",
+    "begruendung": "Partizipation soll während Planung, Entwicklung, Implementierung und Evaluation stattfinden. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welches ist die richtige Reihenfolge der sechs Schritte?",
+    "a": "Ziele → Bedarf → Methoden → Evaluation → Programm → Umsetzung",
+    "b": "Bedarf → Methoden → Ziele → Programm → Umsetzung → Evaluation",
+    "c": "Bedarf → Programmziele → Methoden → Programmentwicklung → Annahme/Umsetzung → Evaluation",
+    "d": "Bedarf → Programm → Methoden → Ziele → Evaluation → Umsetzung",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Die Schritte bauen aufeinander auf, auch wenn man in der Praxis zwischen ihnen zurückspringen kann. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Aufgabe gehört zur Bedarfsanalyse?",
+    "a": "Prätest der Programmmaterialien",
+    "b": "Formulierung von Veränderungszielen",
+    "c": "Bewertung von Verhaltens- und Umweltfaktoren",
+    "d": "Planung der Prozessevaluation",
+    "richtig": "c",
+    "begruendung": "In Schritt 1 wird das Problem analysiert und unter anderem bewertet, welche Verhaltens- und Umweltfaktoren relevant und veränderbar sind. SB2_K4-Intervention(1).pdfAK-Falle: Genau diese Antwort war in der SoSe-2026-AK richtig. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welches logische Modell entsteht in Schritt 1?",
+    "a": "Logisches Modell des Problems",
+    "b": "Logisches Modell der Veränderung",
+    "c": "Logisches Modell der Evaluation",
+    "d": "Logisches Modell der Implementierung",
+    "richtig": "a",
+    "begruendung": "Zuerst wird geklärt, was das Problem ist und wodurch es entsteht. SB2_K4-Intervention(1).pdfAK-Falle: Modell der Veränderung = Schritt 2, nicht Schritt 1."
+  },
+  {
+    "frage": "Was bezeichnet eine Determinante im Intervention Mapping?",
+    "a": "Das übergeordnete Gesundheitsziel",
+    "b": "Die konkrete Interventionsmethode",
+    "c": "Die Person, die das Programm umsetzt",
+    "d": "Einen Faktor, der Verhalten oder Umweltbedingungen direkt beeinflusst",
+    "richtig": "d",
+    "begruendung": "Beispiele sind Einstellung, Wissen, Selbstwirksamkeit oder subjektive Norm. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Kombination wird bei der Priorisierung von Verhaltens- und Umweltfaktoren betrachtet?",
+    "a": "Kosten und Stichprobengröße",
+    "b": "Relevanz und Veränderbarkeit",
+    "c": "Validität und Reliabilität",
+    "d": "Reichweite und Nachhaltigkeit",
+    "richtig": "b",
+    "begruendung": "Besonders relevante und gut veränderbare Faktoren erhalten hohe Priorität. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was gehört NICHT zur Bedarfsanalyse?",
+    "a": "Zusammenstellen einer Entwicklungsgruppe",
+    "b": "Erfassen vorhandener Ressourcen",
+    "c": "Bewertung von Verhaltens- und Umweltfaktoren",
+    "d": "Prätest und Pilotversuch",
+    "richtig": "d",
+    "begruendung": "Prätest und Pilotversuch gehören erst zu Schritt 4 – Programmentwicklung. SB2_K4-Intervention(1).pdfAK-Falle: Genau diese Zuordnung wurde bereits geprüft. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Wie sollte ein gutes Interventionsziel formuliert sein?",
+    "a": "Möglichst allgemein, damit es flexibel bleibt",
+    "b": "Spezifisch, messbar und mit einem Zeitrahmen versehen",
+    "c": "Ausschließlich als Veränderung einer psychologischen Determinante",
+    "d": "Nur qualitativ beschreibend",
+    "richtig": "b",
+    "begruendung": "Dadurch lässt sich später tatsächlich evaluieren, ob das Ziel erreicht wurde. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was beschreibt ein Verhaltensziel?",
+    "a": "Warum jemand ein Verhalten zeigt",
+    "b": "Welche Interventionstechnik eingesetzt wird",
+    "c": "Welche Verhaltensweise die Zielgruppe als Ergebnis der Intervention zeigen soll",
+    "d": "Wie sich eine Determinante verändern muss",
+    "richtig": "c",
+    "begruendung": "Beispiel: „Beim Geschlechtsverkehr immer ein Kondom benutzen.“ SB2_K4-Intervention(1).pdfAK-Falle: In der AK wurde Verhaltensziel direkt gegen Handlungsziel ausgespielt. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was ist ein Handlungsziel (performance objective)?",
+    "a": "Ein konkreter Einzelschritt, der nötig ist, um ein Verhaltensziel zu erreichen",
+    "b": "Die langfristige gesundheitliche Wirkung einer Intervention",
+    "c": "Eine Veränderung der Einstellung oder Selbstwirksamkeit",
+    "d": "Eine theoretische Methode zur Verhaltensänderung",
+    "richtig": "a",
+    "begruendung": "Zum Verhaltensziel „Kondom verwenden“ gehören z. B. „Kondome kaufen“ oder „Kondome mitnehmen“. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welches Beispiel ist am ehesten ein Veränderungsziel?",
+    "a": "„Die Person ist überzeugt, ein Kondom korrekt anwenden zu können.“",
+    "b": "„Die Person kauft Kondome.“",
+    "c": "„Die Person verwendet immer ein Kondom.“",
+    "d": "„In Bars werden Kondomautomaten angebracht.“",
+    "richtig": "a",
+    "begruendung": "Ein Veränderungsziel beschreibt, wie sich eine Determinante verändern muss. Hier verändert sich die Selbstwirksamkeit. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Zuordnung ist korrekt?",
+    "a": "Verhaltensziel = Warum tut jemand etwas?",
+    "b": "Veränderungsziel = konkrete Handlungsschritte",
+    "c": "Determinante = Einflussfaktor auf Verhalten",
+    "d": "Handlungsziel = langfristige gesundheitliche Wirkung",
+    "richtig": "c",
+    "begruendung": "Merker:Verhalten = WAS?Handlung = WELCHE SCHRITTE?Determinante = WARUM?Veränderungsziel = WAS MUSS SICH AM WARUM ÄNDERN?"
+  },
+  {
+    "frage": "Was ist ein Umweltziel?",
+    "a": "Eine notwendige Veränderung in der Umgebung, die gesundheitsförderliches Verhalten ermöglicht oder erleichtert",
+    "b": "Ein individuelles Gesundheitsverhalten",
+    "c": "Eine statistische Umweltvariable",
+    "d": "Ein langfristiges gesundheitliches Outcome",
+    "richtig": "a",
+    "begruendung": "Beispiel: „In Bars stehen Kondomautomaten zur Verfügung.“ \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Wie entsteht eine Matrix der Veränderungsziele?",
+    "a": "Programmziele werden mit Evaluationsmethoden gekreuzt.",
+    "b": "Umweltziele werden mit Gesundheitsproblemen gekreuzt.",
+    "c": "Methoden werden mit Anwendungen gekreuzt.",
+    "d": "Handlungsziele werden mit Determinanten gekreuzt.",
+    "richtig": "d",
+    "begruendung": "In die entstehenden Zellen kommen die jeweiligen Veränderungsziele. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welches Modell beantwortet hauptsächlich die Frage: „Was muss sich verändern?“",
+    "a": "Logisches Modell des Problems",
+    "b": "Evaluationsmodell",
+    "c": "Logisches Modell der Veränderung",
+    "d": "Implementierungsmodell",
+    "richtig": "c",
+    "begruendung": "Der Perspektivwechsel vom Problem zur Lösung erfolgt in Schritt 2. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Aussage zu logischen Modellen ist richtig?",
+    "a": "Beim Planen wird ausschließlich von Ursachen nach vorne gearbeitet.",
+    "b": "Das Modell der Intervention enthält nur Schritt 6.",
+    "c": "Das Modell des Problems wird erst nach der Intervention erstellt.",
+    "d": "Die angenommene Kausalität verläuft von links nach rechts, bei der Planung wird jedoch vom gewünschten Endzustand rückwärts gedacht.",
+    "richtig": "d",
+    "begruendung": "Die Intervention wird also vom gewünschten Ergebnis ausgehend zurückgeplant. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was ist im Intervention Mapping eine Methode?",
+    "a": "Eine allgemeine theoriebasierte Technik oder ein Prozess zur Verhaltensänderung",
+    "b": "Ein konkretes Video oder Rollenspiel",
+    "c": "Eine Voraussetzung für eine statistische Analyse",
+    "d": "Das fertige Gesundheitsprogramm",
+    "richtig": "a",
+    "begruendung": "Methoden sind generisch; konkrete Interventionselemente sind Anwendungen. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was ist eine Anwendung?",
+    "a": "Ein kausaler Einflussfaktor auf Verhalten",
+    "b": "Die konkrete praktische Umsetzung einer theoretischen Methode",
+    "c": "Eine Voraussetzung, damit die Methode wirken kann",
+    "d": "Eine Form der Prozessevaluation",
+    "richtig": "b",
+    "begruendung": "Beispiel: Methode = Modeling; Anwendung = konkretes Video mit einem Vorbild. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was sind Wirkparameter?",
+    "a": "Statistische Effektstärken einer Intervention",
+    "b": "Bedingungen, die eine Anwendung erfüllen muss, damit eine Methode korrekt umgesetzt wird",
+    "c": "Eigenschaften der Zielpopulation",
+    "d": "Ausschließlich biologische Einflussfaktoren",
+    "richtig": "b",
+    "begruendung": "Werden Wirkparameter ignoriert, ist die Wirksamkeit der Methode nicht gewährleistet. SB2_K4-Intervention(1).pdfAK-Falle: Eine gute Methode funktioniert nicht automatisch, wenn sie schlecht umgesetzt wird."
+  },
+  {
+    "frage": "Welche Aussage zu Furchtappellen entspricht dem Studienbrief?",
+    "a": "Furcht führt unabhängig von anderen Faktoren zuverlässig zur Verhaltensänderung.",
+    "b": "Schreckbilder erhöhen automatisch die Selbstwirksamkeit.",
+    "c": "Persönliche Anfälligkeit spielt keine Rolle.",
+    "d": "Furchtappelle benötigen unter anderem ausreichende Selbstwirksamkeit, Handlungswirksamkeit und wahrgenommene persönliche Anfälligkeit.",
+    "richtig": "d",
+    "begruendung": "Sonst können defensive Reaktionen wie Leugnen oder Ignorieren auftreten. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Warum wird beim Modeling (Lernen am Modell) eher ein Coping Model als ein Mastery Model empfohlen?",
+    "a": "Weil das Modell Schwierigkeiten erlebt und deren Bewältigung realistischer demonstriert.",
+    "b": "Weil ein Coping Model keine Selbstwirksamkeit benötigt.",
+    "c": "Weil ein Mastery Model grundsätzlich bestraft wird.",
+    "d": "Weil Modeling nur bei negativen Vorbildern wirkt.",
+    "richtig": "a",
+    "begruendung": "Das Verhalten darf dem Modell nicht einfach mühelos zufallen; relevante Hürden und deren Bewältigung sollen sichtbar sein. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Aufgabe gehört zu Schritt 4?",
+    "a": "Bewertung von Verhaltensfaktoren",
+    "b": "Identifikation von Umweltzielen",
+    "c": "Entwicklung und Testung konkreter Programmmaterialien",
+    "d": "Formulierung des logischen Modells des Problems",
+    "richtig": "c",
+    "begruendung": "Schritt 4 macht aus Methoden und Anwendungen das konkrete Gesamtprogramm. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was unterscheidet Prätest und Pilotversuch?",
+    "a": "Beim Prätest werden Einzelkomponenten getestet, beim Pilotversuch das komplette Programm.",
+    "b": "Prätest erfolgt nach der vollständigen Implementierung, Pilotversuch davor.",
+    "c": "Pilotversuche testen ausschließlich einzelne Bilder und Texte.",
+    "d": "Beide Begriffe bezeichnen dasselbe.",
+    "richtig": "a",
+    "begruendung": "AK-Falle:Prätest = Teile. Pilot = Ganzes. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was bezeichnet der Kommunikationskanal?",
+    "a": "Die konkrete Form der Nachricht, z. B. Talkshow",
+    "b": "Die Zielpopulation",
+    "c": "Das Medium, über das die Botschaft übermittelt wird, z. B. Fernsehen oder persönlicher Kontakt",
+    "d": "Die theoretische Veränderungsmethode",
+    "richtig": "c",
+    "begruendung": "Ein Kommunikationsvehikel wäre dagegen z. B. innerhalb des Fernsehens ein Interview oder eine Talkshow. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Wer sind die Annehmenden (adopters) einer Intervention?",
+    "a": "Die Personen, deren Gesundheit verbessert werden soll",
+    "b": "Personen mit Entscheidungsmacht darüber, ob das Programm eingeführt wird",
+    "c": "Personen, die das Programm praktisch durchführen",
+    "d": "Personen, die die Effekte statistisch evaluieren",
+    "richtig": "b",
+    "begruendung": "Beispiel Schule: Schulleitung/Schulbehörde = Annehmende. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Wer wären bei einem Schulprogramm typischerweise die Umsetzenden (implementers)?",
+    "a": "Schüler:innen als Zielgruppe",
+    "b": "Eltern als Kontrollgruppe",
+    "c": "Schulleitung, weil sie das Programm genehmigt",
+    "d": "Lehrkräfte oder externe Fachkräfte, die das Programm tatsächlich durchführen",
+    "richtig": "d",
+    "begruendung": "AK-Falle: Annehmende entscheiden – Umsetzende machen. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was bedeutet Nachhaltigkeit (sustainability) im Intervention Mapping?",
+    "a": "Ökologisch klimaneutrale Durchführung",
+    "b": "Geringer finanzieller Aufwand",
+    "c": "Langfristige Integration der Intervention in Alltagsabläufe oder Routinen",
+    "d": "Einmalige vollständige Durchführung",
+    "richtig": "c",
+    "begruendung": "Genau diese Bedeutung wurde in der SoSe-2026-AK geprüft. AFG_AK2026SoSe.pdfAK-Falle: Nachhaltigkeit ≠ ökologischer Fußabdruck."
+  },
+  {
+    "frage": "Welche Frage gehört zur Effektevaluation?",
+    "a": "Hat sich das Gesundheitsverhalten der Zielgruppe durch die Intervention verändert?",
+    "b": "Wie viele Programmmodule führten die Lehrkräfte tatsächlich durch?",
+    "c": "Wie viele Personen wurden erreicht?",
+    "d": "Wurde das Programm gemäß Handbuch durchgeführt?",
+    "richtig": "a",
+    "begruendung": "Effektevaluation untersucht Ergebnisse und Veränderungen. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Eine Evaluation untersucht Reichweite und Umsetzungsgenauigkeit. Um welchen Typ handelt es sich?",
+    "a": "Summative Bedarfsanalyse",
+    "b": "Effektevaluation",
+    "c": "Wirkungsmodellierung",
+    "d": "Prozessevaluation",
+    "richtig": "d",
+    "begruendung": "Prozessevaluation untersucht, wie das Programm entwickelt, eingeführt und umgesetzt wurde. SB2_K4-Intervention.pdfAK-Falle: Genau das wurde in der SoSe-2026-AK abgefragt. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was bezeichnet der Kontext innerhalb der Prozessevaluation?",
+    "a": "Ausschließlich die Motivation der Umsetzenden",
+    "b": "Aspekte des weiteren sozialen Umfelds, die die Programmumsetzung beeinflussen",
+    "c": "Den statistischen Effekt der Intervention",
+    "d": "Die Zahl der erreichten Personen",
+    "richtig": "b",
+    "begruendung": "Beispielsweise können Einstellungen von Eltern die Umsetzung schulischer Gesundheitsprogramme beeinflussen. SB2_K4-Intervention.pdfAK-Falle: In der AK: Kontext = soziales Umfeld. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was bedeutet Wirksamkeit im Studienbrief?",
+    "a": "Wirkung unter realen Alltagsbedingungen",
+    "b": "Wirkung einer Intervention unter optimalen bzw. kontrollierten Bedingungen",
+    "c": "Langfristige Integration in den Alltag",
+    "d": "Anteil der erreichten Zielgruppe",
+    "richtig": "b",
+    "begruendung": "Wirksamkeit = optimale Bedingungen, während Effektivität reale Bedingungen meint. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Was bedeutet Effektivität?",
+    "a": "Wirkung ausschließlich unter Laborbedingungen",
+    "b": "Theoretisches Potenzial einer Methode",
+    "c": "Anzahl korrekt umgesetzter Einheiten",
+    "d": "Wirkung einer Intervention unter realen Bedingungen",
+    "richtig": "d",
+    "begruendung": "AK-Falle:Wirksamkeit = ideal.Effektivität = real."
+  },
+  {
+    "frage": "Warum ist bei der Evaluation eine Kontrollgruppe wichtig?",
+    "a": "Sie ersetzt den Prätest.",
+    "b": "Sie erhöht automatisch die Reichweite.",
+    "c": "Veränderungen könnten auch durch andere Einflüsse als die Intervention entstanden sein.",
+    "d": "Kontrollgruppen werden nur für qualitative Forschung verwendet.",
+    "richtig": "c",
+    "begruendung": "Ein bloßer Prä-Post-Unterschied reicht nicht für einen guten Kausalschluss. Optimal ist eine randomisierte Interventions- und Kontrollgruppe. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Wann ist eine Cluster-Randomisierung besonders sinnvoll?",
+    "a": "Wenn nicht einzelne Personen, sondern ganze Einheiten wie Schulen oder Klassen zufällig den Bedingungen zugeteilt werden können",
+    "b": "Wenn überhaupt keine Randomisierung möglich ist",
+    "c": "Wenn eine Intervention nur qualitativ untersucht wird",
+    "d": "Wenn ausschließlich eine einzige Gruppe vorhanden ist",
+    "richtig": "a",
+    "begruendung": "Gesundheitsprogramme finden häufig innerhalb bestehender Organisationseinheiten statt. Dann können beispielsweise ganze Schulen randomisiert werden. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Was bedeutet Umsetzungsgenauigkeit (fidelity)?",
+    "a": "Anteil der Zielgruppe, der erreicht wurde",
+    "b": "Ausmaß der langfristigen Wirkung",
+    "c": "Inwieweit das Programm so durchgeführt wurde, wie es von den Entwickler:innen vorgesehen war",
+    "d": "Anzahl der Personen, die sich freiwillig anmelden",
+    "richtig": "c",
+    "begruendung": "Werden z. B. Rollenspiele so verändert, dass wichtige Wirkparameter verloren gehen, sinkt die Umsetzungsgenauigkeit. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Was bezeichnet Reichweite?",
+    "a": "Stärke des Interventionseffekts",
+    "b": "Anteil der Zielgruppe, der das Programm tatsächlich erreicht bzw. erhalten hat",
+    "c": "Grad der theoretischen Fundierung",
+    "d": "langfristige Integration der Intervention",
+    "richtig": "b",
+    "begruendung": "AK-Falle: Reichweite = Prozess, nicht Effekt."
+  },
+  {
+    "frage": "Warum ist eine gute Dokumentation der Intervention wichtig?",
+    "a": "Weil nur dokumentierte Programme als RCT gelten",
+    "b": "Weil damit keine Evaluation mehr nötig ist",
+    "c": "Weil sie ausschließlich urheberrechtliche Zwecke erfüllt",
+    "d": "Sie ermöglicht Replikation, Validierung, Vergleich und Anpassung an andere Zielgruppen und Kontexte.",
+    "richtig": "d",
+    "begruendung": "Intervention Mapping bietet dafür eine einheitliche Struktur und Terminologie. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Welche Zuordnung ist vollständig korrekt?",
+    "a": "Schritt 1 → Modell der Veränderung; Schritt 2 → Prätest; Schritt 4 → Umweltfaktoren bewerten",
+    "b": "Schritt 2 → Bedarfsanalyse; Schritt 3 → Pilotversuch; Schritt 5 → Effektevaluation",
+    "c": "Schritt 1 → Modell des Problems; Schritt 2 → Veränderungsziele; Schritt 4 → Prätest/Pilot; Schritt 6 → Evaluation",
+    "d": "Schritt 1 → Programmmaterialien; Schritt 3 → Umweltziele; Schritt 5 → Modell des Problems",
+    "richtig": "c",
+    "begruendung": "Genau solche fast plausiblen Verschiebungen zwischen den Schritten sind die zentrale AK-Falle. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Reihenfolge entspricht dem Vorgehen der Schlüsselprozesse beim Intervention Mapping am ehesten?",
+    "a": "Literaturrecherche → Brainstorming → Planungsfragen → eigene Forschung",
+    "b": "Planungsfragen → Brainstorming → empirische Belege/Theorien suchen → ggf. eigene Forschung → endgültige Antworten",
+    "c": "Eigene Forschung → Planungsfragen → Literaturrecherche → Brainstorming",
+    "d": "Theorien auswählen → Intervention durchführen → Bedarf bestimmen → Evaluation",
+    "richtig": "b",
+    "begruendung": "Zuerst werden Fragen gestellt und vorläufige Antworten gebrainstormt. Erst danach wird systematisch nach empirischen Belegen und Theorien gesucht. SB2_K4-Intervention.pdfAK-Falle: Brainstorming ersetzt nicht die Literaturrecherche."
+  },
+  {
+    "frage": "Während des Brainstormings wird „soziale Norm“ als möglicherweise relevanter Faktor identifiziert. Anschließend wird gezielt dieses theoretische Konstrukt recherchiert. Welche Herangehensweise ist das?",
+    "a": "problemgerichtete Herangehensweise",
+    "b": "theoriegerichtete Herangehensweise",
+    "c": "konstruktgerichtete Herangehensweise",
+    "d": "evaluative Herangehensweise",
+    "richtig": "c",
+    "begruendung": "Beim construct approach (konstruktgerichteter Ansatz) wird ein identifiziertes theoretisches Konstrukt vertieft recherchiert. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Wann handelt es sich um eine theoriegerichtete Herangehensweise (general theory approach)?",
+    "a": "Wenn ausschließlich Studien zu einem bestimmten Gesundheitsproblem gesucht werden",
+    "b": "Wenn eine allgemeine Theorie, etwa die sozial-kognitive Theorie, auf das Problem angewendet wird",
+    "c": "Wenn einzelne Konstrukte wie soziale Norm recherchiert werden",
+    "d": "Wenn ohne Theorie nur eigene Forschung durchgeführt wird",
+    "richtig": "b",
+    "begruendung": "Allgemeine Theorien werden auf das konkrete Problem übertragen. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Welche Verhaltensweise ist ein Beispiel für risikominderndes Verhalten?",
+    "a": "Ausreichend schlafen",
+    "b": "Regelmäßig Zähne putzen",
+    "c": "Blutzucker bei bestehendem Diabetes kontrollieren",
+    "d": "Mit dem Rauchen aufhören",
+    "richtig": "d",
+    "begruendung": "Risikominderndes Verhalten reduziert ein bereits vorhandenes Risiko. SB2_K4-Intervention.pdfAK-Falle: „Risikomindernd“ und „gesundheitsfördernd“ sind nicht völlig dasselbe."
+  },
+  {
+    "frage": "Welche Verhaltensweise gehört am ehesten zu Compliance- und Selbstmanagement-Verhalten?",
+    "a": "Nichtrauchen bei einer gesunden Person",
+    "b": "Ausreichend schlafen",
+    "c": "Den Blutzuckerspiegel bei bestehendem Diabetes beobachten",
+    "d": "Einen Fahrradhelm tragen",
+    "richtig": "c",
+    "begruendung": "Compliance- und Selbstmanagement-Verhalten betrifft bereits Erkrankte und soll den Umgang mit der Erkrankung verbessern bzw. Verschlechterungen verhindern. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Wann kann es sinnvoll sein, eine Interventionspopulation in Subgruppen aufzuteilen?",
+    "a": "Immer, unabhängig von Unterschieden innerhalb der Zielgruppe",
+    "b": "Nur bei unterschiedlichen Altersgruppen",
+    "c": "Nur wenn die Stichprobe zu groß ist",
+    "d": "Wenn sich relevante Determinanten oder Handlungsziele zwischen Teilgruppen unterscheiden",
+    "richtig": "d",
+    "begruendung": "Dann können für die Subgruppen eigene Matrizen der Veränderungsziele notwendig sein. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Aussage zur Unterteilung der Zielgruppe ist korrekt?",
+    "a": "Jede Intervention muss mindestens zwei Subgruppen enthalten.",
+    "b": "Der Nutzen einer Unterteilung sollte gegen zusätzlichen Aufwand und Kosten abgewogen werden.",
+    "c": "Subgruppen dürfen nur anhand des Geschlechts gebildet werden.",
+    "d": "Für alle Subgruppen wird immer dieselbe Veränderungszielmatrix verwendet.",
+    "richtig": "b",
+    "begruendung": "Eine Unterteilung kann sinnvoll sein, verursacht aber zusätzliche praktische Kosten und Aufwand. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was bezeichnet der Umfang einer Intervention?",
+    "a": "Die Reihenfolge der einzelnen Module",
+    "b": "Die Anzahl erreichter Personen",
+    "c": "Menge und Intensität des Programms",
+    "d": "Die Zahl der verwendeten Theorien",
+    "richtig": "c",
+    "begruendung": "Umfang beschreibt beispielsweise, ob eine Intervention sehr intensiv über kurze Zeit oder regelmäßig über längere Zeit durchgeführt wird. SB2_K4-Intervention.pdfAK-Falle: Umfang ≠ Ablauf."
+  },
+  {
+    "frage": "Was beschreibt der Ablauf einer Intervention?",
+    "a": "Reihenfolge der Module und ob Komponenten parallel oder nacheinander stattfinden",
+    "b": "Menge und Intensität der Intervention",
+    "c": "Anteil der tatsächlich erreichten Zielgruppe",
+    "d": "langfristige Integration in den Alltag",
+    "richtig": "a",
+    "begruendung": "Umfang = wie viel/wie intensiv; Ablauf = in welcher Reihenfolge. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Welche Aussage zur Auswahl eines Kommunikationsmediums ist richtig?",
+    "a": "Jede Methode kann über jedes Medium gleich gut umgesetzt werden.",
+    "b": "Kommunikationskanal und Wirkparameter sind voneinander unabhängig.",
+    "c": "Der gewählte Kanal muss zur Zielgruppe und zu den Anforderungen der Methode passen.",
+    "d": "Der Kommunikationskanal wird erst bei der Evaluation festgelegt.",
+    "richtig": "c",
+    "begruendung": "Beispielsweise eignet sich ein Radiointerview nicht für eine angeleitete Übung, wenn deren Wirkparameter dort nicht umgesetzt werden können. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Was geschieht in Schritt 5 bei der Planung von Annahme, Umsetzung und Nachhaltigkeit?",
+    "a": "Nur die bereits fertige Intervention wird verteilt.",
+    "b": "Es wird ausschließlich eine Effektevaluation durchgeführt.",
+    "c": "Die Schritte 1 bis 4 dürfen nicht mehr verändert werden.",
+    "d": "Für Annahme, Umsetzung und Nachhaltigkeit werden im Prinzip erneut entsprechende Ziele, Determinanten, Methoden und Anwendungen entwickelt.",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief fasst es so zusammen, dass Entwickler:innen dafür erneut die Schritte 1 bis 4 des Intervention Mapping durchlaufen. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Ein Programm sieht zehn Sitzungen vor. Eine Schule führt davon nur sechs durch. Welche Komponente der Prozessevaluation wird damit besonders untersucht?",
+    "a": "Reichweite",
+    "b": "Ausmaß, in dem das Programm umgesetzt wurde",
+    "c": "Ausmaß, in dem das Programm empfangen wurde",
+    "d": "Anwerben von Teilnehmenden",
+    "richtig": "b",
+    "begruendung": "Hier geht es darum, wie viel vom vorgesehenen Programm tatsächlich durchgeführt wurde. SB2_K4-Intervention(1).pdfAK-Falle: Das ist nicht dasselbe wie die Frage, wie viel die Zielgruppe tatsächlich absolvierte."
+  },
+  {
+    "frage": "Viele Teilnehmende fehlen regelmäßig und absolvieren nur einen Teil der Intervention. Was wird damit erfasst?",
+    "a": "Umsetzungsgenauigkeit",
+    "b": "Reichweite",
+    "c": "Ausmaß, in dem das Programm empfangen wurde",
+    "d": "Kontext",
+    "richtig": "c",
+    "begruendung": "„Empfangen“ beschreibt, in welchem Umfang die Zielgruppe selbst das Programm tatsächlich absolviert. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Komponente der Prozessevaluation beantwortet die Frage, wie die Teilnehmenden überhaupt für das Programm gewonnen wurden?",
+    "a": "Gesamtumsetzung",
+    "b": "Kontext",
+    "c": "Reichweite",
+    "d": "Anwerben von Teilnehmenden",
+    "richtig": "d",
+    "begruendung": "Dabei wird z. B. unterschieden, ob Personen persönlich eingeladen, über Werbung gewonnen oder verpflichtend einbezogen wurden. \u00a0\nSB2_K4-Intervention(1).pdf"
+  },
+  {
+    "frage": "Welche Aussage zum logischen Modell der Intervention ist korrekt?",
+    "a": "Es enthält ausschließlich das logische Modell des Problems.",
+    "b": "Es wird erst nach Abschluss der Evaluation erstellt.",
+    "c": "Es verbindet Problemlogik, Veränderungslogik, Methoden/Anwendungen sowie Implementierungs- und Umsetzungsplanung.",
+    "d": "Es enthält ausschließlich gesundheitliche Endpunkte.",
+    "richtig": "c",
+    "begruendung": "Es bildet praktisch die gesamte angenommene Wirkungskette der Intervention ab und wird später auch für die Evaluation genutzt. \u00a0\nSB2_K4-Intervention.pdf"
+  },
+  {
+    "frage": "Eine Schule wird zufällig der Kontrollgruppe zugewiesen und erhält die Intervention erst später. Welches Design beschreibt das?",
+    "a": "Querschnittdesign",
+    "b": "Analogexperiment",
+    "c": "Wartelisten-Kontrollgruppendesign",
+    "d": "Fall-Kontroll-Studie",
+    "richtig": "c",
+    "begruendung": "Eine Kontrollgruppe erhält die Intervention zunächst nicht bzw. erst zu einem späteren Zeitpunkt. Ganze Schulen können dabei beispielsweise cluster-randomisiert werden. \u00a0\nSB2_K4-Intervention.pdf"
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

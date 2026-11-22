@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J]L[M</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            
+            --primary-blue: #1e3a8a;       
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;        
+            
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;          
+            --text-muted: #64748b;
+            
+            --correct-bg: #ecfdf5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            
+            --wrong-bg: #fef2f2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Fixer Zurück-Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .fixed-back-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .question-meta {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            background: #f1f5f9;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.selected {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .option-btn.correct-ans {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong-ans {
+            background: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            border: none;
+            color: #ffffff;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+
+        .explanation {
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .result-score {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            margin: 10px 0;
+            color: var(--primary-blue);
+            font-weight: 800;
+        }
+
+        .result-status {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .passed {
+            color: #059669;
+        }
+
+        .failed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<a href="LE_index.html" class="fixed-back-btn">
+    <span>←</span> J]L[M - HOME
+</a>
+
+<div class="app-container">
+    <header>
+        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="65" height="65">
+              <defs>
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+              <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+              <g transform="translate(100, 105)">
+                <path d="M -55 -25 C -35 -30, -10 -20, 0 -10 L 0 35 C -10 25, -35 15, -55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <path d="M 55 -25 C 35 -30, 10 -20, 0 -10 L 0 35 C 10 25, 35 15, 55 20 Z" fill="#f8fafc" opacity="0.9"/>
+                <line x1="0" y1="-10" x2="0" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+              </g>
+              <circle cx="70" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="100" cy="55" r="3.5" fill="#fbbf24"/>
+              <circle cx="130" cy="65" r="3" fill="#fbbf24" opacity="0.8"/>
+              <line x1="70" y1="65" x2="100" y2="55" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <line x1="100" y1="55" x2="130" y2="65" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+              <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+            </svg>
+        </div>
+        <h1>Quiz 1 - LE7 SB1/K5</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div id="startScreen" class="screen active">
+        <div class="question-text" style="text-align: center; margin-top: 10px;">
+            Bereit für deine Lernsession?<br><span style="color: var(--primary-blue); font-weight: 700;">Lerneinheit 7</span>
+        </div>
+        <p style="font-size: 0.88rem; text-align: center; margin-bottom: 28px; color: var(--text-muted); line-height: 1.5;">
+            Bestanden ab 75% korrekten Antworten.
+        </p>
+        <button class="cyber-btn" onclick="startQuiz()">Lernen starten</button>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div class="question-meta" id="questionCounter">Frage 1 / 30</div>
+        <div class="question-text" id="questionText">Lade Frage...</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation" id="explanationBox"></div>
+        <button class="cyber-btn" id="actionBtn" onclick="handleAction()">Antworten prüfen</button>
+    </div>
+
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <h2 style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;">Auswertung</h2>
+            <div class="result-score" id="resultScore">0%</div>
+            <div class="result-status" id="resultStatus">Status</div>
+            <p id="resultDetails" style="font-size: 0.92rem; margin-bottom: 25px; color: var(--text-muted); line-height: 1.5;"></p>
+            <button class="cyber-btn" onclick="restartQuiz()">Nochmal lernen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+  {
+    "frage": "Was beschreibt Selbstregulation am treffendsten?",
+    "a": "Die ausschließliche Unterdrückung spontaner Impulse",
+    "b": "Die automatische Ausführung gelernter Reiz-Reaktions-Muster",
+    "c": "Die Initiierung, Überwachung und Steuerung von Gedanken, Emotionen und Verhalten zur Zielerreichung",
+    "d": "Die emotionale Verarbeitung einer Erkrankung",
+    "richtig": "c",
+    "begruendung": "Selbstregulation umfasst den gesamten zielgerichteten Steuerungsprozess.\nAK-Falle: Selbstregulation ist mehr als Selbstkontrolle."
+  },
+  {
+    "frage": "Wie ist das persönliche Zielsystem nach Brunstein et al. organisiert?",
+    "a": "Zyklisch",
+    "b": "Dichotom",
+    "c": "Linear",
+    "d": "Hierarchisch",
+    "richtig": "d",
+    "begruendung": "Übergeordnete Ziele werden in konkretere untergeordnete Ziele gegliedert.\nAK-Falle: Hierarchisch wurde in der AK direkt gegen „zyklisch“ gestellt. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was bedeutet vertikale Differenzierung eines Zielsystems?",
+    "a": "Konkrete untergeordnete Ziele werden aus übergeordneten Zielen abgeleitet.",
+    "b": "Verschiedene Ziele widersprechen sich nicht.",
+    "c": "Ein unerreichbares Ziel wird aufgegeben.",
+    "d": "Ein kurzfristiges Ziel wird durch ein langfristiges ersetzt.",
+    "richtig": "a",
+    "begruendung": "Beispiel: „gesund leben“ → „regelmäßig bewegen“."
+  },
+  {
+    "frage": "Was bezeichnet horizontale Kohärenz?",
+    "a": "Die Hierarchie zwischen Ober- und Unterzielen",
+    "b": "Die Schwierigkeit eines Ziels",
+    "c": "Die Widerspruchsfreiheit zwischen verschiedenen Zielen",
+    "d": "Die zeitliche Stabilität eines Ziels",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Widerspruchsfreiheit = horizontal, nicht vertikal. Genau so kam es in der AK. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Aussage über die Wichtigkeit eines Ziels entspricht dem Studienbrief?",
+    "a": "Wichtigkeit beeinflusst nur die Zielauswahl, nicht die Zielverfolgung.",
+    "b": "Je wichtiger ein Ziel, desto ausgeprägter sind typischerweise die selbstregulativen Aktivitäten.",
+    "c": "Besonders wichtige Ziele benötigen weniger Selbstregulation.",
+    "d": "Die Zielwichtigkeit spielt ausschließlich bei kurzfristigen Zielen eine Rolle.",
+    "richtig": "b",
+    "begruendung": "Zielwichtigkeit ist eine zentrale Zieldimension und beeinflusst die Anstrengung."
+  },
+  {
+    "frage": "Welche Aussage ist ein Annäherungsziel?",
+    "a": "„Ich möchte keinen Herzinfarkt bekommen.“",
+    "b": "„Ich möchte eine Grippeinfektion vermeiden.“",
+    "c": "„Ich möchte verhindern, wieder zu rauchen.“",
+    "d": "„Ich möchte einen Halbmarathon laufen.“",
+    "richtig": "d",
+    "begruendung": "Annäherungsziele richten sich auf einen gewünschten Zustand."
+  },
+  {
+    "frage": "Was gehört zu einer adaptiven Zielanpassung, wenn ein Ziel dauerhaft nicht mehr erreichbar ist?",
+    "a": "Nur die Anstrengung für das alte Ziel erhöhen",
+    "b": "Das alte Ziel möglichst lange unverändert weiterverfolgen",
+    "c": "Zielentbindung und Zielneubindung",
+    "d": "Ausschließlich neue kurzfristige Ziele formulieren",
+    "richtig": "c",
+    "begruendung": "Erfolgreiche Anpassung bedeutet, ein unerreichbares Ziel loszulassen und neue realistische Ziele aufzubauen."
+  },
+  {
+    "frage": "Welche Rolle kann Gesundheit im persönlichen Zielsystem spielen?",
+    "a": "Ausschließlich als eigenständiges Ziel",
+    "b": "Ausschließlich als Voraussetzung für andere Ziele",
+    "c": "Ausschließlich als Folge erfolgreicher Selbstregulation",
+    "d": "Als eigenes Ziel, als Voraussetzung für andere Ziele und als Unterstützung weiterer Ziele",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief beschreibt alle drei Funktionen."
+  },
+  {
+    "frage": "Was bezeichnet Selbstwirksamkeitserwartung?",
+    "a": "Die Erwartung, dass eine Belohnung langfristig größer wird",
+    "b": "Die Einschätzung, ein erforderliches Verhalten selbst erfolgreich ausführen zu können",
+    "c": "Die Fähigkeit, emotionale Reaktionen vollständig auszuschalten",
+    "d": "Die automatische Ausführung einer Gewohnheit",
+    "richtig": "b",
+    "begruendung": "Selbstwirksamkeit bezieht sich auf das Vertrauen in die eigene Handlungsfähigkeit."
+  },
+  {
+    "frage": "Was bedeutet Belohnungsaufschub?",
+    "a": "Ein langfristiges Ziel auf einen späteren Zeitpunkt verschieben",
+    "b": "Zwei gleichwertige Ziele nacheinander verfolgen",
+    "c": "Auf eine kurzfristige positive Verhaltensfolge zugunsten einer bedeutsameren langfristigen Verstärkung verzichten",
+    "d": "Eine Belohnung grundsätzlich vermeiden",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Belohnungsaufschub, nicht „Zielaufschub“. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Für welche Ziele sind selbstregulative Kompetenzen laut AK besonders bedeutsam?",
+    "a": "Nur spontane Ziele",
+    "b": "Nur kurzfristige Ziele",
+    "c": "Ausschließlich unbewusste Ziele",
+    "d": "Langfristige gesundheitsbezogene Ziele",
+    "richtig": "d",
+    "begruendung": "Langfristige Gesundheitsziele konkurrieren häufig mit kurzfristig attraktiven Belohnungen. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was ist der zentrale Mechanismus in der Selbstregulationstheorie von Carver & Scheier?",
+    "a": "Klassische Konditionierung",
+    "b": "Fortlaufender Vergleich von Soll- und Ist-Zustand",
+    "c": "Ausschließliche Unterdrückung negativer Emotionen",
+    "d": "Ausschließliche Verstärkung erfolgreichen Verhaltens",
+    "richtig": "b",
+    "begruendung": "Abweichungen zwischen gewünschtem und aktuellem Zustand führen zur Anpassung von Verhaltensstrategien."
+  },
+  {
+    "frage": "Welche Funktion haben Emotionen bei Carver & Scheier?",
+    "a": "Sie beeinträchtigen Selbstregulation grundsätzlich.",
+    "b": "Sie spielen für Zielverfolgung keine Rolle.",
+    "c": "Sie liefern Rückmeldung über Fortschritte oder fehlenden Erfolg bei der Zielerreichung.",
+    "d": "Sie ersetzen den Vergleich von Soll- und Ist-Zustand.",
+    "richtig": "c",
+    "begruendung": "Positive bzw. negative Gefühlslagen können Hinweise auf den Verlauf der Zielerreichung geben."
+  },
+  {
+    "frage": "Was versteht man nach Baumeister & Heatherton unter Selbstkontrolle?",
+    "a": "Die gesamte Regulation persönlicher Ziele",
+    "b": "Das Setzen möglichst konkreter Ziele",
+    "c": "Die Fähigkeit, eigenen Impulsen, Wünschen oder Gewohnheiten zu widerstehen oder sie zu verändern",
+    "d": "Die automatische Anpassung an Kontextreize",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Genau diese Definition wurde in der AK geprüft. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Abgrenzung ist korrekt?",
+    "a": "Selbstkontrolle umfasst den Gesamtprozess; Selbstregulation nur Impulskontrolle.",
+    "b": "Beide Begriffe bezeichnen im Studienbrief exakt dasselbe.",
+    "c": "Selbstkontrolle beschreibt ausschließlich die Zielsetzung.",
+    "d": "Selbstregulation ist der Gesamtprozess der Zielsteuerung; Selbstkontrolle ist eine Ressource bzw. Fähigkeit innerhalb dieses Prozesses.",
+    "richtig": "d",
+    "begruendung": "Merker: Regulation = steuern, Kontrolle = widerstehen."
+  },
+  {
+    "frage": "Welche Annahme gehört zum Strength Model of Self-Control?",
+    "a": "Selbstkontrolle steht unbegrenzt zur Verfügung.",
+    "b": "Selbstkontrolle ist für jede Verhaltensdomäne völlig unabhängig.",
+    "c": "Selbstkontrolle wird als begrenzte globale Ressource betrachtet.",
+    "d": "Selbstkontrolle beruht ausschließlich auf Gewohnheiten.",
+    "richtig": "c",
+    "begruendung": "Im Modell wird Selbstkontrolle mit einem Muskel verglichen, dessen Leistungsfähigkeit nach Beanspruchung abnimmt."
+  },
+  {
+    "frage": "Was bezeichnet Ego-Depletion?",
+    "a": "Dauerhaften Verlust jeglicher Selbstkontrollfähigkeit",
+    "b": "Einen Zustand vorübergehend verminderter Selbstkontrollressourcen nach Beanspruchung",
+    "c": "Einen Konflikt zwischen zwei gleich wichtigen Zielen",
+    "d": "Eine besonders starke Gewohnheitsbildung",
+    "richtig": "b",
+    "begruendung": "Nach dem Ressourcenmodell soll starke vorherige Selbstkontrollbeanspruchung die nachfolgende Selbstkontrolle reduzieren."
+  },
+  {
+    "frage": "Welche Aussage zum Strength Model ist korrekt?",
+    "a": "Seine Annahmen gelten inzwischen als zweifelsfrei bestätigt.",
+    "b": "Das Modell wurde empirisch vollständig widerlegt.",
+    "c": "Es erklärt nachweislich jede Form gesundheitsbezogenen Verhaltens.",
+    "d": "Es gibt unterstützende Befunde, aber auch konzeptuelle und methodische Kritik.",
+    "richtig": "d",
+    "begruendung": "Der Studienbrief stellt das Modell ausdrücklich als umstritten dar."
+  },
+  {
+    "frage": "Warum reichen bewusste Selbstregulationsmodelle zur Erklärung von Gesundheitsverhalten nicht immer aus?",
+    "a": "Weil Gesundheitsverhalten nie bewusst gesteuert wird",
+    "b": "Weil auch Impulse, automatische Prozesse und Gewohnheiten Verhalten beeinflussen",
+    "c": "Weil Gesundheitsziele grundsätzlich unbewusst sind",
+    "d": "Weil Selbstregulation nur bei Krankheit vorkommt",
+    "richtig": "b",
+    "begruendung": "Menschen handeln häufig trotz besseren Wissens anders als geplant."
+  },
+  {
+    "frage": "Welche beiden Systeme unterscheidet die Zweisystem-Theorie von Hofmann et al.?",
+    "a": "Kognitives und behaviorales System",
+    "b": "Emotionales und behaviorales System",
+    "c": "Reflektives und impulsives System",
+    "d": "Rationales und soziales System",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Kein behaviorales System. Genau das war eine AK-Aussage. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche Eigenschaft gehört zum reflektiven System?",
+    "a": "Automatisierte Informationsverarbeitung mit sehr geringem Ressourcenbedarf",
+    "b": "Ausschließliche Steuerung durch hedonistische Affekte",
+    "c": "Starre Reaktion auf frühere Lernerfahrungen",
+    "d": "Bewusste Planung und Bewertung unter Nutzung kognitiver Ressourcen",
+    "richtig": "d",
+    "begruendung": "Das reflektive System ist langsam und ressourcenintensiver, dafür flexibel."
+  },
+  {
+    "frage": "Welche Eigenschaft gehört zum impulsiven System?",
+    "a": "Schnelle automatisierte Verarbeitung und Aktivierung gelernter Verhaltenstendenzen",
+    "b": "Ausführliche rationale Bewertung aller Verhaltensfolgen",
+    "c": "Besonders hoher Bedarf an Gedächtniskapazität",
+    "d": "Ausschließliche Orientierung an langfristigen Zielen",
+    "richtig": "a",
+    "begruendung": "Das impulsive System arbeitet schnell und ressourcensparend, ist dafür weniger flexibel."
+  },
+  {
+    "frage": "Welche Rolle spielen hedonistische Affekte in der Zweisystem-Theorie?",
+    "a": "Sie treten ausschließlich im reflektiven System auf.",
+    "b": "Sie sind für beide Systeme bedeutungslos.",
+    "c": "Sie entstehen erst nach der Verhaltensausführung.",
+    "d": "Sie spielen im impulsiven System eine zentrale Rolle.",
+    "richtig": "d",
+    "begruendung": "Hedonistisch = auf Lustgewinn bzw. Vermeidung von Unlust ausgerichtet.\nAK: Genau so geprüft → wahr. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Reflektives und impulsives System aktivieren unterschiedliche Verhaltensweisen. Wovon hängt nach Hofmann et al. besonders ab, welches Verhalten tatsächlich ausgeführt wird?",
+    "a": "Ausschließlich vom langfristigen Gesundheitsnutzen",
+    "b": "Ausschließlich von der sozialen Norm",
+    "c": "Von der jeweiligen Aktivierungsstärke der konkurrierenden Verhaltenstendenzen",
+    "d": "Ausschließlich von der Selbstwirksamkeit",
+    "richtig": "c",
+    "begruendung": "Das stärker aktivierte Verhalten setzt sich im Konflikt eher durch."
+  },
+  {
+    "frage": "Was kann starke Ego-Erschöpfung laut Zweisystem-Theorie bewirken?",
+    "a": "Verstärkung des reflektiven Systems",
+    "b": "Dauerhafte Ausschaltung des impulsiven Systems",
+    "c": "Automatische Auflösung von Zielkonflikten",
+    "d": "Schwächung des reflektiven Systems und stärkeren Einfluss impulsgetriebenen Verhaltens",
+    "richtig": "d",
+    "begruendung": "Weniger Selbstkontrolle kann den Einfluss spontaner Impulse erhöhen."
+  },
+  {
+    "frage": "Wie definiert der Studienbrief eine Gewohnheit?",
+    "a": "Als bewusst geplantes Verhalten zur Erreichung eines langfristigen Ziels",
+    "b": "Als durch situative Hinweisreize ausgelöstes, automatisiertes Verhalten auf Basis erlernter Reiz-Reaktions-Muster",
+    "c": "Als kurzfristigen emotionalen Impuls ohne Lernerfahrung",
+    "d": "Als Verhalten, das ausschließlich durch soziale Normen entsteht",
+    "richtig": "b",
+    "begruendung": "Der Kontext wird durch Wiederholung mit dem Verhalten verknüpft."
+  },
+  {
+    "frage": "Welche Rolle spielen Kontextreize bei Gewohnheiten?",
+    "a": "Sie verhindern die Automatisierung des Verhaltens.",
+    "b": "Sie sind erst nach bewusster Entscheidung relevant.",
+    "c": "Sie können ein erlerntes Verhalten automatisch initiieren.",
+    "d": "Sie wirken ausschließlich bei gesundheitsschädlichen Gewohnheiten.",
+    "richtig": "c",
+    "begruendung": "AK: Genau diese Aussage wurde als wahr geprüft. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Wie entstehen feste Gewohnheitsassoziationen?",
+    "a": "Durch einmalige besonders intensive Entscheidungen",
+    "b": "Ausschließlich durch direkte Belohnung",
+    "c": "Durch bewusste Zielsetzung ohne Wiederholung",
+    "d": "Durch häufiges gemeinsames Auftreten einer Situation und eines bestimmten Verhaltens",
+    "richtig": "d",
+    "begruendung": "Wiederholung stärkt die Reiz-Reaktions-Verbindung."
+  },
+  {
+    "frage": "Welche Konsequenz ergibt sich für Interventionen zum Aufbau gesunder Gewohnheiten?",
+    "a": "Verhalten sollte möglichst häufig in wechselnden Kontexten gezeigt werden.",
+    "b": "Gesundheitsförderliches Verhalten sollte durch Wiederholung als stabiles Reiz-Reaktions-Muster etabliert werden.",
+    "c": "Bewusstes Denken über das Verhalten sollte dauerhaft immer stärker werden.",
+    "d": "Gewohnheitsbildung sollte vermieden werden, weil sie immer gesundheitsschädlich ist.",
+    "richtig": "b",
+    "begruendung": "Automatisierung kann gesundes Verhalten langfristig erleichtern."
+  },
+  {
+    "frage": "Was sollte beim Abbau einer schädlichen Gewohnheit besonders berücksichtigt werden?",
+    "a": "Ausschließlich das sichtbare Verhalten",
+    "b": "Nur die langfristigen Ziele der Person",
+    "c": "Die erlernte Assoziation zwischen Kontextreiz und Verhalten",
+    "d": "Nur die emotionale Repräsentation der Krankheit",
+    "richtig": "c",
+    "begruendung": "Der Studienbrief betont, dass die zugrunde liegenden Verknüpfungen aufgebrochen bzw. abgeschwächt werden sollten."
+  },
+  {
+    "frage": "Wofür wurde das Common-Sense-Modell (CSM) besonders entwickelt?",
+    "a": "Zur Erklärung allgemeiner Gewohnheitsbildung",
+    "b": "Zur Vorhersage ausschließlich sportlichen Verhaltens",
+    "c": "Zur Erklärung der Selbstregulation bei Krankheit und gesundheitlicher Bedrohung",
+    "d": "Zur Messung allgemeiner Selbstkontrolle",
+    "richtig": "c",
+    "begruendung": "Das CSM richtet sich speziell auf den Umgang mit gesundheitlichen Gefährdungen und Erkrankungen."
+  },
+  {
+    "frage": "Welche zwei parallelen Reaktionswege enthält das CSM?",
+    "a": "Reflektiver und impulsiver Reaktionsweg",
+    "b": "Bewusster und unbewusster Reaktionsweg",
+    "c": "Behavioraler und physiologischer Reaktionsweg",
+    "d": "Kognitiver und emotionaler Reaktionsweg",
+    "richtig": "d",
+    "begruendung": "AK-Falle: Beim CSM bedeutet „dual“ nicht reflektiv vs. impulsiv."
+  },
+  {
+    "frage": "Was entsteht im kognitiven Reaktionsarm des CSM?",
+    "a": "Ausschließlich Angst",
+    "b": "Kognitive Repräsentationen bzw. Krankheitstheorien",
+    "c": "Hedonistische Affekte",
+    "d": "Automatisierte Gewohnheiten",
+    "richtig": "b",
+    "begruendung": "Dieser Arm enthält Vorstellungen und Wissen über die Krankheit oder Bedrohung."
+  },
+  {
+    "frage": "Welche Zuordnung ist korrekt?",
+    "a": "Kognitiver Arm → Furchtkontrolle",
+    "b": "Emotionaler Arm → Gefahrenkontrolle",
+    "c": "Kognitiver Arm → Gefahrenkontrolle",
+    "d": "Reflektiver Arm → Furchtkontrolle",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Gefahrenkontrolle = kognitiv. Furchtkontrolle = emotional."
+  },
+  {
+    "frage": "Welchem Reaktionsarm ist die Furchtkontrolle zugeordnet?",
+    "a": "Reflektiver Reaktionsarm",
+    "b": "Kognitiver Reaktionsarm",
+    "c": "Impulsiver Reaktionsarm",
+    "d": "Emotionaler Reaktionsarm",
+    "richtig": "d",
+    "begruendung": "AK: Die Zuordnung zum kognitiven Arm war in der Klausur falsch. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Was geschieht nach einem Bewältigungsversuch im CSM?",
+    "a": "Der Regulationsprozess endet automatisch.",
+    "b": "Die Krankheitstheorie bleibt grundsätzlich unverändert.",
+    "c": "Die Wirksamkeit wird bewertet und kann zukünftige Wahrnehmungen, Repräsentationen und Bewältigung verändern.",
+    "d": "Nur die emotionale Reaktion wird neu bewertet.",
+    "richtig": "c",
+    "begruendung": "Das CSM enthält Rückkopplungsprozesse."
+  },
+  {
+    "frage": "Was sind subjektive Krankheitstheorien?",
+    "a": "Medizinisch objektive Diagnosekriterien",
+    "b": "Allgemeine gesellschaftliche Vorstellungen ohne persönlichen Bezug",
+    "c": "Persönliche kognitive Vorstellungen über eine Krankheit und ihr Funktionsgefüge",
+    "d": "Ausschließlich emotionale Reaktionen auf Krankheit",
+    "richtig": "c",
+    "begruendung": "Sie beeinflussen, wie Betroffene ihre Erkrankung verstehen und damit umgehen."
+  },
+  {
+    "frage": "Welche Dimension gehört zu subjektiven Krankheitstheorien?",
+    "a": "Extraversion",
+    "b": "Belohnungsaufschub",
+    "c": "Horizontale Kohärenz des Zielsystems",
+    "d": "Annahmen über Ursachen, Verlauf, Konsequenzen und Kontrollierbarkeit der Erkrankung",
+    "richtig": "d",
+    "begruendung": "Diese Dimensionen gehören zur kognitiven Krankheitsrepräsentation."
+  },
+  {
+    "frage": "Womit werden subjektive Krankheitstheorien häufig erfasst?",
+    "a": "PSS",
+    "b": "SRRS",
+    "c": "IPQ-R",
+    "d": "NEO-FFI",
+    "richtig": "c",
+    "begruendung": "IPQ-R = Illness Perception Questionnaire – Revised.\nAK: Genau so geprüft → wahr. \u00a0\nAFG_AK2026SoSe.pdf"
+  },
+  {
+    "frage": "Welche beiden zusätzlichen Dimensionen erfasst der IPQ-R laut Studienbrief?",
+    "a": "Selbstkontrolle und Selbstwirksamkeit",
+    "b": "Annäherung und Vermeidung",
+    "c": "Impulsivität und Reflexivität",
+    "d": "Wahrgenommene Kohärenz der Erkrankung und emotionale Repräsentationen",
+    "richtig": "d",
+    "begruendung": "Kohärenz = wie verständlich bzw. nachvollziehbar die Erkrankung für die Person erscheint."
+  },
+  {
+    "frage": "Welche Zuordnung ist vollständig korrekt?",
+    "a": "Selbstregulation = Impulswiderstand; Selbstkontrolle = gesamter Zielprozess",
+    "b": "Vertikale Differenzierung = Widerspruchsfreiheit; horizontale Kohärenz = Unterzielbildung",
+    "c": "Selbstregulation = gesamter Zielprozess; Selbstkontrolle = Widerstand gegen Impulse",
+    "d": "Selbstregulation = Gewohnheitsbildung; Selbstkontrolle = Krankheitstheorie",
+    "richtig": "c",
+    "begruendung": "AK-Falle: Hier werden die Begriffe bewusst vertauscht – genau typisches Klausurmuster."
+  },
+  {
+    "frage": "Eine Person möchte Gewicht verlieren, greift aber nach einem stressigen Arbeitstag automatisch zu Süßigkeiten. Welche Erklärung passt besonders gut?",
+    "a": "Ausschließlich horizontale Kohärenz",
+    "b": "Ausschließlich Zielneubindung",
+    "c": "Impulsive bzw. gewohnheitsmäßige Verhaltenssteuerung konkurriert mit dem reflektiven langfristigen Ziel.",
+    "d": "Das Verhalten zeigt einen besonders starken Belohnungsaufschub.",
+    "richtig": "c",
+    "begruendung": "Langfristiges Ziel und kurzfristige automatische Verhaltenstendenz können miteinander konkurrieren."
+  },
+  {
+    "frage": "Eine Person lehnt einen Kuchen ab, obwohl sie ihn gerade sehr gerne essen würde, weil sie langfristig Gewicht reduzieren möchte. Welcher Begriff passt am besten?",
+    "a": "Ego-Depletion",
+    "b": "Zielentbindung",
+    "c": "Vertikale Differenzierung",
+    "d": "Belohnungsaufschub",
+    "richtig": "d",
+    "begruendung": "Die unmittelbar verfügbare positive Folge wird zugunsten eines langfristig bedeutsameren Ziels zurückgestellt."
+  },
+  {
+    "frage": "Eine Person hört nach dem Schließen der Autotür automatisch das „Signal“ zum Anschnallen und greift ohne bewusstes Nachdenken zum Gurt. Was beschreibt dies am besten?",
+    "a": "Selbstwirksamkeitserwartung",
+    "b": "Durch einen Kontextreiz ausgelöste Gewohnheit",
+    "c": "Horizontale Kohärenz",
+    "d": "Furchtkontrolle",
+    "richtig": "b",
+    "begruendung": "Ein gelernter Hinweisreiz löst das Verhalten automatisch aus."
+  },
+  {
+    "frage": "Eine Patientin denkt: „Meine Erkrankung wird wahrscheinlich lange dauern, aber durch meine Behandlung kann ich sie beeinflussen.“ Was beschreibt diese Aussage?",
+    "a": "Hedonistische Affekte",
+    "b": "Ego-Depletion",
+    "c": "Bestandteile ihrer subjektiven Krankheitstheorie",
+    "d": "Horizontale Kohärenz",
+    "richtig": "c",
+    "begruendung": "Sie äußert Annahmen über Zeitverlauf und Kontrollierbarkeit ihrer Erkrankung."
+  },
+  {
+    "frage": "Eine Patientin reagiert auf eine Diagnose mit starker Angst und versucht anschließend vor allem, diese Angst zu reduzieren. Welcher Prozess ist im CSM besonders angesprochen?",
+    "a": "Gefahrenkontrolle im kognitiven Arm",
+    "b": "Selbstkontrolle im reflektiven System",
+    "c": "Belohnungsaufschub",
+    "d": "Furchtkontrolle im emotionalen Arm",
+    "richtig": "d",
+    "begruendung": "Hier steht die Regulation des negativen Gefühlszustandes im Vordergrund."
+  },
+  {
+    "frage": "Eine Person vergleicht regelmäßig ihren aktuellen Bewegungsumfang mit ihrem Ziel und passt ihren Wochenplan entsprechend an. Welches Modellprinzip wird hier besonders deutlich?",
+    "a": "Reiz-Reaktions-Automatisierung",
+    "b": "Soll-Ist-Vergleich nach Carver & Scheier",
+    "c": "Ego-Depletion",
+    "d": "Emotionale Repräsentation des CSM",
+    "richtig": "b",
+    "begruendung": "Zielzustand und aktueller Stand werden fortlaufend verglichen."
+  },
+  {
+    "frage": "Welche Aussage wäre nach dem Studienbrief falsch?",
+    "a": "Gewohnheiten können gesundheitsförderlich oder gesundheitsschädlich sein.",
+    "b": "Das reflektive System benötigt mehr kognitive Ressourcen als das impulsive.",
+    "c": "Das CSM enthält kognitive und emotionale Repräsentationen.",
+    "d": "Selbstkontrolle bezeichnet den gesamten Prozess der Steuerung auf persönliche Ziele hin.",
+    "richtig": "d",
+    "begruendung": "Der Gesamtprozess ist Selbstregulation; Selbstkontrolle ist enger gefasst."
+  },
+  {
+    "frage": "Welche Aussage zu persönlichen Zielen entspricht dem Studienbrief?",
+    "a": "Nur die Wichtigkeit eines Ziels beeinflusst die Selbstregulation.",
+    "b": "Ziele unterscheiden sich ausschließlich darin, ob sie kurz- oder langfristig sind.",
+    "c": "Ziele können sich unter anderem in Wichtigkeit, Realisierbarkeit, Fortschritt, zeitlicher Perspektive und Konkretheit unterscheiden.",
+    "d": "Konkrete und abstrakte Ziele spielen für Selbstregulation dieselbe Rolle.",
+    "richtig": "c",
+    "begruendung": "Der Studienbrief nennt mehrere Zieldimensionen (Eigenschaften von Zielen), nicht nur eine einzige. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Warum können konkret formulierte Gesundheitsziele hilfreich sein?",
+    "a": "Weil sie keine Selbstregulation mehr benötigen",
+    "b": "Weil Fortschritte und notwendige Verhaltensanpassungen leichter erkannt werden können",
+    "c": "Weil konkrete Ziele immer kurzfristig sind",
+    "d": "Weil sie Zielkonflikte grundsätzlich verhindern",
+    "richtig": "b",
+    "begruendung": "„Zweimal pro Woche eine Stunde Sport“ lässt sich leichter überprüfen als „mehr bewegen“. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welche Rolle spielen Erwartungen bei Carver & Scheier?",
+    "a": "Erwartungen beeinflussen ausschließlich die Auswahl kurzfristiger Ziele.",
+    "b": "Erwartungen sind nur nach erfolgreicher Zielerreichung relevant.",
+    "c": "Negative Erwartungen erhöhen grundsätzlich die Anstrengung.",
+    "d": "Zuversicht hinsichtlich der Zielerreichung macht die Aufrechterhaltung von Anstrengung wahrscheinlicher.",
+    "richtig": "d",
+    "begruendung": "Wer glaubt, ein Ziel erreichen zu können, hält seine Anstrengungen eher aufrecht. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welcher Ablauf beschreibt den Zielablöseprozess bei einem dauerhaft unerreichbaren Ziel am ehesten?",
+    "a": "Mehr Anstrengung → Beharren/Wut → Trauer/Niedergeschlagenheit → Bedeutungsverlust des Ziels",
+    "b": "Bedeutungsverlust → verstärkte Anstrengung → Freude → Zielneubindung",
+    "c": "Trauer → Zielerreichung → Bedeutungsverlust → neue Anstrengung",
+    "d": "Zielneubindung → Wut → verstärkte Anstrengung → Zielentbindung",
+    "richtig": "a",
+    "begruendung": "Zielentbindung erfolgt laut Studienbrief als mehrphasiger Prozess. Für gute Anpassung ist danach zusätzlich Zielneubindung wichtig. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welche Kritik wird im Studienbrief am Strength Model of Self-Control genannt?",
+    "a": "Es berücksichtigt Selbstkontrolle überhaupt nicht.",
+    "b": "Es basiert ausschließlich auf qualitativer Forschung.",
+    "c": "Unter anderem werden eine unscharfe Begriffsdefinition und viele Laborexperimente mit geringer ökologischer Validität kritisiert.",
+    "d": "Das Modell behauptet, Selbstkontrolle sei unbegrenzt.",
+    "richtig": "c",
+    "begruendung": "Ökologische Validität = Übertragbarkeit auf reale Alltagssituationen.\nBegründung: Genau diese konzeptuelle und methodische Kritik wird im Studienbrief genannt. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Was wird bei einer dispositional niedrigen Kontrollfähigkeit nach Hofmann et al. angenommen?",
+    "a": "Das reflektive System ist generell stärker aktiviert.",
+    "b": "Beide Systeme werden vollständig ausgeschaltet.",
+    "c": "Die Person bildet keine Gewohnheiten mehr.",
+    "d": "Das impulsive System ist generell stärker aktiviert.",
+    "richtig": "d",
+    "begruendung": "Dispositional = relativ stabile persönliche Eigenschaft.\nBegründung: Niedrige Kontrollfähigkeit soll mit stärkerem impulsgetriebenem Verhalten zusammenhängen. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Warum können rein rationale Gesundheitsinterventionen manchmal scheitern?",
+    "a": "Weil Wissen grundsätzlich keinen Einfluss auf Verhalten hat",
+    "b": "Weil auch impulsive und automatisierte Verhaltenstendenzen Verhalten beeinflussen können",
+    "c": "Weil das reflektive System nie Gesundheitsverhalten steuert",
+    "d": "Weil Selbstkontrolle nur bei Krankheit relevant ist",
+    "richtig": "b",
+    "begruendung": "Informationsvermittlung allein erreicht nicht zwingend die automatischen und impulsiven Prozesse, die Verhalten mitsteuern. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welche Konsequenz ergibt sich aus der Gewohnheitsforschung für den Abbau gesundheitsschädlicher Gewohnheiten?",
+    "a": "Nur das sichtbare Verhalten sollte verändert werden.",
+    "b": "Kontextreize sollten möglichst häufiger auftreten.",
+    "c": "Die erlernten Assoziationen zwischen Kontext und Verhalten sollten aufgebrochen oder abgeschwächt werden.",
+    "d": "Gewohnheiten können prinzipiell nicht verändert werden.",
+    "richtig": "c",
+    "begruendung": "Entscheidend ist das gelernte Reiz-Reaktions-Muster, nicht nur das offene Verhalten. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welche Faktoren können laut Common-Sense-Modell zusätzlich zu den internen Rückmeldungsprozessen die Krankheitsregulation beeinflussen?",
+    "a": "Ausschließlich biologische Faktoren",
+    "b": "Nur Selbstwirksamkeit und Selbstkontrolle",
+    "c": "Ausschließlich medizinische Diagnosen",
+    "d": "Kommunikationsprozesse, kulturelle Vorstellungen und Personenmerkmale",
+    "richtig": "d",
+    "begruendung": "Das CSM berücksichtigt auch äußere Informationen sowie beispielsweise Persönlichkeitseigenschaften. \u00a0\nAFG Modul 36611 SB1.pdf"
+  },
+  {
+    "frage": "Welche Erweiterung des Common-Sense-Modells schlagen Hagger et al. vor?",
+    "a": "Kognitive Repräsentationen vollständig aus dem Modell zu entfernen",
+    "b": "Den emotionalen Reaktionsarm durch das impulsive System zu ersetzen",
+    "c": "Direkte Pfade von kognitiven/emotionalen Repräsentationen zur Anpassung sowie Intentionen und Handlungspläne stärker zu berücksichtigen",
+    "d": "Nur noch unbewusste Prozesse zu berücksichtigen",
+    "richtig": "c",
+    "begruendung": "Neuere Befunde sprechen dafür, dass Krankheitsvorstellungen den körperlichen und psychischen Zustand teilweise auch direkt beeinflussen können. Zusätzlich sollen Intentionsbildung und Handlungsplanung genauer modelliert werden. \u00a0\nAFG Modul 36611 SB1.pdf"
+  }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0; 
+    let totalPossiblePoints = 0; 
+    let userAnswers = {};
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        totalPossiblePoints = 0;
+        userAnswers = {};
+
+        questions.forEach((q, index) => {
+            const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+            totalPossiblePoints += correctArr.length;
+        });
+
+        document.getElementById('startScreen').classList.remove('active');
+        document.getElementById('quizScreen').classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById('questionCounter').innerText = `Frage ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('questionText').innerText = q.frage;
+
+        const optionsList = document.getElementById('optionsList');
+        const optionsKeys = ['a', 'b', 'c', 'd', 'e'];
+
+        optionsKeys.forEach(key => {
+            if (q[key]) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${key.toUpperCase()}) ${q[key]}`;
+                btn.dataset.key = key;
+                btn.onclick = () => toggleOption(btn);
+                optionsList.appendChild(btn);
+            }
+        });
+
+        updateProgress();
+    }
+
+    function toggleOption(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('selected');
+    }
+
+    function resetState() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.classList.remove('show');
+        explanationBox.innerText = '';
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.innerText = 'Antworten prüfen';
+        actionBtn.onclick = handleAction;
+    }
+
+    function handleAction() {
+        const actionBtn = document.getElementById('actionBtn');
+        const q = questions[currentQuestionIndex];
+        const selectedButtons = document.querySelectorAll('.option-btn.selected');
+        
+        if (selectedButtons.length === 0) {
+            alert('Bitte wähle mindestens eine Option aus.');
+            return;
+        }
+
+        const correctArr = q.richtig.split(',').map(s => s.trim().toLowerCase());
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(btn => {
+            btn.disabled = true;
+            const key = btn.dataset.key;
+            const isSelected = btn.classList.contains('selected');
+            const isCorrect = correctArr.includes(key);
+
+            if (isCorrect) {
+                btn.classList.add('correct-ans');
+                if (isSelected) {
+                    score += 1;
+                }
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong-ans');
+                }
+            }
+        });
+
+        const explanationBox = document.getElementById('explanationBox');
+        explanationBox.innerText = "Begründung: " + q.begruendung;
+        explanationBox.classList.add('show');
+
+        actionBtn.innerText = 'Nächste Frage';
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+
+        const percentage = totalPossiblePoints > 0 ? Math.round((score / totalPossiblePoints) * 100) : 0;
+
+        document.getElementById('resultScore').innerText = `${percentage}%`;
+
+        const statusEl = document.getElementById('resultStatus');
+        const detailsEl = document.getElementById('resultDetails');
+
+        if (percentage >= 75) {
+            statusEl.innerText = "Bestanden!";
+            statusEl.className = "result-status passed";
+        } else {
+            statusEl.innerText = "Nicht bestanden";
+            statusEl.className = "result-status failed";
+        }
+
+        detailsEl.innerText = `Du hast ${score} von ${totalPossiblePoints} möglichen Antwort-Punkten richtig erreicht.`;
+    }
+
+    function restartQuiz() {
+        document.getElementById('resultScreen').classList.remove('active');
+        document.getElementById('startScreen').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

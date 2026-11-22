@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J]L[M - Zusammenfassung</title>
+    
+    <!-- PWA Manifest & App-Icons für Mobiltelefone -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "J]L[M",
+        "short_name": "J]L[M",
+        "start_url": "LE_index.html",
+        "display": "standalone",
+        "background_color": "#f1f5f9",
+        "theme_color": "#1e3a8a",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+    
+    <!-- Meta-Tags für iOS & Android App-Feeling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jennys Moodle">
+    <meta name="theme-color" content="#1e3a8a">
+    
+    <!-- Favicon für Browser-Tabs -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2786%27 fill=%27%231e3a8a%27/%3E%3Ccircle cx=%27100%27 cy=%27100%27 r=%2782%27 fill=%27none%27 stroke=%27%23fbbf24%27 stroke-width=%272%27/%3E%3Ctext x=%27100%27 y=%27118%27 font-family=%27Georgia, serif%27 font-size=%2752%27 font-weight=%27bold%27 fill=%27%23fbbf24%27 text-anchor=%27middle%27%3EJ%3C/text%3E%3C/svg%3E">
+
+    <!-- Modernes Schriftduo: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --primary-blue: #1e3a8a;
+            --primary-blue-hover: #1e40af;
+            --accent-gold: #b45309;
+            --border-color: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(180, 83, 9, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+        }
+
+        /* --- Moodle Header & Burger Menü --- */
+        .moodle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Burger Menu Button */
+        .burger-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .burger-btn:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 2px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Fullscreen Overlay Burger Menu (Fixed & Versteckt) --- */
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            width: 100%;
+            max-width: 320px;
+            height: 100%;
+            background: #ffffff;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-menu.open .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drawer-link {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* --- Inhalt der Zusammenfassung --- */
+        .content-body {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-blue);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* PDF Link Styling */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 6px 0 14px 0;
+            transition: 0.2s;
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+
+        /* Tabellen-Styling */
+        .summary-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin: 12px 0 16px 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: #fff;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            color: var(--text-muted);
+            vertical-align: top;
+        }
+
+        .summary-table th {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Klausur-Fallen & Highlight-Boxen */
+        .callout-box {
+            background: #fefce8;
+            border-left: 4px solid var(--accent-gold);
+            padding: 14px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 15px 0;
+        }
+
+        .callout-box p {
+            color: #78350f;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .callout-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .conclusion-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 25px;
+        }
+
+        .conclusion-box h3 {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .conclusion-box p {
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .conclusion-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide-out Burger Menü (Overlay) -->
+    <div class="drawer-menu" id="drawerMenu" onclick="closeMenuOnOverlay(event)">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-blue);">Navigation</span>
+                <button class="close-drawer" onclick="toggleMenu()">✕</button>
+            </div>
+            <div class="drawer-links">
+                <a href="LE6_index.html" class="drawer-link">Zurück zu LE6</a>
+                <a href="LE6_Zusammenfassung.html" class="drawer-link" style="background: #eff6ff; color: var(--primary-blue); border-color: var(--primary-blue);">📖 Zusammenfassung lesen</a>
+                <a href="LE6_Quiz1.html" class="drawer-link">📝 Quiz 1 starten</a>
+                <a href="#" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Moodle Header -->
+        <div class="moodle-header">
+            <a href="LE1_index_3.html" class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+                    <defs>
+                        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e3a8a" />
+                            <stop offset="100%" stop-color="#0f172a" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="86" fill="url(#blueGrad)" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+                    <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="52" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle">J</text>
+                </svg>
+                <div>
+                    <div class="brand-title">J]L[M</div>
+                    <div class="brand-subtitle">Lernplattform</div>
+                </div>
+            </a>
+            <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </div>
+
+        <!-- Inhalt der Zusammenfassung (1 zu 1 aus LE6_Zusammenfassung.docx übernommen) -->
+        <div class="content-body">
+            <h1>LE6 – Intervention Mapping</h1>
+
+            <h2>1. Grundidee: Was ist Intervention Mapping?</h2>
+            <p>Intervention Mapping ist ein systematisches Protokoll zur Planung, Umsetzung und Evaluation (Bewertung) von Gesundheitsförderungsprogrammen.</p>
+            <p>Der Grundgedanke ist: Eine Intervention soll nicht einfach aus einer „guten Idee“ entstehen, sondern theorie- und evidenzorientiert sein.</p>
+            <p>theorieorientiert = psychologische bzw. gesundheitspsychologische Theorien erklären, warum sich Menschen auf bestimmte Weise verhalten.</p>
+            <p>evidenzorientiert = empirische Forschungsergebnisse werden bei der Planung berücksichtigt.</p>
+            <p>Eine einzelne Theorie reicht dabei oft nicht aus, um komplexes Verhalten vollständig zu erklären. Deshalb können beim Intervention Mapping verschiedene Theorien und Forschungsergebnisse kombiniert werden. Wenn wichtige Informationen fehlen, kann sogar eigene Forschung durchgeführt werden.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p>Die zentrale Logik lautet:<br>
+            Problem verstehen → bestimmen, was sich verändern muss → passende Methoden wählen → Intervention bauen → Umsetzung sichern → Wirkung und Durchführung evaluieren</p>
+
+            <h2>2. Ökologische Perspektive</h2>
+            <p>Intervention Mapping betrachtet Gesundheit aus einer ökologischen Perspektive (Menschen sind in verschiedene soziale und gesellschaftliche Ebenen eingebettet).</p>
+            <p>Gesundheit hängt also nicht nur vom Verhalten einer einzelnen Person ab.</p>
+            <p>Relevante Ebenen können beispielsweise sein:<br>
+            Individuum → Familie/Freundeskreis → Organisation → Gemeinde → Gesellschaft</p>
+            <p>Auf diesen Ebenen gibt es sogenannte environmental agents (Personen auf Umweltebenen, deren Verhalten verändert werden muss, obwohl sie nicht selbst direkt vom Gesundheitsproblem betroffen sind).</p>
+            <p>Beispiele:</p>
+            <ul>
+                <li>Familie oder Freund:innen</li>
+                <li>Kolleg:innen</li>
+                <li>Vorgesetzte</li>
+                <li>Schulleitung</li>
+                <li>Lokalpolitik</li>
+                <li>nationale Politik.</li>
+            </ul>
+            <p>Eine Intervention gegen Bewegungsmangel könnte deshalb nicht nur versuchen, eine Person zu mehr Bewegung zu motivieren, sondern beispielsweise auch die Schule, den Arbeitgeber oder die Gemeinde dazu bringen, Bewegungsmöglichkeiten zu schaffen.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>3. Partizipation</h2>
+            <p>Partizipation (aktive Beteiligung der Zielgruppe und relevanter Akteur:innen) soll während der gesamten Entwicklung stattfinden.</p>
+            <p>Das hat mehrere Vorteile:<br>
+            Die Intervention berücksichtigt tatsächliche Bedürfnisse, verschiedene Perspektiven und vorhandenes Wissen. Außerdem erhöht Partizipation die externe Validität (Übertragbarkeit auf die reale Lebenswelt) und die Wahrscheinlichkeit, dass das Programm später akzeptiert und tatsächlich umgesetzt wird.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>4. Die sechs Schritte des Intervention Mapping</h2>
+            <p>Die Reihenfolge ist sehr klausurrelevant.</p>
+            <div class="summary-table-wrap">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Schritt</th>
+                            <th>Kernfrage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Bedarfsanalyse</td>
+                            <td>Was ist das Problem und wodurch entsteht es?</td>
+                        </tr>
+                        <tr>
+                            <td>2. Programmziele erstellen</td>
+                            <td>Was muss sich konkret verändern?</td>
+                        </tr>
+                        <tr>
+                            <td>3. Methoden und Anwendungen auswählen</td>
+                            <td>Wie können wir diese Veränderungen erreichen?</td>
+                        </tr>
+                        <tr>
+                            <td>4. Programmentwicklung</td>
+                            <td>Wie sieht die konkrete Intervention aus?</td>
+                        </tr>
+                        <tr>
+                            <td>5. Annahme und Umsetzung</td>
+                            <td>Wer muss sie übernehmen und durchführen?</td>
+                        </tr>
+                        <tr>
+                            <td>6. Evaluation</td>
+                            <td>Hat sie funktioniert und wurde sie korrekt umgesetzt?</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Die Schritte bauen aufeinander auf: Das Ergebnis eines Schrittes ist die Grundlage für den nächsten.</p>
+            <p>Wichtig: In der Praxis ist der Prozess nicht streng linear. Man kann zwischen den Schritten zurückgehen und etwas überarbeiten. Am Ende darf aber kein Schritt ausgelassen werden.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>5. Die drei logischen Modelle</h2>
+            <p>Intervention Mapping verwendet drei logische Modelle (Darstellungen angenommener Ursache-Wirkungs-Zusammenhänge).</p>
+            <p><strong>Logisches Modell des Problems</strong><br>
+            Entsteht in Schritt 1.<br>
+            Es beantwortet:<br>
+            Was ist das Problem?<br>
+            Welche Verhaltensweisen tragen dazu bei?<br>
+            Welche Umweltfaktoren tragen dazu bei?<br>
+            Welche Determinanten verursachen diese Verhaltens- bzw. Umweltfaktoren?<br>
+            Beispiel:<br>
+            negative Einstellung zu Kondomen → kein Kondom benutzen → sexuell übertragbare Erkrankungen → eingeschränkte Gesundheit/Lebensqualität</p>
+            <p><strong>Logisches Modell der Veränderung</strong><br>
+            Entsteht in Schritt 2.<br>
+            Jetzt wird die Perspektive umgedreht:<br>
+            Nicht mehr:<br>
+            Warum besteht das Problem?<br>
+            sondern:<br>
+            Was muss sich verändern, damit das Problem kleiner wird?<br>
+            Es verbindet:<br>
+            Veränderungsziele → Determinanten → Handlungsziele → Verhaltens-/Umweltziele → Gesundheit → Lebensqualität.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Logisches Modell der Intervention</strong><br>
+            Das ist das Gesamtmodell.<br>
+            Es umfasst:<br>
+            Problemlogik aus Schritt 1<br>
+            Veränderungslogik aus Schritt 2<br>
+            Methoden/Anwendungen aus Schritt 3<br>
+            Umsetzung aus Schritt 4 und 5<br>
+            später die Evaluation aus Schritt 6.<br>
+            Damit kann Schritt für Schritt nachvollzogen werden:<br>
+            Warum sollte genau diese Intervention genau diese Wirkung erzielen?</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Wichtig</strong><br>
+            Die angenommene Kausalität (Ursache-Wirkungs-Richtung) läuft im Modell von links nach rechts.<br>
+            Bei der Planung arbeitet man dagegen vom gewünschten Endzustand rückwärts.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>6. Schlüsselprozesse zur Theorieanwendung</h2>
+            <p>Bei jedem Schritt werden sechs grundlegende Prozesse verwendet.</p>
+            <p>Man beginnt mit Planungsfragen und sammelt zunächst über Brainstorming (freie Ideensammlung) mögliche Antworten. Danach sucht man empirische Belege und passende Theorien. Reichen diese nicht aus, kann eigene Forschung durchgeführt werden. Am Ende wird eine endgültige Antwort bzw. ein Erklärungsmodell erstellt.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p>Bei der Theoriesuche werden drei Wege beschrieben:</p>
+            <ul>
+                <li>Problemgerichtet (issue approach)→ direkt nach Theorien zu einem konkreten Problem suchen.</li>
+                <li>Konstruktgerichtet (construct approach)→ nach einem bestimmten psychologischen Konstrukt suchen, z. B. „soziale Norm“.</li>
+                <li>Theoriegerichtet (general theory approach)→ eine allgemeine Theorie, z. B. die sozial-kognitive Theorie, auf das Problem anwenden.</li>
+            </ul>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p>Anschließend werden Determinanten danach bewertet:<br>
+            Wie relevant sind sie?<br>
+            und<br>
+            Wie gut sind sie veränderbar?</p>
+
+            <h2>7. Schritt 1 – Bedarfsanalyse</h2>
+            <p>Bedarf bedeutet eine messbare Lücke zwischen einem Ist-Zustand und einem gewünschten Soll-Zustand.</p>
+            <p>Beispiel:<br>
+            Ist: 25 % der Jugendlichen rauchen.<br>
+            Soll: deutlich geringerer Anteil.</p>
+            <p>Bei der Bedarfsanalyse werden sowohl gesundheitliche Probleme als auch:</p>
+            <ul>
+                <li>Verhaltensrisiken</li>
+                <li>Umweltfaktoren</li>
+                <li>zugrunde liegende Determinanten</li>
+                <li>vorhandene Stärken und Ressourcen</li>
+            </ul>
+            <p>betrachtet.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Entwicklungsgruppe bilden</strong><br>
+            Es werden relevante Personen beteiligt:</p>
+            <ul>
+                <li>Fachleute</li>
+                <li>Mitglieder der Zielgruppe</li>
+                <li>indirekt Betroffene</li>
+                <li>Entscheidungsträger:innen</li>
+                <li>Personen mit Ressourcen oder politischem Einfluss.</li>
+            </ul>
+            <p>Damit soll die Intervention nicht von außen über die Zielgruppe „gestülpt“ werden.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Logisches Modell des Problems erstellen</strong><br>
+            Untersucht werden:<br>
+            Gesundheitsproblem → Lebensqualität → Verhalten → Umweltfaktoren → Determinanten</p>
+            <p><strong>Determinanten</strong><br>
+            Determinanten (Faktoren, die Verhalten bzw. Umweltfaktoren direkt beeinflussen) können beispielsweise sein:</p>
+            <ul>
+                <li>Wissen</li>
+                <li>Einstellung</li>
+                <li>Selbstwirksamkeit</li>
+                <li>subjektive Norm.</li>
+            </ul>
+            <p>Beispiel Kondomnutzung:<br>
+            „Kondome fühlen sich schlecht an“ → Einstellung<br>
+            „Ich weiß nicht, ob ich das Kondom richtig benutzen kann“ → Selbstwirksamkeit<br>
+            „Meine Freund:innen benutzen auch keine“ → subjektive Norm.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Ressourcen berücksichtigen</strong><br>
+            Die Zielgruppe soll nicht nur aus einer Defizitperspektive (Blick ausschließlich auf Schwächen) betrachtet werden.</p>
+            <p>Auch vorhandene Ressourcen werden erhoben, etwa:</p>
+            <ul>
+                <li>soziale Netzwerke</li>
+                <li>funktionierende Kommunikationswege</li>
+                <li>finanzielle Ressourcen</li>
+                <li>Räume</li>
+                <li>Infrastruktur</li>
+                <li>einflussreiche Personen.</li>
+            </ul>
+            <p>Vorhandene Ressourcen erhöhen außerdem die Nachhaltigkeit (langfristige Fortführung) einer Intervention.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Faktoren priorisieren</strong><br>
+            Verhaltens- und Umweltfaktoren werden nach zwei Kriterien bewertet:<br>
+            Relevanz und Veränderbarkeit.<br>
+            Ein wichtiger und gut veränderbarer Faktor hat hohe Priorität.<br>
+            Ein wenig relevanter und kaum veränderbarer Faktor eher geringe.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Interventionsziel formulieren</strong><br>
+            Das Ziel muss:</p>
+            <ul>
+                <li>spezifisch</li>
+                <li>messbar</li>
+                <li>zeitlich definiert</li>
+            </ul>
+            <p>sein.<br>
+            Nicht:<br>
+            „Jugendliche sollen weniger rauchen.“<br>
+            Sondern beispielsweise:<br>
+            „Innerhalb von drei Jahren sinkt der Anteil der Jugendlichen, die mit dem Rauchen beginnen, um 15 %.“</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>8. AK-FALLE: Was gehört zu Schritt 1?</h2>
+            <div class="callout-box">
+                <p>In der SoSe-2026-AK kam genau diese Abgrenzung.<br>
+                Zur Bedarfsanalyse gehört:<br>
+                ✅ Bewertung von Verhaltens- und Umweltfaktoren<br>
+                Nicht dazu:<br>
+                Produktion von Programmmaterialien ❌ → Schritt 4<br>
+                Prätest und Pilotversuch ❌ → Schritt 4<br>
+                Umweltziele identifizieren ❌ → Schritt 2<br>
+                logisches Modell der Veränderung erstellen ❌ → Schritt 2<br>
+                In Schritt 1 entsteht stattdessen das:<br>
+                ✅ logische Modell des Problems.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p>Das ist aus meiner Sicht eine der wichtigsten Prüfungsabgrenzungen.</p>
+
+            <h2>9. Schritt 2 – Programmziele</h2>
+            <p>Jetzt erfolgt der Wechsel:<br>
+            Problemorientierung → Lösungsorientierung<br>
+            Die Informationen aus Schritt 1 werden in konkrete Ziele übersetzt.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p>Hier musst du vier Begriffe sauber auseinanderhalten.</p>
+            <p><strong>Verhaltensziel</strong><br>
+            Verhaltensziel = Welches Verhalten soll die Zielgruppe am Ende zeigen?<br>
+            Beispiel:<br>
+            „Beim Geschlechtsverkehr immer ein Kondom benutzen.“</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Handlungsziel</strong><br>
+            Handlungsziel (performance objective) = Was muss die Person konkret tun, um das Verhaltensziel zu erreichen?<br>
+            Beispiel Kondomnutzung:</p>
+            <ul>
+                <li>Kondome kaufen</li>
+                <li>Kondome mitnehmen</li>
+                <li>mit Partner:in über Verwendung sprechen</li>
+                <li>Kondom korrekt anwenden.</li>
+            </ul>
+            <p>Handlungsziele sind also konkrete Einzelschritte eines übergeordneten Verhaltensziels.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Determinante</strong><br>
+            Determinante = Warum führt eine Person einen Handlungsschritt aus oder nicht?<br>
+            Beispiele:</p>
+            <ul>
+                <li>Wissen</li>
+                <li>Einstellung</li>
+                <li>Selbstwirksamkeit</li>
+                <li>Erwartungen</li>
+                <li>Fertigkeiten.</li>
+            </ul>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Veränderungsziel</strong><br>
+            Veränderungsziel (change objective) = Wie muss sich eine Determinante verändern, damit das Handlungsziel erreicht wird?<br>
+            Beispiel:<br>
+            Handlungsziel:<br>
+            „Kondom korrekt anwenden.“<br>
+            Determinante:<br>
+            Selbstwirksamkeit.<br>
+            Veränderungsziel:<br>
+            „Die Person ist überzeugt, ein Kondom korrekt anwenden zu können.“</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>10. Die zentrale Ziel-Logik</h2>
+            <p>Sehr wichtig:<br>
+            Veränderungsziel → Veränderung der Determinante → Handlungsziel → Verhaltensziel → bessere Gesundheit → bessere Lebensqualität.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Merker</strong><br>
+            Verhaltensziel = WAS soll jemand tun?<br>
+            Handlungsziel = WELCHE SCHRITTE muss er tun?<br>
+            Determinante = WARUM tut er es oder nicht?<br>
+            Veränderungsziel = WAS muss sich an diesem Warum verändern?</p>
+
+            <h2>11. Umweltziele</h2>
+            <p>Gesundheitsverhalten hängt häufig von der Umwelt ab.</p>
+            <p>Deshalb gibt es zusätzlich Umweltziele (notwendige Veränderungen der Umgebung).<br>
+            Beispiel:<br>
+            Verhaltensziel:<br>
+            Menschen benutzen Kondome.<br>
+            Dazu muss die Umgebung vielleicht ermöglichen:<br>
+            „In Bars stehen Kondomautomaten zur Verfügung.“<br>
+            Das wäre ein Umweltziel.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>12. Matrix der Veränderungsziele</h2>
+            <p>Für die Planung werden Handlungsziele mit Determinanten gekreuzt.</p>
+            <p>In der Tabelle stehen:<br>
+            Zeilen → Handlungsziele<br>
+            Spalten → Determinanten<br>
+            Zellen → Veränderungsziele<br>
+            Die Veränderungsziele sagen also immer:<br>
+            Was muss sich an Determinante X verändern, damit Handlungsziel Y erreicht wird?</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>13. Subgruppen</h2>
+            <p>Manchmal ist eine Zielgruppe nicht homogen.</p>
+            <p>Beispielsweise können unterschiedliche:</p>
+            <ul>
+                <li>Geschlechter</li>
+                <li>Altersgruppen</li>
+                <li>Erfahrungsgruppen</li>
+                <li>Stadien einer Verhaltensänderung</li>
+            </ul>
+            <p>unterschiedliche Determinanten haben.</p>
+            <p>Dann kann es sinnvoll sein, für verschiedene Subgruppen eigene Veränderungszielmatrizen zu entwickeln.</p>
+            <p>Dabei muss aber immer abgewogen werden, ob der zusätzliche Nutzen die zusätzlichen Kosten und den Aufwand rechtfertigt.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>14. Schritt 3 – Methoden und Anwendungen</h2>
+            <p>Jetzt weiß man, was sich verändern muss.</p>
+            <p>Nun kommt:<br>
+            Wie verändern wir es?</p>
+            <p>Hier sind drei Begriffe zentral.</p>
+            <p><strong>Methode</strong><br>
+            Methode = allgemeine theoriegestützte Technik zur Verhaltensänderung.<br>
+            Sie ist relativ allgemein und über verschiedene Populationen und Situationen hinweg einsetzbar.<br>
+            Beispiel:<br>
+            Modeling (Lernen durch Beobachtung eines Modells/Vorbilds).</p>
+            <p><strong>Anwendung</strong><br>
+            Anwendung = konkrete praktische Umsetzung der Methode.<br>
+            Beispiel:<br>
+            Methode:<br>
+            Modeling<br>
+            Anwendung:<br>
+            Ein Video zeigt eine gleichaltrige Person, die erfolgreich ein gesundes Verhalten erlernt.</p>
+            <p><strong>Wirkparameter</strong><br>
+            Wirkparameter = Bedingungen, die erfüllt sein müssen, damit eine Methode tatsächlich wirken kann.<br>
+            Das ist enorm wichtig:<br>
+            Wird eine theoretisch gute Methode falsch umgesetzt, kann sie wirkungslos sein.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>15. Beispiel Modeling</h2>
+            <p>Beim Modeling reicht es nicht, einfach irgendeine Person bei einem Verhalten zu zeigen.</p>
+            <p>Unter anderem muss:</p>
+            <ul>
+                <li>Aufmerksamkeit auf das Modell gerichtet sein</li>
+                <li>Verhalten erinnerbar sein</li>
+                <li>Person notwendige Fähigkeiten haben</li>
+                <li>Selbstwirksamkeit vorhanden sein</li>
+                <li>Modell belohnt werden</li>
+                <li>Identifikation mit dem Modell möglich sein.</li>
+            </ul>
+            <p>Außerdem sollte möglichst ein Coping Model (Vorbild, das zunächst Schwierigkeiten hat und diese bewältigt) verwendet werden und nicht nur ein Mastery Model (Vorbild, dem alles sofort mühelos gelingt).<br>
+            Warum?<br>
+            Ein Coping Model wirkt realistischer:<br>
+            „Die Person hatte ebenfalls Schwierigkeiten und hat es trotzdem geschafft.“</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>16. Furchtappelle – wichtiges Beispiel</h2>
+            <p>Furchtappelle (Botschaften, die Angst auslösen sollen, um Verhalten zu verändern) werden beispielsweise auf Zigarettenpackungen eingesetzt.</p>
+            <p>Problem:<br>
+            Angst allein verändert Verhalten nicht zuverlässig.<br>
+            Damit ein Furchtappell funktionieren kann, müssen unter anderem vorhanden sein:</p>
+            <ul>
+                <li>hohe Selbstwirksamkeit (Überzeugung: Ich kann das Verhalten ändern)</li>
+                <li>hohe Handlungswirksamkeit (Überzeugung: Die empfohlene Handlung hilft wirklich)</li>
+                <li>persönliche Anfälligkeit (Überzeugung: Das Risiko betrifft mich tatsächlich).</li>
+            </ul>
+            <p>Fehlen diese Voraussetzungen, können defensive Reaktionen auftreten:</p>
+            <ul>
+                <li>Risiko leugnen</li>
+                <li>Botschaft ignorieren</li>
+                <li>Informationen verzerrt verarbeiten.</li>
+            </ul>
+            <p>Schreckbilder allein erhöhen weder automatisch Selbstwirksamkeit noch persönliche Anfälligkeit.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Prüfungslogik</strong><br>
+            Methode gewählt ≠ Intervention automatisch wirksam.<br>
+            Die Wirkparameter müssen eingehalten werden.</p>
+
+            <h2>17. Schritt 4 – Programmentwicklung</h2>
+            <p>Jetzt wird aus Methoden und Anwendungen ein konkretes Gesamtprogramm.</p>
+            <p>Die Materialien müssen:</p>
+            <ul>
+                <li>zur Zielgruppe passen</li>
+                <li>zum Kontext passen</li>
+                <li>für die Umsetzenden machbar sein</li>
+                <li>die Wirkparameter korrekt umsetzen.</li>
+            </ul>
+            <p>Beispiel:<br>
+            Ein Rollenspiel ist nur sinnvoll, wenn Lehrkräfte und Schüler:innen damit umgehen können bzw. bereit sind, es zu lernen.<br>
+            Eine App ist nur sinnvoll, wenn die Zielgruppe Zugang zu Smartphones hat und Apps verwenden kann.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>18. Kommunikationskanal vs. Kommunikationsvehikel</h2>
+            <p>Ein schönes mögliches Detail für Distraktoren:</p>
+            <p>Kommunikationskanal = Medium, über das eine Nachricht vermittelt wird.<br>
+            Beispiele:<br>
+            Fernsehen, persönlicher Kontakt, Print.</p>
+            <p>Kommunikationsvehikel = konkrete Form, in der die Botschaft innerhalb dieses Mediums präsentiert wird.<br>
+            Beispiele:<br>
+            Fernsehen → Interview, Nachrichtensendung, Talkshow.<br>
+            Persönlicher Kontakt → Lehrkraft, Eltern, Pflegepersonal.<br>
+            Print → Artikel oder Reportage.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>19. Prätest vs. Pilotversuch</h2>
+            <p>Sehr sauber auseinanderhalten:</p>
+            <p><strong>Prätest</strong><br>
+            Prätest = einzelne Bestandteile der Intervention testen.<br>
+            Beispielsweise:</p>
+            <ul>
+                <li>Verständlichkeit</li>
+                <li>Lesbarkeit</li>
+                <li>Gestaltung</li>
+                <li>Botschaft</li>
+                <li>Effekt einzelner Elemente auf Determinanten.</li>
+            </ul>
+            <p><strong>Pilotversuch</strong><br>
+            Pilotversuch = vollständiges Programm im Kleinen testen.<br>
+            Hier wird geprüft:<br>
+            Funktioniert das Gesamtprogramm praktisch?<br>
+            Wo entstehen Probleme?</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <p><strong>Merker</strong><br>
+            Prätest = Einzelteile<br>
+            Pilot = ganzes Programm</p>
+
+            <h2>20. Schritt 5 – Annahme und Umsetzung</h2>
+            <p>Eine gut entwickelte Intervention bringt nichts, wenn niemand sie einführt oder korrekt umsetzt.</p>
+            <p>Deshalb unterscheidet man:</p>
+            <p><strong>Annehmende</strong><br>
+            Annehmende (adopters) = Personen, die entscheiden, ob das Programm eingeführt wird.<br>
+            Beispiel Schule:<br>
+            Schulbehörde oder Schulleitung.</p>
+            <p><strong>Umsetzende</strong><br>
+            Umsetzende (implementers) = Personen, die das Programm tatsächlich durchführen.<br>
+            Beispiel:<br>
+            Lehrkräfte.</p>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+
+            <h2>21. Annahme – Umsetzungsgenauigkeit – Nachhaltigkeit</h2>
+            <p>Drei zentrale Ziele:</p>
+            <ul>
+                <li>Annahme (adoption)→ Entscheidet sich die Organisation bzw. verantwortliche Person überhaupt für das Programm?</li>
+                <li>Umsetzungsgenauigkeit (fidelity)→ Wird das Programm vollständig und so durchgeführt, wie es vorgesehen war?</li>
+                <li>Nachhaltigkeit (sustainability)→ Wird das Programm langfristig in den Alltag bzw. die Routine integriert?</li>
+            </ul>
+            <a href="SB2_K4-Intervention(1).pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention(1).pdf</a>
+            <div class="callout-box">
+                <p><strong>AK-Falle</strong><br>
+                Nachhaltigkeit bedeutet hier NICHT ökologischer Fußabdruck.<br>
+                In der SoSe-2026-AK war:<br>
+                ✅ Nachhaltigkeit = langfristige Umsetzung des Programms.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+
+            <h2>22. Schritt 6 – Evaluation</h2>
+            <p>Evaluation = systematische Bewertung einer Intervention.</p>
+            <p>Zwei Hauptarten:</p>
+            <p><strong>Effektevaluation</strong><br>
+            Frage:<br>
+            Was hat sich durch die Intervention verändert?<br>
+            Untersucht werden beispielsweise:</p>
+            <ul>
+                <li>Gesundheit</li>
+                <li>Lebensqualität</li>
+                <li>Verhaltensziele</li>
+                <li>Umweltziele</li>
+                <li>Handlungsziele</li>
+                <li>Veränderungsziele</li>
+                <li>Determinanten.</li>
+            </ul>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+            <p>Gesundheitliche Endpunkte verändern sich häufig erst langfristig.</p>
+            <p>Darum prüft man zunächst Zwischenschritte:<br>
+            Determinanten → Handlungsziele → Verhalten → Gesundheit.<br>
+            Wenn ein Verhaltensziel nicht erreicht wird, kann man anhand des logischen Modells zurückverfolgen, wo die Kette möglicherweise gescheitert ist.</p>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+
+            <h2>23. Wirksamkeit vs. Effektivität</h2>
+            <p>Das ist eine wichtige begriffliche Unterscheidung:</p>
+            <p>Wirksamkeit = Wirkung unter optimalen/kontrollierten Bedingungen.<br>
+            Also:<br>
+            Kann das Programm grundsätzlich funktionieren?</p>
+            <p>Effektivität = Wirkung unter realen Alltagsbedingungen.<br>
+            Also:<br>
+            Funktioniert es auch tatsächlich in der Praxis?</p>
+            <p>Eine Intervention kann unter optimalen Forschungsbedingungen wirksam, im realen Alltag aber wenig effektiv sein.<br>
+            Warum?<br>
+            Zum Beispiel:</p>
+            <ul>
+                <li>Umsetzende haben wenig Zeit</li>
+                <li>Zielgruppe ist heterogener</li>
+                <li>andere Anforderungen konkurrieren mit dem Programm</li>
+                <li>Intervention wird nicht vollständig umgesetzt.</li>
+            </ul>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+            <p><strong>Merker</strong><br>
+            Wirksamkeit = Idealfall<br>
+            Effektivität = Realität</p>
+
+            <h2>24. Prozessevaluation</h2>
+            <p>Frage:<br>
+            Wie wurde das Programm entwickelt und umgesetzt?</p>
+            <p>Sie kann erklären, warum eine eigentlich gute Intervention in der Realität nicht funktioniert.</p>
+            <p>Wichtige Komponenten sind:</p>
+            <ul>
+                <li>Kontext= Welche Bedingungen des sozialen Umfelds beeinflussen die Intervention?</li>
+                <li>Reichweite= Welcher Anteil der Zielgruppe wurde tatsächlich erreicht?</li>
+                <li>Ausmaß der Umsetzung= Wie viele der vorgesehenen Einheiten wurden tatsächlich durchgeführt?</li>
+                <li>Ausmaß des Empfangs= Wie vollständig nahm die Zielgruppe tatsächlich teil?</li>
+                <li>Umsetzungsgenauigkeit= Wurde das Programm so umgesetzt, wie es geplant war?</li>
+                <li>Gesamtumsetzung= Gesamtbewertung der Durchführung.</li>
+                <li>Anwerben von Teilnehmenden= Wie kamen Personen überhaupt in das Programm?</li>
+            </ul>
+            <p><strong>Beispiel Umsetzungsgenauigkeit</strong><br>
+            Eine Lehrkraft führt zwar ein vorgesehenes Rollenspiel durch, verändert es aber so stark, dass die theoretischen Wirkparameter verloren gehen.<br>
+            → schlechte Umsetzungsgenauigkeit.</p>
+
+            <h2>25. AK: Effekt vs. Prozess</h2>
+            <div class="callout-box">
+                <p>In der SoSe-2026-AK:<br>
+                „Umsetzungsgenauigkeit und Reichweite werden untersucht.“<br>
+                Richtige Antwort:<br>
+                ✅ Prozessevaluation<br>
+                Nicht Effektevaluation.</p>
+            </div>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p>Außerdem:<br>
+            Kontext bezeichnet dort den Einfluss des sozialen Umfelds auf die Umsetzung.</p>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p>Das würde ich definitiv können.</p>
+
+            <h2>26. Evaluationsdesign</h2>
+            <p>Für eine Evaluation können:</p>
+            <ul>
+                <li>qualitative</li>
+                <li>quantitative</li>
+                <li>gemischte Methoden</li>
+            </ul>
+            <p>verwendet werden.</p>
+            <p>Qualitativ z. B. Interviews oder Fokusgruppen.<br>
+            Quantitativ z. B. standardisierte Fragebögen oder Beobachtungschecklisten.</p>
+            <p>Unabhängig davon müssen Reliabilität (Messzuverlässigkeit) und Validität (misst das Instrument tatsächlich das, was es messen soll?) berücksichtigt werden.</p>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+
+            <h2>27. Prätest – Posttest – Kontrollgruppe</h2>
+            <p>Um Interventionseffekte gut beurteilen zu können:</p>
+            <ul>
+                <li>Prätest→ Messung vor Intervention.</li>
+                <li>Posttest→ Messung danach.</li>
+            </ul>
+            <p>Zusätzlich kann es Zwischenmessungen geben.</p>
+            <p>Aber:<br>
+            Eine Veränderung zwischen Prä- und Posttest beweist allein noch nicht, dass die Intervention die Ursache war.</p>
+            <p>Deshalb ist eine Kontrollgruppe wichtig.<br>
+            Optimal ist eine randomisierte kontrollierte Untersuchung.</p>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+
+            <h2>28. Cluster-Randomisierung</h2>
+            <p>In Gesundheitsprogrammen können manchmal nicht einzelne Personen randomisiert werden.</p>
+            <p>Beispiel Schule:<br>
+            Man kann innerhalb derselben Klasse schlecht einzelne Kinder einer Intervention geben und anderen nicht.</p>
+            <p>Dann kann man ganze Gruppen bzw. Organisationseinheiten randomisieren:<br>
+            Cluster-Randomisierung (zufällige Zuteilung ganzer Gruppen wie Schulen oder Klassen).<br>
+            Beispielsweise:<br>
+            Schule A → Intervention<br>
+            Schule B → Kontrollgruppe.</p>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+            <p>Wenn auch das nicht möglich ist, kann ein quasi-experimentelles Design (Vergleich ohne echte Randomisierung) verwendet werden.</p>
+            <p>Dann ist die Aussagekraft jedoch schwächer, weil die Gruppen sich möglicherweise schon vorher unterscheiden.</p>
+
+            <h2>29. Dokumentation</h2>
+            <p>Interventionen müssen transparent dokumentiert werden.</p>
+            <p>Warum?<br>
+            Damit andere nachvollziehen können:</p>
+            <ul>
+                <li>welche theoretischen Annahmen verwendet wurden</li>
+                <li>welche Determinanten verändert werden sollten</li>
+                <li>welche Methoden gewählt wurden</li>
+                <li>wie diese praktisch umgesetzt wurden</li>
+                <li>welche Komponenten vermutlich wirksam waren.</li>
+            </ul>
+            <p>Intervention Mapping bietet hierfür eine gemeinsame Struktur und Terminologie.</p>
+            <p>Gute Dokumentation ermöglicht:<br>
+            Replikation (Wiederholung einer Untersuchung)<br>
+            Validierung (Überprüfung der Befunde)<br>
+            Vergleich mit anderen Interventionen<br>
+            und Anpassung an andere Zielgruppen oder Kontexte.</p>
+            <a href="SB2_K4-Intervention.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: SB2_K4-Intervention.pdf</a>
+            <p>Das logische Modell der Intervention eignet sich besonders gut zur Dokumentation der zugrunde liegenden Theorie der Veränderung (Annahmen darüber, wie die Intervention ihre Wirkung erzeugt).</p>
+
+            <h2>AK-Analyse – Was muss am stärksten sitzen?</h2>
+            <p>In der verfügbaren SoSe-2026-AK gab es zwei komplette Aufgaben zu K2K4 = insgesamt 10 Punkte.</p>
+            <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+            <p>Der Schwerpunkt lag nicht auf Autor:innen oder Detailzahlen, sondern auf Zuordnung.</p>
+            <p><strong>Sehr hohe Priorität</strong></p>
+            <ul>
+                <li>Die sechs Schritte in richtiger Reihenfolge</li>
+                <li>Schritt 1 vs. Schritt 2 sauber unterscheiden</li>
+                <li>Schritt 1:<br>
+                Problem verstehen → logisches Modell des Problems</li>
+                <li>Schritt 2:<br>
+                Lösung definieren → Ziele + logisches Modell der Veränderung</li>
+                <li>Zielarten auseinanderhalten</li>
+                <li>Verhaltensziel = gewünschtes Verhalten<br>
+                Handlungsziel = konkrete Handlungsschritte<br>
+                Determinante = Ursache/Einflussfaktor des Verhaltens<br>
+                Veränderungsziel = notwendige Veränderung einer Determinante.</li>
+                <li>Schritt 4<br>
+                Programmmaterialien<br>
+                Prätest<br>
+                Pilotversuch.</li>
+                <li>Schritt 5<br>
+                Annehmende vs. Umsetzende<br>
+                Annahme<br>
+                Umsetzungsgenauigkeit<br>
+                Nachhaltigkeit.</li>
+                <li>Schritt 6<br>
+                Effekt = Was hat sich verändert?<br>
+                Prozess = Wie wurde es umgesetzt?<br>
+                Reichweite + Umsetzungsgenauigkeit → Prozessevaluation</li>
+            </ul>
+            <p><strong>Hohe Priorität</strong></p>
+            <ul>
+                <li>Methode vs. Anwendung vs. Wirkparameter</li>
+                <li>Furchtappelle + Selbstwirksamkeit</li>
+                <li>logisches Modell des Problems vs. Veränderung vs. Intervention</li>
+                <li>Wirksamkeit vs. Effektivität</li>
+                <li>Prätest vs. Pilotversuch</li>
+                <li>Cluster-Randomisierung</li>
+            </ul>
+            <p><strong>Eher zweite Priorität</strong><br>
+            Die drei unterschiedlichen Wege der Theoriesuche, genaue Beispiele einzelner Kommunikationsvehikel oder einzelne Programme wie „The gay cruise“ würde ich verstehen, aber nicht stumpf auswendig lernen.</p>
+
+            <h2>Das ganze Kapitel in einer Kette</h2>
+            <p>Wenn du Intervention Mapping als eine Geschichte denkst, wird es viel einfacher:<br>
+            1. Was ist falsch?<br>
+            → Bedarfsanalyse.<br>
+            2. Was muss anders werden?<br>
+            → Ziele.<br>
+            3. Wie können wir diese Veränderung psychologisch erzeugen?<br>
+            → Methoden.<br>
+            4. Wie bauen wir daraus ein echtes Programm?<br>
+            → Programmentwicklung.<br>
+            5. Wer sorgt dafür, dass dieses Programm tatsächlich eingesetzt wird?<br>
+            → Annahme und Umsetzung.<br>
+            6. Hat es funktioniert – und wenn nicht, warum nicht?<br>
+            → Effekt- und Prozessevaluation.</p>
+            <p>Und die zentrale Detailkette lautet:<br>
+            Veränderungsziel → Determinante → Handlungsziel → Verhaltens-/Umweltziel → Gesundheit → Lebensqualität.</p>
+            <p>Wenn diese beiden Ketten sitzen, kannst du bei sehr vielen AK-Fragen die Lösung herleiten, selbst wenn die Formulierung neu ist.</p>
+
+            <div class="conclusion-box">
+                <h3>die wichtigsten AK-Fallen ganz kurz:</h3>
+                <p>Schritt 1 = Bedarfsanalyse → Problem verstehen, Verhaltens- und Umweltfaktoren bewerten, logisches Modell des Problems.</p>
+                <p>Schritt 2 = Programmziele → Verhaltensziele, Umweltziele, Handlungsziele, Determinanten, Veränderungsziele, logisches Modell der Veränderung.</p>
+                <p>Verhaltensziel = gewünschtes Endverhalten; Handlungsziel = konkrete Einzelschritte; Veränderungsziel = wie sich eine Determinante ändern muss.</p>
+                <p>Nachhaltigkeit = langfristige Umsetzung, nicht ökologischer Fußabdruck.</p>
+                <p>Prozessevaluation = Reichweite, Umsetzungsgenauigkeit, Kontext, Durchführung. Effektevaluation = was sich durch die Intervention verändert hat.</p>
+                <p>Prätest = Einzelteile testen; Pilotversuch = gesamtes Programm testen.</p>
+                <p>Methode = allgemeine theoriebasierte Technik; Anwendung = konkrete Umsetzung; Wirkparameter = Bedingungen, damit die Methode wirkt.</p>
+                <p>Annehmende entscheiden über Einführung; Umsetzende führen das Programm durch.</p>
+                <p>Wirksamkeit = optimale Bedingungen; Effektivität = reale Alltagsbedingungen.</p>
+                <p>Kontext in der Prozessevaluation = Einfluss des sozialen Umfelds, nicht einfach nur Einfluss der Umsetzenden.</p>
+                <a href="AFG_AK2026SoSe.pdf" target="_blank" class="pdf-link">📄 PDF öffnen: AFG_AK2026SoSe.pdf</a>
+                <p><strong>Super-Merker:</strong><br>
+                1 Problem – 2 Ziele – 3 Methoden – 4 Programm – 5 Umsetzung – 6 Evaluation.</p>
+            </div>
+        </div>
+
+        <footer>
+            J]L[M &bull; WiSe26
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.toggle('open');
+        }
+
+        // Schließt das Menü, wenn man auf den dunklen Hintergrund klickt
+        function closeMenuOnOverlay(e) {
+            if (e.target.id === 'drawerMenu') {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>
