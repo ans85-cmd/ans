@@ -34,6 +34,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         :root {
             --bg-color: #fdf8f6;
@@ -77,7 +80,6 @@
             overflow-x: hidden;
         }
 
-        /* --- Sanft fliegende Herzchen im Hintergrund --- */
         .floating-hearts {
             position: absolute;
             top: 0;
@@ -104,12 +106,8 @@
                 transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
                 opacity: 0;
             }
-            20% {
-                opacity: 0.6;
-            }
-            80% {
-                opacity: 0.6;
-            }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
             100% {
                 transform: translateY(-105vh) translateX(var(--drift, 30px)) scale(1.2) rotate(360deg);
                 opacity: 0;
@@ -137,7 +135,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Dekorative Botanische Line-Art im Hintergrund --- */
         .botanical-decor {
             position: absolute;
             top: -15px;
@@ -149,7 +146,6 @@
             z-index: 0;
         }
 
-        /* --- Moodle Header & Burger Menü --- */
         .moodle-header {
             display: flex;
             justify-content: space-between;
@@ -191,7 +187,6 @@
             font-weight: 600;
         }
 
-        /* Burger Menu Button */
         .burger-btn {
             background: var(--blush-tint);
             border: 1px solid #fbcfe8;
@@ -220,7 +215,6 @@
             transition: 0.3s;
         }
 
-        /* --- Slide-out Burger Menu (Drawer) --- */
         .drawer-menu {
             position: absolute;
             top: 0;
@@ -280,6 +274,8 @@
             font-size: 0.95rem;
             transition: 0.2s;
             box-shadow: 0 2px 8px rgba(131, 24, 67, 0.03);
+            text-align: left;
+            cursor: pointer;
         }
 
         .drawer-link:hover {
@@ -289,7 +285,147 @@
             transform: translateX(4px);
         }
 
-        /* --- Newsfeed (Eyecatcher Begrüßung) --- */
+        /* --- Supabase Auth Gate Styling --- */
+        .auth-card {
+            background: #ffffff;
+            border: 1px solid #fbcfe8;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 6px 20px rgba(131, 24, 67, 0.05);
+        }
+
+        .auth-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--primary-berry);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-bottom: 16px;
+        }
+
+        .auth-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .auth-field label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .auth-field input {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1px solid #e5cbd7;
+            background: #fdf8f6;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .auth-field input:focus {
+            border-color: var(--primary-berry-light);
+            background: #ffffff;
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #9d174d 0%, #be185d 100%);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(190, 24, 93, 0.25);
+        }
+
+        .auth-submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #831843 0%, #9d174d 100%);
+            transform: translateY(-1px);
+        }
+
+        .auth-submit-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .auth-message {
+            margin-top: 12px;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .auth-message.error {
+            display: block;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .auth-message.info {
+            display: block;
+            background: #fff1f2;
+            color: var(--primary-berry);
+            border: 1px solid #fbcfe8;
+        }
+
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: #fff1f2;
+            border: 1px solid #fbcfe8;
+            border-radius: 12px;
+            padding: 9px 12px;
+            margin-bottom: 16px;
+            font-size: 0.78rem;
+            color: var(--primary-berry);
+            position: relative;
+            z-index: 2;
+        }
+
+        .logout-mini-btn {
+            background: #ffffff;
+            border: 1px solid #f9a8d4;
+            color: var(--primary-berry);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+
+        .logout-mini-btn:hover {
+            background: var(--soft-blush);
+        }
+
+        .hidden-view {
+            display: none !important;
+        }
+
         .news-card {
             background: linear-gradient(135deg, #fff1f2 0%, #fdf2f8 100%);
             border: 1px solid #fbcfe8;
@@ -329,7 +465,6 @@
             line-height: 1.4;
         }
 
-        /* --- Sektion / Kurse --- */
         .section-title {
             font-family: 'Playfair Display', Georgia, serif;
             font-style: italic;
@@ -370,7 +505,6 @@
             overflow: hidden;
         }
 
-        /* Roségold Lichtschimmer-Effekt bei Hover */
         .nav-btn::after {
             content: '';
             position: absolute;
@@ -433,7 +567,6 @@
             color: var(--primary-berry);
         }
 
-        /* --- Feminine Support-Card --- */
         .support-card {
             background: linear-gradient(135deg, #fff1f2 0%, #fef3c7 100%);
             border: 1px solid #fed7aa;
@@ -538,7 +671,6 @@
         <!-- Moodle Header -->
         <div class="moodle-header">
             <div class="brand-wrapper">
-                <!-- Edles Beeren- & Roségold-Monogramm -->
                 <svg class="logo-ring" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="42" height="42">
                     <defs>
                         <linearGradient id="berryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -554,7 +686,6 @@
                     <circle cx="100" cy="100" r="88" fill="url(#berryGrad)" />
                     <circle cx="100" cy="100" r="80" fill="none" stroke="url(#roseGoldGrad)" stroke-width="2" stroke-dasharray="5 4" />
                     <text x="100" y="120" font-family="'Playfair Display', Georgia, serif" font-size="56" font-style="italic" font-weight="bold" fill="url(#roseGoldGrad)" text-anchor="middle">J</text>
-                    <!-- Kleine Funkel-Sterne -->
                     <path d="M148 52 L150 58 L156 60 L150 62 L148 68 L146 62 L140 60 L146 58 Z" fill="#fde68a"/>
                 </svg>
                 <div>
@@ -562,7 +693,6 @@
                     <div class="brand-subtitle">Lernplattform</div>
                 </div>
             </div>
-            <!-- Burger Menu Button -->
             <button class="burger-btn" onclick="toggleMenu()" aria-label="Menü öffnen">
                 <div class="burger-line"></div>
                 <div class="burger-line"></div>
@@ -580,62 +710,91 @@
                 <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">🏡 Home</a>
                 <a href="jmoodle.html" class="drawer-link">📚 PDF-Sammlung</a>
                 <a href="LE_index.html" class="drawer-link" onclick="toggleMenu()">⚙️ Einstellungen</a>
+                <button type="button" class="drawer-link hidden-view" id="drawerLogoutBtn" onclick="handleLogout()">🚪 Abmelden</button>
             </div>
         </div>
 
-        <!-- Newsfeed / Ankündigungen -->
-        <div class="news-card">
-            <div class="news-sparkle">✨</div>
-            <div>
-                <div class="news-title">Neuigkeiten</div>
-                <div class="news-text">Lerneinheiten für das Wintersemester freigeschaltet. Viel Erfolg bei deiner Prüfungsvorbereitung!</div>
-            </div>
-        </div>
-
-        <!-- Kursbereich -->
-        <div class="section-title">Deine Lerneinheiten</div>
-        <div class="menu-list">
-            <a href="LE1_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">🌸</span> Lerneinheit 1</span>
-                <span class="nav-arrow">→</span>
-            </a>
-            <a href="LE2_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">📖</span> Lerneinheit 2</span>
-                <span class="nav-arrow">→</span>
-            </a>
-            <a href="LE3_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">🌿</span> Lerneinheit 3</span>
-                <span class="nav-arrow">→</span>
-            </a>
-            <a href="LE4_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">🧠</span> Lerneinheit 4</span>
-                <span class="nav-arrow">→</span>
-            </a>
-            <a href="LE5_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">✨</span> Lerneinheit 5</span>
-                <span class="nav-arrow">→</span>
-            </a>
-             <a href="LE6_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">🌸</span> Lerneinheit 6</span>
-                <span class="nav-arrow">→</span>
-            </a>
-             <a href="LE7_index.html" class="nav-btn">
-                <span class="nav-left"><span class="le-badge">📖</span> Lerneinheit 7</span>
-                <span class="nav-arrow">→</span>
-            </a>
-        </div>
-
-        <!-- Support-Card -->
-        <div class="support-card">
-            <div class="support-icon">🧋</div>
-            <div class="support-content">
-                <div class="support-title">Unterstützung & Danke</div>
-                <div class="support-text">
-                    Diese Lernumgebung wurde mit viel Mühe und einer ordentlichen Portion Kaffee erstellt, um dir das Lernen so leicht wie möglich zu machen. Wenn es dir geholfen hat, freue ich mich riesig über einen virtuellen Kaffee! 
+        <!-- Login-Bereich (sichtbar, wenn nicht autorisiert) -->
+        <div id="authGate" class="auth-card">
+            <div class="auth-title">Geschützter Lernbereich</div>
+            <p class="auth-subtitle">
+                Aufgrund von Urheberrechts- und Studienmaterialien ist der Zugriff nur für freigeschaltete Nutzer möglich. Bitte melde dich mit deinem Konto an.
+            </p>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="auth-field">
+                    <label for="loginEmail">E-Mail-Adresse</label>
+                    <input type="email" id="loginEmail" required autocomplete="email" placeholder="name@beispiel.at">
                 </div>
-                <a href="https://paypal.me/virtualCoffeee?country.x=AT&locale.x=de_DE" target="_blank" rel="noopener noreferrer" class="paypal-btn">
-                    <span>☕</span> PayPal-Kaffee spendieren
+                <div class="auth-field">
+                    <label for="loginPassword">Passwort</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
+                </div>
+                <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">Anmelden</button>
+            </form>
+            <div id="authMessage" class="auth-message"></div>
+        </div>
+
+        <!-- Geschützter Lernbereich (erst nach Login sichtbar) -->
+        <div id="protectedApp" class="hidden-view">
+            <div class="user-bar">
+                <span id="userEmailDisplay">Eingeloggt</span>
+                <button type="button" class="logout-mini-btn" onclick="handleLogout()">Logout</button>
+            </div>
+
+            <!-- Newsfeed / Ankündigungen -->
+            <div class="news-card">
+                <div class="news-sparkle">✨</div>
+                <div>
+                    <div class="news-title">Neuigkeiten</div>
+                    <div class="news-text">Lerneinheiten für das Wintersemester freigeschaltet. Viel Erfolg bei deiner Prüfungsvorbereitung!</div>
+                </div>
+            </div>
+
+            <!-- Kursbereich -->
+            <div class="section-title">Deine Lerneinheiten</div>
+            <div class="menu-list">
+                <a href="LE1_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">🌸</span> Lerneinheit 1</span>
+                    <span class="nav-arrow">→</span>
                 </a>
+                <a href="LE2_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">📖</span> Lerneinheit 2</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                <a href="LE3_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">🌿</span> Lerneinheit 3</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                <a href="LE4_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">🧠</span> Lerneinheit 4</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                <a href="LE5_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">✨</span> Lerneinheit 5</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                 <a href="LE6_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">🌸</span> Lerneinheit 6</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                 <a href="LE7_index.html" class="nav-btn">
+                    <span class="nav-left"><span class="le-badge">📖</span> Lerneinheit 7</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+            </div>
+
+            <!-- Support-Card -->
+            <div class="support-card">
+                <div class="support-icon">🧋</div>
+                <div class="support-content">
+                    <div class="support-title">Unterstützung & Danke</div>
+                    <div class="support-text">
+                        Diese Lernumgebung wurde mit viel Mühe und einer ordentlichen Portion Kaffee erstellt, um dir das Lernen so leicht wie möglich zu machen. Wenn es dir geholfen hat, freue ich mich riesig über einen virtuellen Kaffee! 
+                    </div>
+                    <a href="https://paypal.me/virtualCoffeee?country.x=AT&locale.x=de_DE" target="_blank" rel="noopener noreferrer" class="paypal-btn">
+                        <span>☕</span> PayPal-Kaffee spendieren
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -646,10 +805,105 @@
     </div>
 
     <script>
+        const SUPABASE_URL = 'https://hgtwycqefoexocgfalca.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_gehjt4rGX_76w4bXmyfF_A_UT0Rf7ua';
+
+        // Optional: Falls du im Frontend zusätzlich eine feste Liste erlaubter E-Mails prüfen möchtest (Kleinschreibung)
+        const ALLOWED_EMAILS = []; // z. B. ['freundin@uni.at'] – leer lassen, wenn alle in Supabase angelegten User erlaubt sind
+
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         function toggleMenu() {
             const drawer = document.getElementById('drawerMenu');
             drawer.classList.toggle('open');
         }
+
+        function showAuthMessage(text, type = 'error') {
+            const el = document.getElementById('authMessage');
+            el.textContent = text;
+            el.className = `auth-message ${type}`;
+        }
+
+        function isAuthorizedUser(user) {
+            if (!user || !user.email) return false;
+            if (ALLOWED_EMAILS.length === 0) return true;
+            return ALLOWED_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase());
+        }
+
+        async function applySession(session) {
+            const authGate = document.getElementById('authGate');
+            const protectedApp = document.getElementById('protectedApp');
+            const drawerLogoutBtn = document.getElementById('drawerLogoutBtn');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+
+            const user = session?.user;
+
+            if (user && isAuthorizedUser(user)) {
+                authGate.classList.add('hidden-view');
+                protectedApp.classList.remove('hidden-view');
+                drawerLogoutBtn.classList.remove('hidden-view');
+                userEmailDisplay.textContent = `Angemeldet: ${user.email}`;
+            } else {
+                if (user && !isAuthorizedUser(user)) {
+                    await supabaseClient.auth.signOut();
+                    showAuthMessage('Dieser Account ist nicht für den geschützten Lernbereich freigeschaltet.', 'error');
+                }
+                protectedApp.classList.add('hidden-view');
+                drawerLogoutBtn.classList.add('hidden-view');
+                authGate.classList.remove('hidden-view');
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            const submitBtn = document.getElementById('loginSubmitBtn');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Prüfe Zugangsdaten...';
+            showAuthMessage('', 'info');
+            document.getElementById('authMessage').className = 'auth-message';
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: emailInput.value.trim(),
+                password: passwordInput.value
+            });
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Anmelden';
+
+            if (error) {
+                showAuthMessage('Login fehlgeschlagen. Bitte E-Mail und Passwort prüfen.', 'error');
+                return;
+            }
+
+            if (!isAuthorizedUser(data.user)) {
+                await supabaseClient.auth.signOut();
+                showAuthMessage('Kein Zugriff auf diesen Lernbereich.', 'error');
+                return;
+            }
+
+            passwordInput.value = '';
+            await applySession(data.session);
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            const drawer = document.getElementById('drawerMenu');
+            drawer.classList.remove('open');
+            await applySession(null);
+            showAuthMessage('Du wurdest erfolgreich abgemeldet.', 'info');
+        }
+
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+            applySession(session);
+        });
+
+        (async function initAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            await applySession(session);
+        })();
     </script>
 </body>
 </html>
