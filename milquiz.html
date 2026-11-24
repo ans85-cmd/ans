@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>MilBox // Lernquiz</title>
+  <style>
+    :root {
+      --bg-dark: #0f130e;
+      --bg-panel: #181e16;
+      --bg-card: #21291e;
+      --border: #364231;
+      --olive: #4b5d3b;
+      --olive-light: #6b8254;
+      --amber: #e09f3e;
+      --amber-glow: rgba(224, 159, 62, 0.2);
+      --text: #e6eadf;
+      --muted: #9aa590;
+      --ok: #3fa34d;
+      --ok-bg: rgba(63, 163, 77, 0.18);
+      --err: #d94848;
+      --err-bg: rgba(217, 72, 72, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: env(safe-area-inset-top) 14px calc(env(safe-area-inset-bottom) + 24px) 14px;
+      background:
+        radial-gradient(circle at top, rgba(75, 93, 59, 0.22), transparent 55%),
+        var(--bg-dark);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin-top: 10px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--amber);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--amber);
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .progress-wrap {
+      margin-bottom: 14px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-card);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--olive-light), var(--amber));
+      transition: width 0.25s ease;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 650;
+      line-height: 1.42;
+      margin: 6px 0 16px 0;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      width: 100%;
+      text-align: left;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.38;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.08s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .opt-btn:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+
+    .opt-key {
+      flex: 0 0 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--olive-light);
+      color: var(--amber);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      display: grid;
+      place-items: center;
+      margin-top: 1px;
+    }
+
+    .opt-btn.correct {
+      background: var(--ok-bg);
+      border-color: var(--ok);
+    }
+
+    .opt-btn.correct .opt-key {
+      background: var(--ok);
+      border-color: var(--ok);
+      color: #fff;
+    }
+
+    .opt-btn.wrong {
+      background: var(--err-bg);
+      border-color: var(--err);
+    }
+
+    .opt-btn.wrong .opt-key {
+      background: var(--err);
+      border-color: var(--err);
+      color: #fff;
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+      opacity: 0.95;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .feedback.ok {
+      border-color: var(--ok);
+      color: #b7f0bf;
+    }
+
+    .feedback.err {
+      border-color: var(--err);
+      color: #ffb8b8;
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: #141710;
+      box-shadow: 0 4px 18px var(--amber-glow);
+    }
+
+    .result-banner {
+      text-align: center;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .result-banner.passed {
+      background: var(--ok-bg);
+      border-color: var(--ok);
+    }
+
+    .result-banner.failed {
+      background: var(--err-bg);
+      border-color: var(--err);
+    }
+
+    .result-status {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .result-pct {
+      font-size: 36px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wrong-list {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wrong-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--err);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .wrong-q {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .wrong-yours {
+      color: #ff9c9c;
+      margin-bottom: 3px;
+    }
+
+    .wrong-right {
+      color: #9be8a6;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <span>SEKTOR // PRÜFUNGSTRAINING</span>
+      <span class="badge" id="poolInfo">LADEN...</span>
+    </div>
+
+    <!-- START -->
+    <div class="panel" id="startScreen">
+      <h1>Einsatz-Check</h1>
+      <p class="subtitle">
+        Zufällige Auswahl von <strong>30 Fragen</strong>.
+        Bestanden ab <strong>70 %</strong>. Direktes Feedback bei jeder Antwort.
+      </p>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-val" id="totalPoolVal">-</div>
+          <div class="stat-lbl">Fragenpool</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">30</div>
+          <div class="stat-lbl">Pro Durchlauf</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">70%</div>
+          <div class="stat-lbl">Bestanden</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="startBtn" disabled>Quiz starten</button>
+      <div class="feedback hidden" id="loadError"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="panel hidden" id="quizScreen">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="qCounter">Frage 1 / 30</span>
+          <span id="liveScore">Treffer: 0</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsBox"></div>
+      <div class="feedback hidden" id="feedbackBox"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary hidden" id="nextBtn">Nächste Frage</button>
+      </div>
+    </div>
+
+    <!-- AUSWERTUNG -->
+    <div class="panel hidden" id="resultScreen">
+      <div class="result-banner" id="resultBanner">
+        <div class="result-status" id="resultStatus"></div>
+        <div class="result-pct" id="resultPct"></div>
+        <div id="resultSub" style="margin-top:4px; font-size:14px;"></div>
+      </div>
+
+      <div id="wrongSection">
+        <h2 style="font-size:16px; text-transform:uppercase; letter-spacing:0.05em; margin:0 0 8px 0;">
+          Falsch beantwortete Fragen (<span id="wrongCount">0</span>)
+        </h2>
+        <div class="wrong-list" id="wrongList"></div>
+      </div>
+
+      <div class="actions" style="margin-top:20px;">
+        <button class="btn btn-primary" id="restartBtn">Neues Zufalls-Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EMBEDDED_QUESTIONS = [
+  {
+    "frage": "Wofür steht K3?",
+    "a": "Koordination, Kraft, Konzentration",
+    "b": "Kampf, Kraft und Koordination",
+    "c": "Kraft, Kondition und Koordination",
+    "d": "Kampf, Kondition und Kraft",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Übungen umfasst die Übungsreihe K3?",
+    "a": "8",
+    "b": "12",
+    "c": "15",
+    "d": "10",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "K3 ist ...",
+    "a": "nur eine Ergänzung zu K2",
+    "b": "nur ein Ersatz für K2",
+    "c": "sowohl Ergänzung als auch Alternative zu K2",
+    "d": "unabhängig von K2",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Fähigkeiten werden zusätzlich zu den konditionellen Fähigkeiten geschult?",
+    "a": "Fähigkeiten für den militärischen Nahkampf",
+    "b": "Schwimmfähigkeiten",
+    "c": "Schießfertigkeiten",
+    "d": "Orientierung",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Aus wie vielen Tempi bestehen alle K3-Übungen zur Vereinfachung?",
+    "a": "4",
+    "b": "6",
+    "c": "8",
+    "d": "10",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Fuß befindet sich in der Ausgangsstellung vorne?",
+    "a": "rechter Fuß",
+    "b": "linker Fuß",
+    "c": "beide Füße gleichauf",
+    "d": "beliebig",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wo befinden sich die Fäuste?",
+    "a": "Hüfthöhe",
+    "b": "Brusthöhe",
+    "c": "Kinnhöhe",
+    "d": "knapp unter der Augenhöhe",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "Schritt mit rechtem Fuß zurück",
+    "b": "Schritt mit linkem Fuß etwa eine Fußlänge nach vor",
+    "c": "Sprung nach links",
+    "d": "rechter Fuß nach vor",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Fünf“?",
+    "a": "linker Fuß zurück",
+    "b": "rechter Fuß etwa eine Fußlänge zurück",
+    "c": "rechter Fuß vor",
+    "d": "linker Fuß seitlich",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was erfolgt bei Tempo „Eins“?",
+    "a": "Schritt mit rechtem Fuß nach rechts",
+    "b": "Sprung nach links",
+    "c": "Schritt mit linkem Fuß etwa eine Fußlänge nach links",
+    "d": "Schritt nach vorne",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Bewegung erfolgt bei Tempo „Fünf“?",
+    "a": "rechter Fuß etwa eine Fußlänge nach rechts",
+    "b": "linker Fuß nach links",
+    "c": "rechter Fuß nach vorne",
+    "d": "Sprung rückwärts",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "In welcher Stellung beginnt die Übung „Handflächenstoß“?",
+    "a": "Grätschstand",
+    "b": "Liegestütz",
+    "c": "Kampfhaltung",
+    "d": "Kniestand",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was passiert bei Tempo „Zwo“?",
+    "a": "Kniehub",
+    "b": "Hände hinter den Kopf",
+    "c": "Sprung nach vorne",
+    "d": "Arme kräftig strecken und Fäuste öffnen",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie zeigen die Finger beim Handflächenstoß?",
+    "a": "nach unten",
+    "b": "gestreckt",
+    "c": "angewinkelt",
+    "d": "zur Faust geballt",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie sind die Hände in der Ausgangsstellung?",
+    "a": "zur Faust geballt",
+    "b": "hinter dem Rücken",
+    "c": "geöffnet",
+    "d": "auf den Oberschenkeln",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "hoher Kniehub mit linkem Bein",
+    "b": "hoher Kniehub mit rechtem Bein",
+    "c": "Sprung nach vorne",
+    "d": "Liegestütz",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Drei“?",
+    "a": "linker Kniehub",
+    "b": "rechter Kniehub",
+    "c": "Kampfhaltung einnehmen",
+    "d": "Schritt zurück",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie sind die Finger ausgerichtet?",
+    "a": "nach hinten",
+    "b": "nach innen",
+    "c": "nach außen",
+    "d": "nach vorne",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was erfolgt bei Tempo „Eins“?",
+    "a": "Ellbogen strecken",
+    "b": "Ellbogen beugen",
+    "c": "Sprung aufstehen",
+    "d": "Knie zum Boden",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was erfolgt bei Tempo „Zwo“?",
+    "a": "Körper absenken",
+    "b": "Ellbogen strecken in Ausgangsstellung",
+    "c": "Knie ablegen",
+    "d": "Arme überkreuzen",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie sind die Hände in der Ausgangsstellung?",
+    "a": "geöffnet",
+    "b": "hinter dem Kopf",
+    "c": "vor der Brust zur Faust geballt",
+    "d": "seitlich abgestreckt",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "Sprung in Grätschstand und Arme vorstoßen",
+    "b": "Kniebeuge",
+    "c": "Armheben",
+    "d": "Ausfallschritt",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie zeigen die Handrücken bei Tempo „Eins“?",
+    "a": "nach unten",
+    "b": "nach vorne",
+    "c": "nach hinten",
+    "d": "nach oben",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Drei“?",
+    "a": "Arme hochstoßen",
+    "b": "Arme senken",
+    "c": "Kniebeuge",
+    "d": "Liegestütz",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Bis zu welchem Winkel wird die Kniebeuge ausgeführt?",
+    "a": "30°",
+    "b": "etwa rechter Winkel",
+    "c": "120°",
+    "d": "völlig frei",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was passiert bei Tempo „Zwo“?",
+    "a": "Sprung nach oben",
+    "b": "Arme senken",
+    "c": "Knie strecken in Ausgangsstellung",
+    "d": "Oberkörper beugen",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "In welcher Lage beginnt die Übung?",
+    "a": "Bauchlage",
+    "b": "Rückenlage",
+    "c": "Stand",
+    "d": "Kniestand",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie sind Hüft- und Kniegelenke?",
+    "a": "gestreckt",
+    "b": "leicht gebeugt",
+    "c": "rechtwinkelig gebeugt",
+    "d": "überstreckt",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "Beine strecken",
+    "b": "Oberkörper abheben und Handflächen nach oben drücken",
+    "c": "Armkreisen",
+    "d": "Drehsprung",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Fuß befindet sich in der Ausgangsstellung vorne?",
+    "a": "rechter Fuß",
+    "b": "linker Fuß",
+    "c": "beide nebeneinander",
+    "d": "beliebig",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "gleichzeitiger Schrittwechselsprung mit Armwechsel",
+    "b": "Kniebeuge",
+    "c": "Kniestoß",
+    "d": "Liegestütz",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie zeigen die Finger in der Ausgangsstellung?",
+    "a": "nach vorne",
+    "b": "nach außen",
+    "c": "nach hinten",
+    "d": "nach oben",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Tempo „Eins“?",
+    "a": "Becken anheben",
+    "b": "Knie anziehen",
+    "c": "Oberkörper drehen",
+    "d": "Kopf absenken",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was soll bewusst angespannt werden?",
+    "a": "Bauch und Arme",
+    "b": "Rückenmuskulatur und Gesäß",
+    "c": "Schultern und Nacken",
+    "d": "Unterarme",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welches Ziel haben Kampfsportspiele hauptsächlich?",
+    "a": "Schießausbildung",
+    "b": "Berührungsängste abbauen",
+    "c": "Marschleistung erhöhen",
+    "d": "Kartenlesen verbessern",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche zusätzliche Eigenschaft soll gefördert werden?",
+    "a": "instrumentelle Aggressivität",
+    "b": "Passivität",
+    "c": "Angstverhalten",
+    "d": "Orientierungssinn",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welches Prinzip muss gleichzeitig entwickelt werden?",
+    "a": "Kraftausdauer",
+    "b": "Maximalgeschwindigkeit",
+    "c": "Impulskontrolle",
+    "d": "Sprungkraft",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Gegenstände dürfen Kämpfer nicht tragen?",
+    "a": "Gürtel",
+    "b": "Schuhe",
+    "c": "Ringe, Armbänder und Ketten",
+    "d": "Trainingshose",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Bei welchen Übungen sollen erhebliche Gewichts- und Kraftunterschiede vermieden werden?",
+    "a": "1,2,3,4",
+    "b": "2,5,7,10 und 12",
+    "c": "6,8,9,11",
+    "d": "nur Übung 12",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Womit sollte jede Übungsstunde beginnen?",
+    "a": "Wettkampf",
+    "b": "Erwärmung",
+    "c": "Krafttest",
+    "d": "Ausdauerlauf",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Übungsformen können für die Erwärmung genutzt werden?",
+    "a": "Nur Laufen",
+    "b": "Nur Dehnen",
+    "c": "Allgemein-gymnastische Übungen, Spiele, Partnerübungen und wenig belastende Zweikämpfe",
+    "d": "Nur Sparring",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist das Ziel von KSS 1 „Handschlagen“?",
+    "a": "Den Gegner wegzuschieben",
+    "b": "Den oberen Handrücken des Übungspartners abzuschlagen",
+    "c": "Den Gegner festzuhalten",
+    "d": "Die Schultern zu berühren",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Hinweise werden bei KSS 1 genannt?",
+    "a": "Liegestütz und Kniebeugen",
+    "b": "Beinarbeit und Täuschungsmanöver",
+    "c": "Medizinballarbeit",
+    "d": "Bodenkampf",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Ausgangsposition wird bei KSS 2 „Ziehkampf“ verwendet?",
+    "a": "Kampfhaltung",
+    "b": "Rückenlage",
+    "c": "Einbeinstand",
+    "d": "Kniestand",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist das Ziel beim Ziehkampf?",
+    "a": "Gegner zu Boden stoßen",
+    "b": "Gegner festhalten",
+    "c": "Durch Ziehen und Schieben den anderen aus dem Gleichgewicht bringen",
+    "d": "Medizinball gewinnen",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wer schlägt bei KSS 3 kontrolliert auf Kopf und Körper?",
+    "a": "Beide Partner gleichzeitig",
+    "b": "Übungspartner A",
+    "c": "Trainer",
+    "d": "Schiedsrichter",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Womit dürfen die Schläge bei KSS 3 ausgeführt werden?",
+    "a": "Nur Faust",
+    "b": "Nur Fuß",
+    "c": "Hand oder Gerät (z. B. Schwimmnudel, Handtuch)",
+    "d": "Medizinball",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie soll bei KSS 3 begonnen werden?",
+    "a": "Schnell und hart",
+    "b": "Explosiv",
+    "c": "Langsam und kontrolliert",
+    "d": "Wettkampfmäßig",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Mit welchen Händen wird KSS 4 durchgeführt?",
+    "a": "Zu Fäusten geballt",
+    "b": "Geöffnet",
+    "c": "Hinter dem Rücken",
+    "d": "Verschränkt",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Körperstellen werden bei KSS 4 berührt?",
+    "a": "Nur Schultern",
+    "b": "Nur Oberschenkel",
+    "c": "Schulter, Oberschenkel usw.",
+    "d": "Nur Hände",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie heißt KSS 5?",
+    "a": "Schiebekampf",
+    "b": "Eidechsenkampf",
+    "c": "Ziehkampf",
+    "d": "Ringkampf",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was wird beim Eidechsenkampf kontrolliert weggezogen?",
+    "a": "Füße",
+    "b": "Arme",
+    "c": "Hände des Übungspartners",
+    "d": "Schultern",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Worauf wird beim Eidechsenkampf besonders hingewiesen?",
+    "a": "Knieverletzungen",
+    "b": "Kopfstoßgefahr",
+    "c": "Fingerbruch",
+    "d": "Nasenbluten",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Ball wird bei KSS 6 verwendet?",
+    "a": "Fußball",
+    "b": "Volleyball",
+    "c": "Tennisball",
+    "d": "Basketball",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was geschieht bei Ballverlust laut Hinweis?",
+    "a": "Pause",
+    "b": "Zusatzaufgabe wie Liegestütze oder Kniebeugen",
+    "c": "Rollenwechsel",
+    "d": "Spielende",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie sitzen die Übungspartner bei KSS 7?",
+    "a": "Gegenüber",
+    "b": "Rücken an Rücken",
+    "c": "Bauch an Bauch",
+    "d": "Im Kniestand",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Worauf soll bei KSS 7 reagiert werden?",
+    "a": "Lichtsignal",
+    "b": "Handzeichen",
+    "c": "Akustisches Signal",
+    "d": "Pfiff des Gegners",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was stört Übungspartner A bei KSS 8?",
+    "a": "Kniestand",
+    "b": "Kampfhaltung",
+    "c": "Stabilen Liegestützstand",
+    "d": "Sitzhaltung",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie kann KSS 8 gesteigert werden?",
+    "a": "Mit Zusatzgewicht",
+    "b": "Durch Schließen der Augen",
+    "c": "Durch Laufen",
+    "d": "Durch Ballarbeit",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was wird bei KSS 9 trainiert?",
+    "a": "Ausdauerlauf",
+    "b": "Schlag- und Stoßtechniken mit Medizinball",
+    "c": "Bodenkampf",
+    "d": "Sprungkraft",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Techniken werden bei KSS 9 genannt?",
+    "a": "Ellbogenstöße",
+    "b": "Frontkicks",
+    "c": "Gerade Hände, Seitwärts- und Aufwärtshaken",
+    "d": "Würfe",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist das Ziel des Medizinballkampfes?",
+    "a": "Den Ball wegwerfen",
+    "b": "Den Medizinball dem Partner wegnehmen",
+    "c": "Den Ball möglichst hoch werfen",
+    "d": "Den Ball tragen",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie werden die Beine bei KSS 11 gehalten?",
+    "a": "Gestreckt am Boden",
+    "b": "Angehoben und angewinkelt",
+    "c": "Überkreuzt",
+    "d": "Gegrätscht",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Würfe werden bei KSS 11 durchgeführt?",
+    "a": "Nur frontal",
+    "b": "Direkt, seitlich und von oben",
+    "c": "Nur seitlich",
+    "d": "Nur rückwärts",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist das Ziel von KSS 12?",
+    "a": "Sprinten",
+    "b": "Partner aus dem Gleichgewicht bringen und zu Boden werfen",
+    "c": "Medizinball fangen",
+    "d": "Liegestütze durchführen",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Warum sind die ersten Minuten nach einer Verletzung besonders wichtig?",
+    "a": "Wegen der Dokumentation",
+    "b": "Weil sie die Weichen für die weitere Gesundheit stellen",
+    "c": "Wegen der Versicherung",
+    "d": "Wegen der Wettkampfwertung",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie nennt man Platzwunden im Gesicht oder Kopfbereich beim Boxen?",
+    "a": "Fraktur",
+    "b": "Prellung",
+    "c": "Cut",
+    "d": "Stauchung",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wodurch entstehen Cuts häufig?",
+    "a": "Durch einen Sturz",
+    "b": "Durch mehrere Schläge auf dieselbe Stelle",
+    "c": "Durch Muskelkrämpfe",
+    "d": "Durch Übertraining",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Körperregion ist besonders anfällig für Cuts?",
+    "a": "Nase",
+    "b": "Kinn",
+    "c": "Augenbrauenpartie",
+    "d": "Schulter",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wer ist im Profiboxen für die Versorgung von Platzwunden zuständig?",
+    "a": "Ringrichter",
+    "b": "Trainer",
+    "c": "Cutman",
+    "d": "Zeitnehmer",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wo befindet sich der Cutman?",
+    "a": "Zuschauerbereich",
+    "b": "In der Ecke des Boxers",
+    "c": "Neben dem Ringarzt",
+    "d": "Auf der Tribüne",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Verletzungen versorgt der Cutman speziell?",
+    "a": "Muskelkrämpfe",
+    "b": "Platzwunden, Nasenbluten und Schwellungen",
+    "c": "Knochenbrüche",
+    "d": "Muskelkater",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Womit wird die Wunde gereinigt?",
+    "a": "Alkohol",
+    "b": "Seifenwasser",
+    "c": "Wattestäbchen und wassergetränktem Schwamm",
+    "d": "Jodlösung",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie heißt das Spezialeisen zum Kühlen?",
+    "a": "Coolpad",
+    "b": "Enswell",
+    "c": "Icebar",
+    "d": "Cryotool",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Salbe wird zur Vorbeugung eines weiteren Aufplatzens genannt?",
+    "a": "Magnesiumsalbe",
+    "b": "Arnikasalbe",
+    "c": "Adrenalinhaltige Salbe",
+    "d": "Ringelblumensalbe",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Mittel können zusätzlich aufgetragen werden?",
+    "a": "Vaseline, Thrombine und Avitene",
+    "b": "Magnesium und Kalium",
+    "c": "Cortison und Schmerzgel",
+    "d": "Kochsalz",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Nach wie vielen Tagen ist ein Cut in der Regel verheilt?",
+    "a": "3 Tage",
+    "b": "5 Tage",
+    "c": "10 Tage",
+    "d": "30 Tage",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wofür steht das P bei P-E-C-H?",
+    "a": "Position",
+    "b": "Pause",
+    "c": "Pressen",
+    "d": "Prävention",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wofür steht das E?",
+    "a": "Entlasten",
+    "b": "Erholung",
+    "c": "Eis",
+    "d": "Energie",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wofür steht das C?",
+    "a": "Compression",
+    "b": "Cooldown",
+    "c": "Cardio",
+    "d": "Check",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wofür steht das H?",
+    "a": "Heben",
+    "b": "Hilfe",
+    "c": "Hochlagern",
+    "d": "Hallentraining",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Bei welchen Verletzungen wird die PECH-Regel angewandt?",
+    "a": "Prellung, Zerrung, Stauchung",
+    "b": "Muskelkater",
+    "c": "Schnupfen",
+    "d": "Verbrennung",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Wirkung hat Kühlen?",
+    "a": "Erhöht Schwellungen",
+    "b": "Lindert Schmerzen und reduziert Schwellungen",
+    "c": "Senkt Muskelkraft",
+    "d": "Führt zu Muskelkater",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wodurch entsteht eine Verstauchung?",
+    "a": "Sturz oder Schlag",
+    "b": "Überdehnung bzw. Reißen von Bändern",
+    "c": "Muskelüberlastung",
+    "d": "Muskelriss",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was passiert bei einer Zerrung?",
+    "a": "Knochenbruch",
+    "b": "Muskel wird überdehnt oder reißt",
+    "c": "Gelenk verrutscht",
+    "d": "Bänder reißen immer vollständig",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wodurch entsteht eine Prellung?",
+    "a": "Sturz oder Schlag",
+    "b": "Überdehnung",
+    "c": "Gelenksverdrehung",
+    "d": "Durchblutungsstörung",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Symptome treten häufig auf?",
+    "a": "Schwellung, Schmerz, Funktionseinschränkung",
+    "b": "Husten",
+    "c": "Fieber",
+    "d": "Atemnot",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Körperteile sind hauptsächlich betroffen?",
+    "a": "Knie und Hüfte",
+    "b": "Schulter und Ellbogen",
+    "c": "Handgelenke und Daumen",
+    "d": "Sprunggelenke",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was zählt zu den Ursachen?",
+    "a": "Gute Bandagierung",
+    "b": "Unsaubere Schläge und schlechtes Bandagieren",
+    "c": "Radfahren",
+    "d": "Schwimmen",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was kann starke Treffer an Augenhöhle, Nase oder Rippen verursachen?",
+    "a": "Muskelkater",
+    "b": "Prellung oder Bruch",
+    "c": "Krampf",
+    "d": "Zerrung",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Kann man allein durch die Schmerzintensität Prellung und Bruch unterscheiden?",
+    "a": "Immer",
+    "b": "Meistens",
+    "c": "Nur bei Rippen",
+    "d": "Nein",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Warum wird eine ärztliche Untersuchung empfohlen?",
+    "a": "Wegen der Trainingsplanung",
+    "b": "Um einen Knochenbruch nicht zu übersehen",
+    "c": "Für die Statistik",
+    "d": "Wegen der Versicherung",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wann dürfen keine Druckverbände angelegt werden?",
+    "a": "Bei Muskelkater",
+    "b": "Bei eindeutigen Brüchen oder Verrenkungen",
+    "c": "Bei Krämpfen",
+    "d": "Bei Schulterbeschwerden",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie nennt man eine ausgekugelte Schulter?",
+    "a": "Luxation",
+    "b": "Distorsion",
+    "c": "Kontusion",
+    "d": "Fraktur",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wohin verrutscht der Oberarmkopf?",
+    "a": "Brustkorb",
+    "b": "Achselhöhle",
+    "c": "Schlüsselbein",
+    "d": "Ellenbogen",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was muss bei einer Schulterluxation erfolgen?",
+    "a": "Weiterkämpfen",
+    "b": "Dehnen",
+    "c": "Kampfabbruch und ärztliche Hilfe",
+    "d": "Massage",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Runden dauert ein Kampf?",
+    "a": "2 Runden",
+    "b": "3 Runden",
+    "c": "4 Runden",
+    "d": "5 Runden",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie lange dauert eine Runde?",
+    "a": "1 Minute",
+    "b": "90 Sekunden",
+    "c": "2 Minuten",
+    "d": "3 Minuten",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie lange dauert die Rundenpause?",
+    "a": "30 Sekunden",
+    "b": "45 Sekunden",
+    "c": "90 Sekunden",
+    "d": "1 Minute",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie müssen die Kämpfer während der Pause stehen?",
+    "a": "Mit dem Rücken zur Ringmitte",
+    "b": "Gesicht zur Ringmitte",
+    "c": "In der Ecke sitzend",
+    "d": "Außerhalb des Ringes",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Betreuer dürfen sich während der Pause im Ring befinden?",
+    "a": "Keiner",
+    "b": "Zwei",
+    "c": "Einer",
+    "d": "Beliebig viele",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was passiert bei zu harter Schlaghärte?",
+    "a": "Sofortige Disqualifikation",
+    "b": "Kampfabbruch",
+    "c": "Verwarnung",
+    "d": "Punktabzug für beide",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie müssen sich die Gegner grundsätzlich bewegen?",
+    "a": "Seitlich versetzt",
+    "b": "Rücken an Rücken",
+    "c": "Angesicht zu Angesicht",
+    "d": "Frei wählbar",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Maßnahme erfolgt, wenn das Vis-a-vis-Prinzip nicht eingehalten wird?",
+    "a": "Disqualifikation",
+    "b": "Verwarnung",
+    "c": "Ermahnung",
+    "d": "Kampfabbruch",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Ab welcher Körpergröße erfolgt die Einteilung in 5-cm-Schritten?",
+    "a": "130 cm",
+    "b": "140 cm",
+    "c": "145 cm",
+    "d": "150 cm",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Bis zu welcher Körpergröße erfolgt die Klasseneinteilung in 5-cm-Schritten?",
+    "a": "180 cm",
+    "b": "185 cm",
+    "c": "190 cm",
+    "d": "195 cm",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Größenklassen dürfen maximal zusammengefasst werden?",
+    "a": "Eine",
+    "b": "Zwei",
+    "c": "Drei",
+    "d": "Vier",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Trefferfläche der Hand ist erlaubt?",
+    "a": "Innenhand",
+    "b": "Handkante",
+    "c": "Geschlossene Hand und Knöchel",
+    "d": "Handballen",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Treffer sind ausdrücklich nicht erlaubt?",
+    "a": "Fausttreffer",
+    "b": "Kniestoß",
+    "c": "Vorwärtsfußstoß",
+    "d": "Innenhandtreffer",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Bereich zählt zu den erlaubten Trefferzielen?",
+    "a": "Nase",
+    "b": "Hals",
+    "c": "Stirn",
+    "d": "Hinterkopf",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Bereich gehört ebenfalls zu den erlaubten Trefferzielen?",
+    "a": "Vordere Körperhälfte von Brust bis Gürtellinie",
+    "b": "Nierenbereich",
+    "c": "Wirbelsäule",
+    "d": "Hinterkopf",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Treffer werden mit Strafpunkten geahndet?",
+    "a": "Stirn",
+    "b": "Brust",
+    "c": "Hinterkopf",
+    "d": "Bauch",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Bereich zählt zu den verbotenen Trefferzonen?",
+    "a": "Mund",
+    "b": "Brust",
+    "c": "Bauch",
+    "d": "Stirn",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Strafpunkte erhält der Gegner bei einer Ermahnung?",
+    "a": "3",
+    "b": "2",
+    "c": "1",
+    "d": "0",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wann erfolgt eine Ermahnung?",
+    "a": "Bei schweren absichtlichen Vergehen",
+    "b": "Bei kleinen unabsichtlichen Vergehen",
+    "c": "Bei Knockout",
+    "d": "Nach jeder Runde",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Strafpunkte erhält der Gegner bei einer Verwarnung?",
+    "a": "1",
+    "b": "2",
+    "c": "4",
+    "d": "3",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wann erfolgt eine Verwarnung?",
+    "a": "Kleine unabsichtliche Vergehen",
+    "b": "Schwere absichtliche Vergehen",
+    "c": "Technische Fehler",
+    "d": "Passivität",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Ab wie vielen Strafpunkten erfolgt die Disqualifikation?",
+    "a": "5",
+    "b": "7",
+    "c": "9",
+    "d": "12",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welches Mindestgewicht müssen die Boxhandschuhe haben?",
+    "a": "8 Unzen",
+    "b": "10 Unzen",
+    "c": "12 Unzen",
+    "d": "14 Unzen",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie müssen die Boxhandschuhe der beiden Kämpfer sein?",
+    "a": "Unterschiedlich",
+    "b": "Gleich",
+    "c": "Eigene Wahl",
+    "d": "Nur gleiche Farbe",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Schutzausrüstung ist vorgeschrieben?",
+    "a": "Nur Zahnschutz",
+    "b": "Nur Tiefschutz",
+    "c": "Trittschutzweste und Tiefschutz",
+    "d": "Nur Kopfschutz",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Schutzausrüstung ist möglich?",
+    "a": "Kopfschutz und Zahnschutz",
+    "b": "Schienbeinschützer",
+    "c": "Ellenbogenschützer",
+    "d": "Brustschutz",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wer muss vor Wettkämpfen informiert werden?",
+    "a": "Feuerwehr",
+    "b": "Polizei",
+    "c": "Sanitätseinrichtung",
+    "d": "Verband",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche körperliche Voraussetzung wird gefordert?",
+    "a": "Ärztliches Gutachten",
+    "b": "Gültige durchschnittliche LPraKond",
+    "c": "Leistungssportabzeichen",
+    "d": "Schwimmnachweis",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Aus wie vielen Personen besteht die Jury?",
+    "a": "3",
+    "b": "4",
+    "c": "5",
+    "d": "6",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wer gehört NICHT zur Jury?",
+    "a": "Ringrichter",
+    "b": "Zeitnehmer",
+    "c": "Punkterichter",
+    "d": "Trainer",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Punkterichter gibt es?",
+    "a": "2",
+    "b": "3",
+    "c": "4",
+    "d": "5",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was bedeutet das Kommando „STOPP“?",
+    "a": "Kampfbeginn",
+    "b": "Zeit anhalten",
+    "c": "Sofortiges Beenden des Kampfes",
+    "d": "Wechsel der Kämpfer",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was bedeutet das Kommando „BOX“?",
+    "a": "Kampfrichterwechsel",
+    "b": "Weiterführen des Kampfes",
+    "c": "Pause",
+    "d": "Wertung",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wann wird „TIME“ angewendet?",
+    "a": "Vor Rundenbeginn",
+    "b": "Bei längerer Unterbrechung",
+    "c": "Nach Kampfschluss",
+    "d": "Bei Gegnerwechsel",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist die Grundlage der Wertung?",
+    "a": "Trefferanzahl",
+    "b": "Schlagwechsel",
+    "c": "Knockouts",
+    "d": "Kampfdauer",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wann beginnt ein Schlagwechsel?",
+    "a": "Nach Kommando BOX",
+    "b": "Mit dem ersten regelkonformen Treffer",
+    "c": "Nach 10 Sekunden",
+    "d": "Nach Betreuerfreigabe",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie viele Punkte bringt ein gewonnener Schlagwechsel?",
+    "a": "3",
+    "b": "2",
+    "c": "5",
+    "d": "1",
+    "richtig": "d",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher Leitsatz von Applegate wird angeführt?",
+    "a": "Übung macht den Meister",
+    "b": "Erfolg hat nur das Einfache",
+    "c": "Angriff ist die beste Verteidigung",
+    "d": "Wer rastet, der rostet",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welches Lernen wird im Militärischen Boxen bevorzugt?",
+    "a": "Starres Techniklernen",
+    "b": "Selbstorganisiertes differenzielles Lernen",
+    "c": "Ausschließlich Theorie",
+    "d": "Reines Krafttraining",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welches Problem kann beim Techniklernen auftreten?",
+    "a": "Jeder Mensch ist gleich",
+    "b": "Unterschiedliche Freiheitsgrade im Gelenksystem",
+    "c": "Identische Körperproportionen",
+    "d": "Gleiche Bewegungsmuster",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche Koordination wird ausdrücklich genannt?",
+    "a": "Intramuskuläre Koordination",
+    "b": "Intermuskuläre Koordination",
+    "c": "Optische Koordination",
+    "d": "Taktische Koordination",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welche körperliche Eigenschaft wird als Einflussfaktor genannt?",
+    "a": "Elastizität der Muskeln, Sehnen und Bänder",
+    "b": "Schuhgröße",
+    "c": "Haarfarbe",
+    "d": "Blutgruppe",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie lautet ein methodischer Grundsatz?",
+    "a": "Vom Schweren zum Leichten",
+    "b": "Vom Komplexen zum Einfachen",
+    "c": "Vom Leichten zum Schweren",
+    "d": "Vom Unbekannten zum Bekannten",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Welcher weitere Grundsatz wird genannt?",
+    "a": "Vom Schnellen zum Langsamen",
+    "b": "Vom Bekannten zum Unbekannten",
+    "c": "Vom Wettkampf zum Training",
+    "d": "Vom Sparring zur Theorie",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ermöglicht differenzielles Techniktraining?",
+    "a": "Standardisierte Lösungen",
+    "b": "Individuelle Aufgabenlösungen",
+    "c": "Einheitliche Bewegungen",
+    "d": "Feste Technikbilder",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist laut differenziellem Lernen Voraussetzung für Lernerfolg?",
+    "a": "Perfektion",
+    "b": "Wiederholung",
+    "c": "Fehler",
+    "d": "Kraft",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was wird besser gefördert?",
+    "a": "Disziplin und Gehorsam",
+    "b": "Individualität und Kreativität",
+    "c": "Größe und Gewicht",
+    "d": "Schlagkraft",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie soll Sparring im Militärischen Boxen durchgeführt werden?",
+    "a": "Vollkontakt",
+    "b": "Hartkontakt",
+    "c": "Kontrollierter Leichtkontakt",
+    "d": "Ohne Regeln",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was kommt nach den Differenzierungsübungen in der Ausbildungsreihenfolge?",
+    "a": "Wettkampf",
+    "b": "Freies Sparring",
+    "c": "Imitierende Partnerübungen",
+    "d": "Ringrichterausbildung",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was folgt nach dem Kampfsituationstraining?",
+    "a": "Bedingtes Sparring",
+    "b": "Wettkampf",
+    "c": "Theorieblock",
+    "d": "Technikbildtraining",
+    "richtig": "a",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was ist die höchste Form der Ausbildung?",
+    "a": "Freies Sparring",
+    "b": "Kampfsituationstraining",
+    "c": "Wettkampf",
+    "d": "Techniktraining",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Wie soll der Boxer vor dem Lernen sein?",
+    "a": "Müde",
+    "b": "Physisch und psychisch voll aufgewärmt",
+    "c": "Erschöpft",
+    "d": "Nüchtern",
+    "richtig": "b",
+    "begruendung": ""
+  },
+  {
+    "frage": "Womit soll man den Boxer nicht überfordern?",
+    "a": "Bewegung",
+    "b": "Training",
+    "c": "Information",
+    "d": "Aufwärmen",
+    "richtig": "c",
+    "begruendung": ""
+  },
+  {
+    "frage": "Was soll nach jeder Trainingseinheit stattfinden?",
+    "a": "Ausdauerlauf",
+    "b": "Krafttraining",
+    "c": "Bedingter Sparringskampf unter Aufsicht",
+    "d": "Wettkampf",
+    "richtig": "c",
+    "begruendung": ""
+  }
+ ];
+
+    const QUIZ_LENGTH = 30;
+    const PASS_PERCENT = 70;
+    const KEYS = ["a", "b", "c", "d"];
+
+    let allQuestions = [];
+    let sessionQuestions = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let wrongAnswers = [];
+    let answered = false;
+
+    const el = {
+      poolInfo: document.getElementById("poolInfo"),
+      totalPoolVal: document.getElementById("totalPoolVal"),
+      startScreen: document.getElementById("startScreen"),
+      quizScreen: document.getElementById("quizScreen"),
+      resultScreen: document.getElementById("resultScreen"),
+      startBtn: document.getElementById("startBtn"),
+      loadError: document.getElementById("loadError"),
+      qCounter: document.getElementById("qCounter"),
+      liveScore: document.getElementById("liveScore"),
+      progressFill: document.getElementById("progressFill"),
+      questionText: document.getElementById("questionText"),
+      optionsBox: document.getElementById("optionsBox"),
+      feedbackBox: document.getElementById("feedbackBox"),
+      nextBtn: document.getElementById("nextBtn"),
+      resultBanner: document.getElementById("resultBanner"),
+      resultStatus: document.getElementById("resultStatus"),
+      resultPct: document.getElementById("resultPct"),
+      resultSub: document.getElementById("resultSub"),
+      wrongSection: document.getElementById("wrongSection"),
+      wrongCount: document.getElementById("wrongCount"),
+      wrongList: document.getElementById("wrongList"),
+      restartBtn: document.getElementById("restartBtn")
+    };
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function init() {
+      try {
+        if (!Array.isArray(EMBEDDED_QUESTIONS) || EMBEDDED_QUESTIONS.length === 0) {
+          throw new Error("Keine Fragen in EMBEDDED_QUESTIONS gefunden.");
+        }
+        allQuestions = EMBEDDED_QUESTIONS;
+        el.poolInfo.textContent = `${allQuestions.length} FRAGEN BEREIT`;
+        el.totalPoolVal.textContent = allQuestions.length;
+        el.startBtn.disabled = false;
+      } catch (err) {
+        el.poolInfo.textContent = "FEHLER";
+        el.loadError.classList.remove("hidden");
+        el.loadError.classList.add("err");
+        el.loadError.innerHTML = `Fehler beim Laden: <strong>${err.message}</strong>`;
+      }
+    }
+
+    function startQuiz() {
+      const count = Math.min(QUIZ_LENGTH, allQuestions.length);
+      sessionQuestions = shuffle(allQuestions).slice(0, count);
+      currentIndex = 0;
+      correctCount = 0;
+      wrongAnswers = [];
+
+      el.startScreen.classList.add("hidden");
+      el.resultScreen.classList.add("hidden");
+      el.quizScreen.classList.remove("hidden");
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const q = sessionQuestions[currentIndex];
+      const total = sessionQuestions.length;
+
+      el.qCounter.textContent = `Frage ${currentIndex + 1} / ${total}`;
+      el.liveScore.textContent = `Treffer: ${correctCount}`;
+      el.progressFill.style.width = `${(currentIndex / total) * 100}%`;
+      el.questionText.textContent = q.frage;
+
+      el.feedbackBox.classList.add("hidden");
+      el.feedbackBox.className = "feedback hidden";
+      el.nextBtn.classList.add("hidden");
+      el.nextBtn.textContent = currentIndex === total - 1 ? "Auswertung anzeigen" : "Nächste Frage";
+
+      el.optionsBox.innerHTML = "";
+      KEYS.forEach((k) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.dataset.key = k;
+        btn.innerHTML = `<span class="opt-key">${k.toUpperCase()}</span><span>${q[k]}</span>`;
+        btn.addEventListener("click", () => selectAnswer(k));
+        el.optionsBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(chosenKey) {
+      if (answered) return;
+      answered = true;
+
+      const q = sessionQuestions[currentIndex];
+      const rightKey = String(q.richtig || "").toLowerCase().trim();
+      const isCorrect = chosenKey === rightKey;
+
+      const buttons = el.optionsBox.querySelectorAll(".opt-btn");
+      buttons.forEach((btn) => {
+        btn.disabled = true;
+        const k = btn.dataset.key;
+        if (k === rightKey) btn.classList.add("correct");
+        if (k === chosenKey && !isCorrect) btn.classList.add("wrong");
+      });
+
+      el.feedbackBox.classList.remove("hidden");
+      if (isCorrect) {
+        correctCount++;
+        el.liveScore.textContent = `Treffer: ${correctCount}`;
+        el.feedbackBox.classList.add("ok");
+        el.feedbackBox.textContent = "Richtig!";
+      } else {
+        el.feedbackBox.classList.add("err");
+        el.feedbackBox.textContent = `Falsch – richtig wäre ${rightKey.toUpperCase()}: ${q[rightKey]}`;
+        wrongAnswers.push({
+          frage: q.frage,
+          chosenKey,
+          chosenText: q[chosenKey],
+          rightKey,
+          rightText: q[rightKey]
+        });
+      }
+
+      el.nextBtn.classList.remove("hidden");
+    }
+
+    function nextStep() {
+      if (currentIndex + 1 < sessionQuestions.length) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      el.progressFill.style.width = "100%";
+      el.quizScreen.classList.add("hidden");
+      el.resultScreen.classList.remove("hidden");
+
+      const total = sessionQuestions.length;
+      const pct = Math.round((correctCount / total) * 100);
+      const passed = pct >= PASS_PERCENT;
+
+      el.resultBanner.className = `result-banner ${passed ? "passed" : "failed"}`;
+      el.resultStatus.textContent = passed ? "PRÜFUNG BESTANDEN" : "NICHT BESTANDEN";
+      el.resultPct.textContent = `${pct} %`;
+      el.resultSub.textContent = `${correctCount} von ${total} Fragen richtig (Limit: ${PASS_PERCENT} %)`;
+
+      el.wrongCount.textContent = wrongAnswers.length;
+      el.wrongList.innerHTML = "";
+
+      if (wrongAnswers.length === 0) {
+        el.wrongList.innerHTML = `<div class="feedback ok">Keine Fehler – saubere Leistung!</div>`;
+      } else {
+        wrongAnswers.forEach((item) => {
+          const div = document.createElement("div");
+          div.className = "wrong-item";
+          div.innerHTML = `
+            <div class="wrong-q">${item.frage}</div>
+            <div class="wrong-yours">Deine Antwort (${item.chosenKey.toUpperCase()}): ${item.chosenText}</div>
+            <div class="wrong-right">Richtig (${item.rightKey.toUpperCase()}): ${item.rightText}</div>
+          `;
+          el.wrongList.appendChild(div);
+        });
+      }
+    }
+
+    el.startBtn.addEventListener("click", startQuiz);
+    el.nextBtn.addEventListener("click", nextStep);
+    el.restartBtn.addEventListener("click", startQuiz);
+
+    init();
+  </script>
+</body>
+</html>
